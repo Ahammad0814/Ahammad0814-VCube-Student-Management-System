@@ -1,0 +1,1522 @@
+body{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    background-color: hwb(202 96% 0%);
+}
+.dashboard-vcube-logo{
+    width: 60px;
+    height: 60px;
+    border: solid 1px lightgrey;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffff;
+    border-radius: 50%;
+    position: absolute;
+    right: 0.5%;
+    top: 1%;
+    cursor: pointer;
+    overflow: hidden;
+    transition: 0.5s ease-in-out;
+    z-index: 101;
+}
+.dashboard-vcube-logo:hover{
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+.dashboard-vcube-logo img{
+    width: 130%;
+    margin-right: 4px;
+}
+.dashboard-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    height: 110px;
+    margin-top: 3%;
+}
+.header-div{
+    width: 17.5%;
+    height: 110px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px 0 11px;
+    border-radius: 10px;
+    transition: 0.5s ease;
+    cursor: pointer;
+    background-color: #ffff;
+    border: solid 1px lightgrey;
+}
+
+.header-div:hover{
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+}
+.header-span-img{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    z-index: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.inner-students-div{
+    width: 60%;
+    height: 100%;
+}
+
+.header-students-div span{
+    background: #616af146;
+    box-shadow: 0 0 20px #616af146;
+}
+
+.header-no-of-class-div span{
+    background: #5000b135;
+    box-shadow: 0 0 20px #5000b135;
+}
+
+.header-mock-tests-div span{
+    background: rgba(255, 166, 0, 0.352);
+    box-shadow: 0 0 20px rgba(255, 166, 0, 0.352);
+}
+
+.header-case-study-div span{
+    background: rgba(255, 0, 0, 0.189);
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.189);
+}
+
+.header-interview-div span{
+    background: rgba(0, 128, 0, 0.247);
+    box-shadow: 0 0 20px rgba(0, 128, 0, 0.247);
+}
+.msg-div{
+    width: 80px;
+    height: 38px;
+    position: absolute;
+    top: -53px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffff;
+    font-size: 18px;
+    font-weight: bold;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease-in-out;
+}
+#v{
+    border-left: solid 10px transparent;
+    border-right: solid 10px transparent;
+    border-bottom: solid 10px transparent;
+    position: absolute;
+    bottom: -20px;
+}
+.progress-circle:hover .msg-div{
+    opacity: 1;
+}
+
+.search-div{
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 30px;
+}
+.search-input-div{
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    height: 30px;
+}
+
+.search-input-div input{
+    width: 40%;
+    height: 35px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border: none;
+    padding-left: 3%;
+    border: solid 1px grey;
+    border-right: none;
+    outline: none;
+    font-size: 20px;
+}
+.search-input-div button{
+    background-color: #ffff;
+    border: solid 1px grey;
+    border-left: none;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding-right: 10px;
+    height: 38px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.batches option{
+    height: 30px;
+    padding: 5px;
+    line-height: 2;
+}
+
+.make-operation-btn{
+    width: 80%;
+    height: 100%;
+    border: solid 1px #616bf1;
+    color: #ffff;
+    background: #616bf1;
+    cursor: pointer;
+    transition: 0.5s;
+    border-radius: 5px;
+    margin-left: 5px;
+    font-size: 17px;
+    transition: width 0.5s ease-in-out;
+}
+.make-operation-div,
+.search-select-option{
+    height: 35px;
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.search-select-option select{
+    width: 70%;
+    height: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 0 10px 0 10px;
+}
+.add-batch-option{
+    width: 60%;
+    height: 30px;
+    font-size: 18px;
+    border-radius: 5px;
+    padding-left: 10px;
+    border: solid 1px grey;
+    position: absolute;
+    left: 0;
+    visibility: hidden;
+}
+.add-batch-option-btn{
+    width: 35%;
+    height: 34px;
+    font-size: 18px;
+    margin-left: 10px;
+    background: #616bf1;
+    border-radius: 5px;
+    border: solid 1px #616bf1;
+    color: #ffff;
+    transition: width 0.5s ease-in-out;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    visibility: hidden;
+}
+
+.students-details-container{
+    width: 91%;
+    height: 520px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    background: #ffff;
+    overflow: hidden;
+    position: relative;
+}
+
+.student-details-header{
+    width: 96.5%;
+    height: 9%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom: solid 1px lightgrey;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 2.5%;
+}
+
+.student-details-container{
+    width: 99.1%;
+    height: 8.96%;
+    border-bottom: solid 1px lightgrey;
+    display: flex;
+    position: relative;
+    align-items: center;
+    padding-left: 10px;
+    cursor: pointer;
+    transition: 0.5s ease;
+}
+.student-details-container span{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+.student-details-profile{
+    width: 3%;
+    margin: 10px;
+}
+.student-details-container input{
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+.student-details-header span:nth-child(1){
+    width: 5%;
+}
+.student-details-header span:nth-child(2){
+    width: 15%;
+}
+.student-details-header span:nth-child(3){
+    width: 23%;
+}
+.student-details-header span:nth-child(4){
+    width: 11%;
+}
+.student-details-header span:nth-child(5){
+    width: 28%;
+}
+.student-details-header span:nth-child(6){
+    width: 9%;
+}
+.student-details-header span:nth-child(7){
+    width: 15%;
+}
+.student-details-header span:nth-child(8){
+    width: 8.030%;
+}
+
+.student-details-container span:nth-child(3){
+    width: 13%;
+}
+.student-details-container span:nth-child(4){
+    width: 20%;
+    margin : 0 4.5px 0 5px;
+}
+.student-details-container span:nth-child(5){
+    width: 9%;
+}
+.student-details-container span:nth-child(6){
+    width: 25%;
+}
+.student-details-container span:nth-child(7){
+    width: 8%;
+}
+.student-details-container span:nth-child(8){
+    width: 13%;
+}
+.student-details-container span:nth-child(9){
+    width: 8%;
+}
+.student-details-header span{
+    font-weight: bold;
+}
+.student-details-container:hover{
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.5);   
+}
+
+.blur-div{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    backdrop-filter: blur(5px);
+    z-index: 100;
+    visibility: hidden; 
+}
+
+.profile-side-bar{
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    width: 210px;
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    overflow: hidden;
+    pointer-events: none;
+}
+.setting-btn,
+.log-out,
+.add-student{
+    width: 200px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #4f5af8;
+    color: #ffff;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    z-index: 101;
+    border-radius: 10px;
+    margin-right: -450px;
+}
+.setting-btn{
+    transition: 0.8s ease-in-out;
+}
+.log-out{
+    transition: 0.5s ease-in-out;
+}
+.add-student{
+    transition: 1s ease-in-out;
+}
+
+.log-out img{
+    width: 18%;
+    margin: 0 18px 0 0;
+}
+.add-student img{
+    width: 30px;
+    margin: 0 10px 0 10px;
+}
+.setting-btn img{
+    width: 30px;
+    margin: 0 28px 0 0;
+}
+
+.btn-rotate{
+    content: '';
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    border: none;
+    background: #ffff;
+    border: solid 5px #616bf1;
+    border-right: solid 5px transparent;
+    animation: rotate 0.80s linear infinite;
+}
+
+@keyframes rotate {
+    0%  {
+        transform: rotate(0deg);
+        }
+    100%{
+        transform: rotate(360deg);
+        };
+}
+
+
+.student-register-form-center{
+    margin-top: 3%;
+}
+.student-registration-form{
+    width: 90%;
+    height: 710px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+    background-color: #ffff;
+    border-radius: 10px;
+    position: relative;
+}
+.student-registration-form h1{
+    margin: 4% 0 4% 0;
+}
+.student-registration-form img{
+    position: absolute;
+    width: 12%;
+    top: 0;
+    left: 10px;
+    cursor: pointer;
+}
+.batch-label{
+    width: 100%;
+}
+.batch-label h2{
+    display: inline;
+    line-height: 0;
+}
+.batch-label select{
+    width: 15%;
+    height: 30px;
+    font-size: 18px;
+    margin-left: 1%;
+    cursor: pointer;
+}
+.std-personal-details-div{
+    display: flex;
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 97%;
+    margin-top: 2%;
+}
+
+.std-personal-details-div label{
+    font-weight: bold;
+    font-size: 20px;
+}
+.std-personal-details-div label input{
+    font-size: 18px;
+    height: 30px;
+}
+.std-form-education-details-div{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    row-gap: 25px;
+    text-align: center;
+    padding: 0 2% 0 2%;
+}
+.std-form-education-details-div input{
+    height: 25px;
+    width: 45%;
+    font-size: 16px;
+}
+.std-form-education-details-div label{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.std-form-education-details-div label:nth-child(1),
+.std-form-education-details-div label:nth-child(5),
+.std-form-education-details-div label:nth-child(9),
+.std-form-education-details-div label:nth-child(13){
+    width: 60%;
+}
+.std-form-education-details-div label:nth-child(2),
+.std-form-education-details-div label:nth-child(6),
+.std-form-education-details-div label:nth-child(10),
+.std-form-education-details-div label:nth-child(14){
+    width: 90%;
+    margin-left: -14%;
+}
+.std-form-education-details-div label:nth-child(3),
+.std-form-education-details-div label:nth-child(7),
+.std-form-education-details-div label:nth-child(11),
+.std-form-education-details-div label:nth-child(15){
+    width: 80%;
+    margin-left: -8%;
+}
+.std-form-education-details-div label:nth-child(4),
+.std-form-education-details-div label:nth-child(8),
+.std-form-education-details-div label:nth-child(12),
+.std-form-education-details-div label:nth-child(16){
+    width: 109%;
+    margin-left: -7%;
+}
+.std-form-education-details-div label span{
+    margin-right: 30%;
+    font-weight: lighter;
+}
+.project-label{
+    font-size: 25px;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 2%;
+}
+.project-label select{
+    width: 100px;
+    height: 30px;
+    font-size: 18px;
+    cursor: pointer;
+}
+.completed-pg{
+    margin: 2% 0 3% 0;
+    font-size: 20px;
+    font-weight: bold;
+}
+.completed-pg select{
+    width: 70px;
+    height: 25px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.form-submit-btn{
+    background-color: #616bf1;
+    border: solid 1px #616bf1;
+    color: #ffff;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 3%;
+    width: 30%;
+    font-size: 18px;
+    height: 40px;
+    transition: width 0.5s ease-in-out;   
+}
+
+.student-pop-up-details-container{
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    border-radius: 20px;
+    background-color: #ffff;
+    width: 90%;
+    height: 92%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.student-details-left-div{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    height: 97%;
+    padding: 10px;
+    border-right: solid 1px lightgrey;
+}
+.student-details-left-div h2{
+    line-height: 1;
+    margin: 13% 0 10% 0;
+}
+.student-details-left-div h2,
+.student-details-left-div h3{
+    line-height: 0.5;
+    width: 99%;
+}
+.student-details-left-div h1{
+    margin-top: 10%;
+}
+.student-details-left-div h1 span{
+    font-size: 25px;
+}
+.student-details-left-div h3{
+    font-weight: lighter;
+}
+.std-img-main-btn{
+    width: 200px;
+    height: 200px;
+    background: #616bf1;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: solid 1px #616bf1;
+    position: relative;
+    margin-top: 15px;
+}
+.std-img-btn1{
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    border: none;
+    background: #ffff;
+    margin-bottom: 10px;
+}
+.std-img-btn2{
+    width: 120px;
+    height: 50px;
+    border-radius: 30px;
+    border: none;
+    background: #ffff;
+    margin-top: 10px;
+}
+
+.student-details-right-div{
+    width: 70%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    position: relative;
+}
+.student-details-right-div p{
+    font-weight: bold;
+}  
+.student-details-right-div span{
+    font-weight: lighter;
+}
+.std-inner-main-div{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.std-education-details-div{
+    margin: 1% 0 3% 0;
+    display: flex;
+    flex-direction: column;
+}
+.std-education-details-div div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+}
+.std-education-details-div div p{
+    text-align: start;
+    margin-left: 4%;
+    font-size: 18px;
+}
+.std-education-details-div div p:nth-child(1){
+    width: 20%;
+}
+.std-education-details-div div p:nth-child(2){
+    width: 40%;
+}
+.std-education-details-div div p:nth-child(3){
+    width: 15%;
+}
+.std-education-details-div div p:nth-child(4){
+    width: 25%;
+}
+.std-inner-div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    font-size: 18px;
+}
+.std-inner-div p{
+    width: 25%;
+}
+.std-attendence1{
+    font-weight: bold;
+    color: #616bf1;
+    font-size: 20px;
+}
+.std-attendence2{
+    font-weight: bold;
+    color: darkred;
+    font-size: 20px;
+}
+.feedback-p,
+#project-p{
+    margin-top: 2%;
+    margin-left: 5%;
+    font-size: 18px;
+    width: auto;
+}
+.feedback-p{
+    width: 90%;
+    text-align: start;
+    display: flex;
+    align-items: center;
+    height: 50px;
+}
+.feedback-p button{
+    margin-left: 3%;
+    border: solid 1px #616bf1;
+    background: #616bf1;
+    color: #ffff;
+    height: 30px;
+    width: 50px;
+    font-size: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: width 0.2s ease-in-out;
+}
+
+.feedback-span input{
+    height: 25px;
+    font-size: 18px;
+}
+
+.std-joining-date,
+.std-status{
+    width: 100%;
+}
+
+.std-joining-date{
+    font-size: 20px;
+    line-height: 1;
+}
+.std-batch{
+    width: 100%;
+}
+
+.std-info-progress-circle{
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    position: relative;
+}
+.progress-circle{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    position: relative;
+}
+.std-info-progress-circle circle,
+.progress-circle circle {
+    fill: none;
+    stroke-width: 10;
+}
+.std-info-progress-circle svg,
+.progress-circle svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+.progress-bg{
+    stroke: #f3f3f3;
+    z-index: 3;
+}
+.std-info-progress-circle,
+.progress-bar{
+    stroke-linecap: round;
+    transition: stroke-dashoffset 3s;
+}
+
+.progress-text-div{
+    width: 40%;
+    height: 20%;
+    position: absolute;
+    top: 40%;
+    left: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.progress-text {
+    font-size: 25px;
+    font-family: Arial, sans-serif;
+    color: #4caf50;
+}
+
+.close-std-details{
+    width: 20px;
+    position: absolute;
+    top: 3%;
+    right: 2.5%;
+    cursor: pointer;
+}
+.update-std-details-div{
+    position: absolute;
+    bottom: 2%;
+    right: 1%;
+    width: 300px;
+    height: 50px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.update-std-details-div button{
+    width: 45%;
+    height: 35px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: width 0.5s ease-in-out;
+}
+.std-details-discontinued-btn{
+    background-color: red;
+    border: solid 1px red;
+    color: #ffff;
+    font-size: 18px;
+}
+.std-details-update-btn{
+    border: solid 1px green;
+    background-color: green;
+    color: #ffff;
+    font-size: 18px;
+}
+
+
+.std-details-logo{
+    position: absolute;
+    left: 1%;
+    top: 1%;
+    width: 120px;
+}
+
+.attendance-pop-up-container{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+}
+
+.attendance-pop-up-div{
+    width: 27%;
+    height: 350px;
+    padding: 1% 3%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    background: #ffff;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    position: relative;
+}
+
+.attendance-pop-up-div label{
+    font-size: 20px;
+    margin: 10px 0 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.attendance-pop-up-div label input{
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+    margin-right: 15px;
+}
+.attendance-pop-up-div div{
+    width: 100%;
+    margin-top: 5%;
+}
+.attendance-submit-btn{
+    width: 50%;
+    height: 40px;
+    border: solid 1px #616bf1;
+    background-color: #616bf1;
+    color: #ffff;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: width 0.5s ease-in-out;
+}
+.attendance-submit-close-btn{
+    width: 15px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+}
+
+
+.std-batch-performance-pop-up-container{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 900;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+    visibility: hidden;
+}
+.std-batch-performance-pop-up{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 95%;
+    height: 85%;
+    background: #ffff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.std-batch-performance-inner-div{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    width: 100%;
+    margin-top: 2%;
+}
+.main-outer-circle-div,
+.outer-circle-div{
+    width: 150px;
+    height: 150px;
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.outer-circle-div{
+    margin-left: 27%;
+}
+.main-outer-circle-div span,
+.outer-circle-div span{
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    z-index: 3;
+}
+.main-inner-circle-div,
+.inner-circle-div{
+    width: 150px;
+    background: orange;
+    position: absolute;
+    bottom: 0;
+    height: 0;
+    transition: height 3s ease;
+}
+
+.std-batch-performance-logo{
+    width: 150px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+.std-batch-performance-span{
+    position: absolute;
+    top: 0;
+    right: 15px;
+    font-size: 50px;
+    cursor: pointer;
+}
+
+.std-discontinued-pop-up{
+    z-index: 3;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+}
+.std-discontinued-inner-div{
+    width: 350px;
+    height: 200px;
+    background: #ffff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    border-radius: 10px;
+    position: relative;
+}
+.std-discontinued-inner-div div{
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    height: 25%;
+    display: flex;
+    flex-direction: row;
+}
+.std-discontinued-inner-div div button{
+    width: 50%;
+    height: 100%;
+    border: solid 1px lightgrey;
+    font-size: 20px;
+    cursor: pointer;
+    background: #ffff;
+}
+.std-discontinued-inner-div div button:nth-child(1){
+    background: #ffff;
+    border-bottom-left-radius: 10px;
+    color: green;
+}
+.std-discontinued-inner-div div button:nth-child(1):hover{
+    background-color: green;
+    color: #ffff;
+}
+.std-discontinued-inner-div div button:nth-child(2){
+    color: red;
+    border-bottom-right-radius: 10px;
+}
+.std-discontinued-inner-div div button:nth-child(2):hover{
+    background-color: red;
+    color: #ffff;
+}
+
+.db-rotating-div-container,
+.rotating-div-container{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+}
+
+.db-rotating-img,
+.rotating-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    animation: rotating 1.50s linear infinite;
+}
+
+@keyframes rotating {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.std-attendance-pop-up-div{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    backdrop-filter: blur(5px);
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+    transition: 0.4s ease-in-out;
+}
+.std-attendance-pop-up-inner-div{
+    width: 40%;
+    height: 335px;
+    position: relative;
+    background: #ffff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    border-radius: 10px;
+}
+#X-times-span{
+    font-size: 50px;
+    position: absolute;
+    top: 0;
+    right: 10px;
+    cursor: pointer;
+    user-select: none;
+}
+.std-attendance-pop-up-inner-div button{
+    width: 90%;
+    height: 50px;
+    border-radius: 5px;
+    border: solid 1px #616bf1;
+    background: #616bf1;
+    font-size: 20px;
+    color: #ffff;
+    margin-top: 5%;
+    cursor: pointer;
+    transition: width 0.5s ease-in-out;
+}
+.std-attendance-pop-up-inner-div button:active{
+    background: #4953e6;
+}
+.std-attendance-pop-up-inner-div select{
+    width: 40%;
+    height: 40px;
+    font-size: 20px;
+    border-radius: 5px;
+    padding-left: 10px;
+    cursor: pointer;
+}
+
+.empty-search-label{
+    position: absolute;
+    top: 15%;
+    left: 0;
+    width: 100%;
+    visibility: hidden;
+}
+.empty-search-icon{
+    width: 20%;
+    height: 55%;
+}
+.empty-search-label h1{
+    color: #616bf1;
+}
+.empty-search-label span{
+    color: grey;
+}
+.empty-error-icon,
+.empty-std-icon{
+    position: absolute;
+    left: 30%;
+    width: 40%;
+    height: 80%;
+    object-fit: cover;
+    visibility: hidden;
+}
+.empty-std-icon{
+    top: 10%;
+}
+.empty-error-icon{
+    opacity: 0.9;
+    top: 20%;
+}
+
+.alert-div{
+    width: 50%;
+    height: 60px;
+    border: solid 1px red;
+    position: fixed;
+    top: 0;
+    left: 25%;
+    border-radius: 5px;
+    border: none;
+    display: flex;
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 1s ease-in-out,
+                top 0.5s ease-in-out;
+}
+.alert-div .X{
+    font-size: 40px;
+    position: absolute;
+    top: 0;
+    right: 1.3%;
+    color: #000;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.alert-div p{
+    color: darkred;
+    font-weight: bold;
+    font-size: 18px;
+    width: 90%;
+    height: auto;
+    text-align: center;
+}
+.alert-timer-line{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    transition: width 5s ease-in-out;
+}
+
+.disabled-btn{
+    background: grey;
+    border: solid 1px grey;
+}
+
+
+.att-opts-container{
+    position: relative;
+    width: 250px;
+}
+.main-opt-div{
+    border: solid 1px grey;
+    width: 250px;
+    height: 50px;
+    font-size: 23px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+}
+.main-opt-div p{
+    margin-left: 10px;
+}
+#down-arrow{
+    position: absolute;
+    right: 7px;
+    width: 20px;
+    transition: 0.5s ease-in-out;
+    cursor: pointer;
+}
+.opts-div{
+    position: absolute;
+    background: #ffff;
+    width: 250px;
+    max-height: 300px;
+    overflow-y: scroll;
+    margin: 0;
+    scrollbar-width: thin;
+    border: solid 1px grey;
+    border-radius: 10px;
+    visibility: hidden;
+    height: 0;
+    transition: height 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+.opts{
+    height: 300px;
+    transition: height 0.5s ease-in-out;
+    visibility: visible;
+}
+.batch-opt span{
+    margin-top: 8px;
+    font-size: 23px;
+    margin-left: 10px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.batch-opt img{
+    margin: 0 10px 0 10px;
+}
+.batch-opt:hover{
+    background: #1967d2;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    color: #fff;
+}
+.batch-opt{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+}
+.downArrow-rotate{
+    transform: rotate(180deg);
+}
+.confirm-operation-div{
+    position: fixed;
+    top: 0;
+    left: 31%;
+    width: 38%;
+    padding: 20px;
+    height: 120px;
+    border-radius: 10px;
+    background: #ffff;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    align-items: start;
+    justify-content: start;
+    font-size: 20px;
+    opacity: 0;
+    z-index: 905;
+    transition: 0.5s ease-in-out;
+    visibility: hidden;
+}
+.confirm-operation-div p{
+    width: 100%;
+    text-align: start;
+    height: auto;
+}
+.outer-confirm-div,
+.cancel-button{
+    position: absolute;
+    width: 100px;
+    bottom: 10%;
+    border-radius: 30px;
+}
+.outer-confirm-div{
+    right: 23%;
+    height: 40px;
+    border: solid 3px #4f5af8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffff;
+}
+.inner-confirm-button{
+    width: 96%;
+    height: 93%;
+    border-radius: 30px;
+    border: solid 1px #4f5af8;
+    background: #4f5af8;
+    color: #ffff;
+    font-size: 18px;
+    cursor: pointer;
+}
+.cancel-button{
+    right: 3%;
+    height: 43px;
+    background: #ffff;
+    border: solid 2px #4f5af8;
+    color: #4f5af8;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.student-form-X-icon{
+    position: absolute;
+    top: 0%;
+    right: 1%;
+    font-size: 50px;
+    cursor: pointer;
+}
+
+.settings-main-container{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+.profile-header-div{
+    position: absolute;
+    width: 100%;
+    height: 20%;
+    top: 0;
+    left: 0;
+    background: #4f5af8;
+}
+.profile-header-div button{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: #ffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: solid 1px #ffff;
+    position: absolute;
+    left: 5%;
+    top: 25%;
+}
+
+.change-password-container{
+    position: absolute;
+    width: 30%;
+    height: 50%;
+    top: 25%;
+    right: 0;
+    border: none;
+    border-left: solid 1px grey;
+}
+.change-password-container form{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.new-user-username,
+.new-user-mail,
+.new-user-pass,
+.new-user-con-pass,
+.new-pass-input,
+.confirm-new-pass-input,
+.old-pass-input{
+    width: 60%;
+    height: 40px;
+    font-size: 18px;
+    margin: 10px 0 10px 0;
+    outline: none;
+    border: none;
+    border-bottom: solid 1px grey;
+    background: transparent;
+}
+.new-user-submit-btn,
+.change-pass-submit{
+    width: 61%;
+    height: 40px;
+    margin-top: 15px;
+    border: solid 1px #4f5af8;
+    background: #4f5af8;
+    border-radius: 5px;
+    font-size: 18px;
+    color: #ffff;
+    cursor: pointer;
+    transition: 0.5s ease-in-out;
+}
+.settings-x-icon{
+    position: absolute;
+    top: 0;
+    right: 1%;
+    color: #ffff;
+    cursor: pointer;
+    font-size: 50px;
+}
+.isAdmin{
+    width: 60px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    font-size: 16px;
+    margin-left: 20px;
+}
+
+.user-details-container{
+    position: absolute;
+    top: 33%;
+    left: 0;
+    width: 37%;
+    height: 18%;
+    padding-left: 3%;
+}
+.user-details-container h2,
+.user-details-container h1{
+    width: 100%;
+    text-align: start;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+.total-users-details-container{
+    position: absolute;
+    width: 100%;
+    height: auto;
+    top: 75%;
+    left: 0;
+}
+.total-users-details-container h1{
+    width: 100%;
+    height: 50px;
+    margin-top: 5%;
+    border-bottom: solid 1px grey;
+}
+.total-users-inner-div{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    row-gap: 30px;
+    width: 100%;
+    height: auto;
+    margin-bottom: 10%;
+    z-index: 0;
+}
+.total-users-inner-div span{
+    font-size: 20px;
+}
+.total-users-inner-div button{
+    font-size: 20px;
+    width: 35%;
+    margin-left: 32%;
+    height: 40px;
+    cursor: pointer;
+    border-radius: 20px;
+    border: none;
+    color: #ffff;
+}
+
+.no-user-found-img{
+    position: absolute;
+    width: 25%;
+    top: 37%;
+    left: 37.5%;
+}
+
+
+.add-users-container{
+    position: absolute;
+    top: 25%;
+    left: 40%;
+    width: 30%;
+    height: 45%;
+}
+.add-users-container form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
