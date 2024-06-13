@@ -21,6 +21,8 @@ const StudentInfo = () => {
         history('/login');
     };
 
+    console.log(loginned, stdLogin)
+
     let score = 0;
 
     const setProgress = (percent) => {
@@ -45,7 +47,7 @@ const StudentInfo = () => {
         const batchStudy = parseInt(selectedStdBatchData.CaseStudies.split(' ')[0]);
         const batchInterview = parseInt(selectedStdBatchData.Interviews.split(' ')[0]);
 
-        score = Math.floor(((stdClass + stdMock + stdStudy + stdInterview) / (batchClass + batchMock + batchStudy + batchInterview)) * 100);
+        score = Math.floor(((stdClass + stdMock + stdStudy + stdInterview) / (batchClass + batchMock + batchStudy + batchInterview)) * 100) || 0;
         setProgress(score);
         const performanceProgressBar = document.querySelector('.progress-bar');
         const performanceStatus = document.querySelector('.performance-status');
@@ -90,9 +92,15 @@ const StudentInfo = () => {
         },50);
     },[])
 
-    const feedBackInput = () => {
-        const feedbackInputBtn = document.querySelector('.feedback-p button');
-        const feedbackInputElement = document.querySelector('.feedback-span');
+    const feedBackInput = (num) => {
+        let feedbackInputBtn,feedbackInputElement,updated_Feedback;
+        if (num === '1'){
+            feedbackInputBtn = document.querySelector('.feedback-p-1 button');
+            feedbackInputElement = document.querySelector('.feedback-span-1');
+        }else if (num === '2'){
+            feedbackInputBtn = document.querySelector('.feedback-p-2 button');
+            feedbackInputElement = document.querySelector('.feedback-span-2');
+        }
         let fedbckTxt = feedbackInputBtn.innerHTML
         feedbackInputBtn.style.width = '40px';
         feedbackInputBtn.style.height = '40px';
@@ -114,10 +122,18 @@ const StudentInfo = () => {
             feedbackInputBtn.style.border = 'solid 1px #616bf1';
             feedbackInputBtn.innerHTML = fedbckTxt;
             feedbackInputBtn.style.background = '#616bf1';
-            const updated_Feedback = document.querySelector('.updated-feeedback-input');
+            if (num === '1'){
+                updated_Feedback = document.querySelector('.updated-feeedback-input-1');
+            }else if (num === '2'){
+                updated_Feedback = document.querySelector('.updated-feeedback-input-2');
+            }
             if (feedbackInputBtn.innerHTML === 'Done'){
                 if (updated_Feedback.value.length > 0){
-                    selectedStdData.Feedback = updated_Feedback.value;
+                    if (num === '1'){
+                        selectedStdData.Feedback = updated_Feedback.value;
+                    }else if (num === '2'){
+                        selectedStdData.StudentFeedback = updated_Feedback.value;
+                    }
                     updateStdDetails(selectedStdData,'Feedback');
                     feedbackInputBtn.innerHTML = 'Edit';
                 }else{
@@ -126,7 +142,11 @@ const StudentInfo = () => {
                     Alert('error','An input value must be entered !');
                 }
             }else{
-                feedbackInputElement.innerHTML = '<input class="updated-feeedback-input" type="text">';
+                if (num === '1'){
+                    feedbackInputElement.innerHTML = '<input class="updated-feeedback-input-1" type="text">';
+                }else if (num === '2'){
+                    feedbackInputElement.innerHTML = '<input class="updated-feeedback-input-2" type="text">';
+                }
                 feedbackInputBtn.innerHTML = 'Done';
             };
         },2000);
@@ -186,8 +206,6 @@ const StudentInfo = () => {
         confirmationDiv('close');
     };
 
-    console.log(selectedStdData.Classes.split(' ')[0])
-
   return (
     <div>
     <img className="screen-error-img" src="images/screen-size-error.png" width="100%" alt=""/>
@@ -237,12 +255,13 @@ const StudentInfo = () => {
                     </div>
                 </div>
                 <p id="project-p">Project : <span> {selectedStdData.Project}</span></p>
-                <p class="feedback-p">Feedback &nbsp;:&nbsp; <span class="feedback-span"> {selectedStdData.Feedback}</span> <button class="feedback-edit-btn" onClick={feedBackInput}>Edit</button></p>
+                <p class="feedback-p feedback-p-1">Feedback &nbsp;:&nbsp; <span class="feedback-span feedback-span-1"> {selectedStdData.Feedback}</span> <button class="feedback-edit-btn" onClick={()=>feedBackInput('1')} style={{visibility : (loginned.includes('True')) ? 'visible' : 'hidden'}}>Edit</button></p>
+                <p class="feedback-p feedback-p-2">Student Feedback &nbsp;:&nbsp; <span class="feedback-span feedback-span-2"> {selectedStdData.StudentFeedback}</span> <button class="feedback-edit-btn" onClick={()=>feedBackInput('2')} style={{visibility : (loginned.includes('True')) ? 'hidden' : 'visible'}}>Edit</button></p>
                 <img class="std-details-logo" src="images/V-CUBE-Logo.png" alt="" />
                 <img class="close-std-details" src="images/x-icon.png" onClick={()=>{sessionStorage.setItem('StdLogin','False');history('/dashboard')}} alt="" />
                 <div class="update-std-details-div">
-                    <button class="std-details-discontinued-btn" onClick={()=>confirmationDiv('open')} style={{background : selectedStdData.Status === 'Active' ? 'red' : 'lightgrey',border : selectedStdData.Status === 'Active' ? 'solid 1px red' : 'solid 1px lightgrey',pointerEvents : selectedStdData.Status === 'Active' ? 'auto' : 'none'}}>Discontinued</button>
-                    <button class="std-details-update-btn" onClick={()=>{sessionStorage.setItem('updateStdForm','True');history('/studentform')}}>Update</button>
+                    <button class="std-details-discontinued-btn" onClick={()=>confirmationDiv('open')} style={{background : selectedStdData.Status === 'Active' ? 'red' : 'lightgrey',border : selectedStdData.Status === 'Active' ? 'solid 1px red' : 'solid 1px lightgrey',pointerEvents : selectedStdData.Status === 'Active' ? 'auto' : 'none',visibility : (loginned.includes('True')) ? 'visible' : 'hidden'}}>Discontinued</button>
+                    <button class="std-details-update-btn" onClick={()=>{sessionStorage.setItem('updateStdForm','True');history('/studentform')}} style={{visibility : (loginned.includes('True')) ? 'visible' : 'hidden'}}>Update</button>
                 </div>
             </div>
         </div>
