@@ -136,6 +136,7 @@ const StudentInfo = () => {
                     }
                     updateStdDetails(selectedStdData,'Feedback');
                     feedbackInputBtn.innerHTML = 'Edit';
+                    feedbackInputElement.innerHTML = updated_Feedback.value;
                 }else{
                     feedbackInputElement.innerHTML = selectedStdData.Feedback;
                     feedbackInputBtn.innerHTML = 'Edit';
