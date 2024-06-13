@@ -131,6 +131,7 @@ const AddStudent = () => {
                 Project : projectElement.value,
                 Feedback : wantToUpdateData.Feedback,
                 Status : wantToUpdateData.Status,
+                StudentFeedback : wantToUpdateData.StudentFeedback,
             };
             try {
                 let res = await axios.put('http://127.0.0.1:8000/students/', JSON.stringify(stdFormData), {
@@ -178,6 +179,7 @@ const AddStudent = () => {
                 Project : projectElement.value,
                 Feedback : 'N/A',
                 Status : 'Active',
+                StudentFeedback : 'N/A',
             };
             try {
                 let res = await axios.post('http://127.0.0.1:8000/students/', JSON.stringify(stdFormData), {
