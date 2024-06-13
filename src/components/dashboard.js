@@ -406,14 +406,14 @@ const Dashboard = () => {
         const blurdiv = document.querySelector('.blur-div');
         const opts = document.querySelectorAll('.logo-opt');
         const opt = Array.from(opts)
-        const optsDiv = document.querySelector('.profile-side-bar ');
+        const optsDiv = document.querySelector('.profile-side-bar');
         if (optsDiv && optsDiv.getAttribute('data-value') === 'hidden'){
             optsDiv.style.visibility = 'visible';
             blurdiv.style.visibility = 'visible';
             optsDiv.style.pointerEvents = 'auto';
             opt.forEach(ele=>ele.style.margin = '0');
             optsDiv.setAttribute('data-value','visible')
-        }else{
+        }else if (optsDiv && optsDiv.getAttribute('data-value') === 'visible'){
             opt.forEach(ele=>ele.style.marginRight = '-450px');
             setTimeout(()=>{
                 optsDiv.style.visibility = 'hidden';
