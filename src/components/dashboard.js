@@ -508,7 +508,7 @@ const Dashboard = () => {
             selectedDeleteEles.forEach(ele=>{
                 if (ele.checked === true){
                     batchesData.forEach(data=>{
-                        if (data.id === parseInt(ele.value)){
+                        if (data.BatchName === ele.value){
                             deleteSelectedBatch(data);
                             deleteSelectedBatch(data);
                         };
@@ -533,8 +533,7 @@ const Dashboard = () => {
             });
             if (res.status === 204){
                 Alert('success', 'Batch deleted successfully!');
-                const updatedBatches = batchesData.filter(batch => batch.id !== batchData.id);
-                setbatchesData(updatedBatches);
+                getBatchesData();
             }
         } catch (error) {
             Alert('error', 'Unfortunately, the batch deletion was unsuccessful.<br/>Please check & try again!');
