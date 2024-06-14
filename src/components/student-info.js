@@ -21,8 +21,6 @@ const StudentInfo = () => {
         history('/login');
     };
 
-    console.log(loginned, stdLogin)
-
     let score = 0;
 
     const setProgress = (percent) => {
@@ -155,6 +153,7 @@ const StudentInfo = () => {
 
     const updateStdDetails = async (data,status) => {
         const feedbackInputElement = document.querySelector('.feedback-span');
+        const disconBtn = document.querySelector('.std-details-discontinued-btn');
         const stdData = data;
         try {
             let res = await axios.put('http://127.0.0.1:8000/students/', JSON.stringify(stdData), {
@@ -169,6 +168,9 @@ const StudentInfo = () => {
                     feedbackInputElement.innerHTML = selectedStdData.Feedback;
                 }else{
                     Alert('success','Student status has been updated succesfully !');
+                    disconBtn.style.background = 'lightgrey';
+                    disconBtn.style.border = 'solid 1px lightgrey';
+                    disconBtn.style.pointerEvents = 'none';
                     sessionStorage.setItem('SelectedStudent',JSON.stringify(selectedStdData));
                     document.querySelector('.std-status-span').innerHTML = selectedStdData.Status;
                     document.querySelector('.std-status-span').style.color = 'red';
@@ -184,7 +186,13 @@ const StudentInfo = () => {
           }
     };
 
-    const confirmationDiv = (context) => {
+    const confirmationDiv = (context,name=null) => {
+        const txt = document.querySelector('.confirm-div-p');
+        if (name === 'discontinued'){
+           txt.innerHTML = 'Are you sure this student is discontinued ?';
+        }else{
+            txt.innerHTML = 'Are you sure you want to delete this student ?';
+        }
         const mainDiv = document.querySelector('.confirm-operation-div');
         const blurDiv = document.querySelector('.blur-div');
         if (context === 'open'){
@@ -202,9 +210,34 @@ const StudentInfo = () => {
     };
 
     const stdDiscontinued = () => {
-        selectedStdData.Status = `Discontinued on ${day} ${month} ${year}`;
-        updateStdDetails(selectedStdData,'Status');
+        const txt = document.querySelector('.confirm-div-p');
+        
+        if (txt.innerHTML.includes('discontinued')){
+            selectedStdData.Status = `Discontinued on ${day} ${month} ${year}`;
+            updateStdDetails(selectedStdData,'Status');
+        }else if (txt.innerHTML.includes('delete')){
+            deleteStudent(selectedStdData);
+        }
         confirmationDiv('close');
+    };
+
+    const deleteStudent = async (data) => {
+        try {
+            let res = await axios.delete('http://127.0.0.1:8000/students/', {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                data: JSON.stringify(data)
+            });
+            if (res.status === 204){
+                Alert('success', 'Student deleted successfully!');
+                setTimeout(()=>{
+                    history('/dashboard');
+                },3000)
+            }
+        } catch (error) {
+            Alert('error', 'Unfortunately, the student deletion was unsuccessful.<br/>Please check & try again!');
+        }
     };
 
   return (
@@ -260,9 +293,10 @@ const StudentInfo = () => {
                 <p class="feedback-p feedback-p-2">Student Feedback &nbsp;:&nbsp; <span class="feedback-span feedback-span-2"> {selectedStdData.StudentFeedback}</span> <button class="feedback-edit-btn" onClick={()=>feedBackInput('2')} style={{visibility : (loginned.includes('True')) ? 'hidden' : 'visible'}}>Edit</button></p>
                 <img class="std-details-logo" src="images/V-CUBE-Logo.png" alt="" />
                 <img class="close-std-details" src="images/x-icon.png" onClick={()=>{sessionStorage.setItem('StdLogin','False');history('/dashboard')}} alt="" />
-                <div class="update-std-details-div">
-                    <button class="std-details-discontinued-btn" onClick={()=>confirmationDiv('open')} style={{background : selectedStdData.Status === 'Active' ? 'red' : 'lightgrey',border : selectedStdData.Status === 'Active' ? 'solid 1px red' : 'solid 1px lightgrey',pointerEvents : selectedStdData.Status === 'Active' ? 'auto' : 'none',visibility : (loginned.includes('True')) ? 'visible' : 'hidden'}}>Discontinued</button>
-                    <button class="std-details-update-btn" onClick={()=>{sessionStorage.setItem('updateStdForm','True');history('/studentform')}} style={{visibility : (loginned.includes('True')) ? 'visible' : 'hidden'}}>Update</button>
+                <div class="update-std-details-div" style={{visibility : (loginned.includes('True')) ? 'visible' : 'hidden'}}>
+                    <button style={{fontSize : '18px', background : 'red', color : '#fff',border : 'solid 1px red', width : '170px'}} onClick={()=>confirmationDiv('open')}>Delete Student</button>
+                    <button class="std-details-discontinued-btn" onClick={()=>confirmationDiv('open','discontinued')} style={{background : selectedStdData.Status === 'Active' ? 'red' : 'lightgrey',border : selectedStdData.Status === 'Active' ? 'solid 1px red' : 'solid 1px lightgrey',pointerEvents : selectedStdData.Status === 'Active' ? 'auto' : 'none', width : '140px'}}>Discontinued</button>
+                    <button class="std-details-update-btn" onClick={()=>{sessionStorage.setItem('updateStdForm','True');history('/studentform')}} style={{width : '140px'}}>Update</button>
                 </div>
             </div>
         </div>
@@ -274,8 +308,8 @@ const StudentInfo = () => {
         </div>
         <div className="confirm-operation-div">
             <p style={{lineHeight : '0.5', margin : '0', color : 'red'}}>Note : This operation cannot be undone.</p>
-            <p style={{lineHeight : '1', fontWeight : 'bold'}}>Are you sure this student is discontinued ?</p>
-            <div className="outer-confirm-div" onClick={stdDiscontinued}><button className="inner-confirm-button">Confirm</button></div>
+            <p className="confirm-div-p" style={{lineHeight : '1', fontWeight : 'bold'}}></p>
+            <div className="outer-confirm-div" onClick={()=>stdDiscontinued()}><button className="inner-confirm-button">Confirm</button></div>
             <button className="cancel-button" onClick={()=>confirmationDiv('close')}>Cancel</button>
         </div>
         <div className="blur-div"></div>
