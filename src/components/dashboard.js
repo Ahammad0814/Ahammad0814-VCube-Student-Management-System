@@ -143,12 +143,18 @@ const Dashboard = () => {
         }else{
             const addBatchInput = document.querySelector('.add-batch-option');
             const addBatchBtn = document.querySelector('.add-batch-option-btn');
+            const deleteBatchCon = document.querySelector('.delete-batch-container');
+            const deleteBlurDiv = document.querySelector('.blur-div');
             if (event !== null){
                 const selectedValue = event.target.value;
                 if (event.target.value === 'AddBatch'){
                     selectElement.style.visibility = 'hidden';
                     addBatchInput.style.visibility = 'visible';
                     addBatchBtn.style.visibility = 'visible';
+                }else if (event.target.value === 'DeleteBatch'){
+                    deleteBatchCon.style.opacity = '1';
+                    deleteBatchCon.style.visibility = 'visible';
+                    deleteBlurDiv.style.visibility = 'visible';
                 }else{
                     setSelectedBatch(selectedValue);
                 }
@@ -424,8 +430,13 @@ const Dashboard = () => {
         }
     };
 
-    const confirmationDiv = (context) => {
-        const mainDiv = document.querySelector('.confirm-operation-div');
+    const confirmationDiv = (context,name) => {
+        let mainDiv;
+        if (name === 'logout'){
+            mainDiv = document.querySelector('.confirm-operation-div-1');
+        }else{
+            mainDiv = document.querySelector('.confirm-operation-div-2');
+        }
         if (mainDiv){
             if (context === 'open'){
                 mainDiv.style.top = '5%';
@@ -436,13 +447,13 @@ const Dashboard = () => {
                 mainDiv.style.visibility = 'hidden';
                 mainDiv.style.top = '0';
             }
-        }
+        };
     };
 
     const logout =()=>{
         localStorage.setItem('Login','False');
         Alert('success',"You've successfully logged out !");
-        confirmationDiv('close');
+        confirmationDiv('close','logout');
         setTimeout(()=>{
             history('/login');
             sideBar();
@@ -480,6 +491,83 @@ const Dashboard = () => {
             sideBar();
         }
     };
+
+    const deleteBatch = () => {
+        const deleteEle = document.querySelectorAll('.delete-batch-chx');
+        const selectedDeleteEles = Array.from(deleteEle);
+        const isFoundArray = []
+        selectedDeleteEles.forEach(ele=>{
+            if (ele.checked){
+                const isFound = studentsData.some(data=>data.BatchName === ele.value);
+                isFoundArray.push(isFound);
+            }
+        });
+        if (isFoundArray.some(ele=>ele === true)){
+            Alert('error','Cannot delete the batch. Students are assigned to this batch.<br/>Please change their batch assignments and try again')
+        }else{
+            selectedDeleteEles.forEach(ele=>{
+                if (ele.checked === true){
+                    batchesData.forEach(data=>{
+                        if (data.id === parseInt(ele.value)){
+                            deleteSelectedBatch(data);
+                            deleteSelectedBatch(data);
+                        };
+                    });
+                };
+            });
+        };
+        selectedDeleteEles.forEach((ele)=>{
+            ele.checked = false;
+        });
+        confirmationDiv('close','deleteBatch');
+        closeDeleteBatchDiv();
+    };
+
+    const deleteSelectedBatch = async (batchData) => {
+        try {
+            let res = await axios.delete('http://127.0.0.1:8000/batches/', {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                data: JSON.stringify(batchData)
+            });
+            if (res.status === 204){
+                Alert('success', 'Batch deleted successfully!');
+                const updatedBatches = batchesData.filter(batch => batch.id !== batchData.id);
+                setbatchesData(updatedBatches);
+            }
+        } catch (error) {
+            Alert('error', 'Unfortunately, the batch deletion was unsuccessful.<br/>Please check & try again!');
+        }
+    };
+
+    const closeDeleteBatchDiv = () => {
+        const deleteBatchCon = document.querySelector('.delete-batch-container');
+        const deleteBlurDiv = document.querySelector('.blur-div');
+        deleteBatchCon.style.transition = '0.5s ease-in-out';
+        deleteBatchCon.style.opacity = '0';
+        setTimeout(()=>{
+            deleteBatchCon.style.visibility = 'hidden';
+            deleteBlurDiv.style.visibility = 'hidden';
+        },500);
+        setSelectedBatch(batchesData[0].BatchName);
+        const deleteEle = document.querySelectorAll('.delete-batch-chx');
+        const selectedDeleteEles = Array.from(deleteEle);
+        selectedDeleteEles.forEach((ele)=>{
+            ele.checked = false;
+        });
+    };
+
+    const deleteConfrmDiv = () => {
+        const deleteEle = document.querySelectorAll('.delete-batch-chx');
+        const selectedDeleteEles = Array.from(deleteEle);
+        const isChecked = selectedDeleteEles.some(ele => ele.checked);
+        if (isChecked){
+            confirmationDiv('open','deleteBatch');
+        }else{
+            Alert('error','Select atleast one batch !');
+        }
+    };
     
     let dataCnt = 0;
     const searchDataArray = JSON.parse(sessionStorage.getItem('SearchedData'));
@@ -507,7 +595,9 @@ const Dashboard = () => {
                     <option value={batch.BatchName} style={{fontSize : '23px', cursor: 'pointer'}} selected={batch.BatchName === selectedBatch ? true : false}> {batch.BatchName}</option>
                     ))}
                     <option value="All" style={{fontSize : '25px'}} selected={selectedBatch === 'All' ? true : false}>All Batches</option>
-                    <option value="AddBatch" style={{fontSize : '25px'}}>Add Batch++</option>
+                    <option disabled></option>
+                    <option value="AddBatch" style={{fontSize : '25px'}}>Add Batch ++</option>
+                    <option value="DeleteBatch" style={{fontSize : '25px'}}>Delete Batch</option>
                 </select>
                 <input type="text" placeholder="Add Batch" className="add-batch-option" /> <button className="add-batch-option-btn" onClick={()=>dashboardBatchChange(null,'click')}>Add</button>
             </div>
@@ -573,13 +663,28 @@ const Dashboard = () => {
     <div className="profile-side-bar" data-value="hidden">
         <button className="add-student logo-opt" id="profile1" onClick={navigateAddStd}><img src="images/add-student-icon.png" alt=""/> Add Student </button>
         <button className="setting-btn logo-opt" onClick={navigateSettings}><img src="images/settings-icon.png" alt=""/>Settings</button>
-        <button className="log-out logo-opt" id="profile2" onClick={()=>confirmationDiv('open')}><img src="images/log-out-icon.png" alt=""/> Log Out </button>
+        <button className="log-out logo-opt" id="profile2" onClick={()=>confirmationDiv('open','logout')}><img src="images/log-out-icon.png" alt=""/> Log Out </button>
     </div>
     <div className="blur-div"></div>
-    <div className="confirm-operation-div">
+    <div className="confirm-operation-div confirm-operation-div-1">
         <p>Are you sure you want to log out ?</p>
         <div className="outer-confirm-div" onClick={logout}><button className="inner-confirm-button">Confirm</button></div>
-        <button className="cancel-button" onClick={()=>confirmationDiv('close')}>Cancel</button>
+        <button className="cancel-button" onClick={()=>confirmationDiv('close','logout')}>Cancel</button>
+    </div>
+    <div className="delete-batch-container">
+        <h1 style={{fontWeight : 'normal'}}>Select Batch</h1>
+        <div className="delete-batch-div">
+            {batchesData && batchesData.map((batch,index)=>(
+                <label><input type="checkbox" value={batch.BatchName} className="delete-batch-chx"/> {batch.BatchName}</label>
+            ))}
+        </div>
+        <button onClick={deleteConfrmDiv}>Delete</button>
+        <span className="delete-batch-X" onClick={closeDeleteBatchDiv}>&times;</span>
+    </div>
+    <div className="confirm-operation-div confirm-operation-div-2">
+        <p>Are you sure you want to delete the batch ?</p>
+        <div className="outer-confirm-div" onClick={deleteBatch}><button className="inner-confirm-button">Confirm</button></div>
+        <button className="cancel-button" onClick={()=>confirmationDiv('close','deleteBatch')}>Cancel</button>
     </div>
     </center>
   )
