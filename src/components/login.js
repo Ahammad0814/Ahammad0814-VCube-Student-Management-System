@@ -43,11 +43,17 @@ const Login = () => {
         getBatches();
     }, []);
 
+    useEffect(() => {
+        getLoginData();
+    }, [loginData]);
+
     const btnRotate = (ele) => {
         if (!batchesData){
             Alert('error','Something went wrong. Please try again later !')
         }else{
             let btnElement = ""
+            const password = document.querySelector('.password-input');
+            const email = document.querySelector('.email-input');
             const stdSelectOpt = document.querySelector('.std-batch-selection');
             const stdUserInput = document.querySelector('.std-email-input');
             const blurDiv = document.querySelector('.blurdiv');
@@ -59,9 +65,9 @@ const Login = () => {
             };
             btnElement.style.width = '40px';
             btnElement.innerHTML = "";
-            setTimeout(function () {
+            setTimeout(()=>{
                 btnElement.classList.add('login-btn-rotate');
-                setTimeout(function () {
+                setTimeout(()=>{
                     btnElement.classList.remove('login-btn-rotate');
                     btnElement.style.width = '50%';
                     btnElement.innerHTML = "Login";
@@ -83,25 +89,31 @@ const Login = () => {
                             Alert('error', 'Error finding student. Please check your input and try again.');
                             stdErrorMsg.style.visibility = 'visible';
                         }
-                    } else if (ele === 'Admin') {
-                        if (checkAdmin() === true) {
-                            const loginUserId = JSON.parse(localStorage.getItem('LoginUserId'));
-                            const activeUser = loginData && loginData.find(data => data.id === loginUserId);
-                            if (activeUser){
-                                if (activeUser.Permission === 'Granted'){
-                                    localStorage.setItem('Login',`True ${day} ${month} ${year}`);
-                                    blurDiv.style.visibility = 'visible';
-                                    Alert('success',`Loggined Successful. Welcome back <strong>${activeUser.Username}</strong>`);
-                                    setTimeout(()=>{
-                                        blurDiv.style.visibility = 'hidden';
-                                        history('/dashboard');
-                                    },5000)
-                                }else{
-                                    Alert('error',`Dear ${activeUser.Username}, Your login access has been denied.<br/>Please contact Admin and try again !`)
-                                }
-                            };
-                        } else{
-                            Alert('error','Invalid username or password !');
+                    }else if (ele === 'Admin') {
+                        if ((checkAdmin() !== true || checkAdmin() !== false) && checkAdmin() === email.value){
+                            const otp = Math.floor(100000 + Math.random() * 900000);
+                            setOTP(otp);
+                            sendMail(null,'ahammado828@gmail.com',otp,'User_OTP');
+                        }else{
+                            if (checkAdmin() === true) {
+                                const loginUserId = JSON.parse(localStorage.getItem('LoginUserId'));
+                                const activeUser = loginData && loginData.find(data => data.id === loginUserId);
+                                if (activeUser){
+                                    if (activeUser.Permission === 'Granted'){
+                                        blurDiv.style.visibility = 'visible';
+                                        Alert('success',`Loggined Successful. Welcome back <strong>${activeUser.Username}</strong>`);
+                                        setTimeout(()=>{
+                                            blurDiv.style.visibility = 'hidden';
+                                            localStorage.setItem('Login',`True ${day} ${month} ${year}`);
+                                            history('/dashboard');
+                                        },5000)
+                                    }else{
+                                        Alert('error',`Dear ${activeUser.Username}, Your login access has been denied.<br/>Please contact Admin and try again !`)
+                                    };
+                                };
+                            } else{
+                                Alert('error','Invalid username or password !');
+                            }
                         }
                     }
                 }, 3000);
@@ -156,6 +168,9 @@ const Login = () => {
     const checkAdmin = () => {
         const email = document.querySelector('.email-input').value;
         const password = document.querySelector('.password-input').value;
+        if ((loginData && loginData.length === 0) && password === 'Create User' && email.length > 0){
+            return email;
+        }
         for (const data of loginData) {
             if (data.Email === email || data.Username === email) {
                 if (data.Password === password){
@@ -163,9 +178,9 @@ const Login = () => {
                     return true;
                 } else {
                     return false;
-                }
+                };
             }
-        }
+        };
         return false;
     };
 
@@ -219,6 +234,8 @@ const Login = () => {
         }
     };
     const sendMail = async (data,mail,user,mailtype) => {
+        const password = document.querySelector('.password-input');
+        const email = document.querySelector('.email-input');
         const emailOptDiv = document.querySelector('.email-otp-div');
         const passwordDiv = document.querySelector('.reset-password-div');
         const mailData = {
@@ -235,13 +252,25 @@ const Login = () => {
             if (mailtype === 'Username'){
                 Alert('success','Your Username has been successfully sent to your email address !<br/>Also check spam folder if not found !');
                 forgotDivClose('close');
-            }else{
+            }else if (mailtype === 'OTP'){
                 Alert('success','OTP has been successfully sent to your email address !<br/>Also check spam folder if not found !');
                 setUserForgotDetail(data);
                 emailOptDiv.style.marginLeft = '-450px';
                 passwordDiv.style.right = '0';
-            }
-          }
+            }else if (mailtype === 'User_OTP'){
+                Alert('success','Enter OTP sent to the Admin email address to add user !<br/>Also check spam folder if not found !');
+                const docEle = document.querySelector('.user-create-container')
+                docEle.style.visibility = 'visible';
+                docEle.style.opacity = '0';
+                setTimeout(()=>{
+                    docEle.style.transition = '0.5s ease-in-out';
+                    docEle.style.opacity = '1';
+                },500);
+                document.querySelector('.user-c-username').value = email.value;
+                password.value = "";
+                email.value = "";
+            };
+          };
         } catch (error){
             if (mailtype === 'Username'){
                 Alert('error','There was an error sending the email. Please try again later !');
@@ -341,6 +370,63 @@ const Login = () => {
                 passSubmitBtn.style.width = '82%';
             },3000)
         },500)
+    };
+
+    const closeUserCreateDiv = () =>{
+        const inputEle = document.querySelectorAll('.user-create-Form input');
+        const inputEles = Array.from(inputEle);
+        inputEles.forEach((ele,index)=>{
+            if (index <= 4){
+                ele.value = "";
+            };
+        });
+        const docEle = document.querySelector('.user-create-container');
+        docEle.style.opacity = '0';
+        setTimeout(()=>{
+            docEle.style.visibility = 'hidden';
+        },500);
+    };
+
+    const submitCreateUser = (e) => {
+        e.preventDefault();
+        const userName = document.querySelector('.user-c-username');
+        const email = document.querySelector('.user-c-email');
+        const password = document.querySelector('.user-c-password');
+        const cnfPass = document.querySelector('.user-c-cnf-pass');
+        const otp = document.querySelector('.user-c-otp');
+        if (parseInt(otp.value) === userOTP){
+            if (password.value === cnfPass.value){
+                const newUserData = {
+                    Username : userName.value,
+                    Email : email.value,
+                    Password : password.value,
+                    User : 'Admin',
+                    Permission : 'Granted'
+                };
+                addUserLoginData(newUserData);
+            }else{
+                Alert('error',"Password does not match. Check and try again !")
+            };
+        }else{
+            Alert('error','Invalid OTP. Check and try again !');
+        };
+    };
+
+    const addUserLoginData = async (data) => {
+        try{
+            let res = await axios.post('http://127.0.0.1:8000/login/', JSON.stringify(data), {
+            headers: {
+              'Content-Type': 'application/json',
+              },
+          });
+          if (res.status === 200 || res.status === 201){
+            Alert('success','New User has been added successfully !');
+            closeUserCreateDiv();
+            setLoginData([...loginData, data]);
+          }
+        }catch (error){
+            Alert('error','Unfortunately, the new user addition was unsuccessful. Try again later ! ');
+        }
     }
 
     return (
@@ -401,6 +487,21 @@ const Login = () => {
                             </div>
                         </div>
                     </div>
+                </div>
+                <div className="user-create-container">
+                    <div className="forgot-pass-img-div">
+                        <button id="forgot-pass-btn1"></button>
+                        <button id="forgot-pass-btn2"></button>
+                    </div>
+                    <form action="" className="user-create-Form" onSubmit={(e)=>submitCreateUser(e)}>
+                        <input className="user-c-username" type="text" placeholder="Username" required />
+                        <input className="user-c-email" type="email" placeholder="Email" required />
+                        <input className="user-c-password" type="text" placeholder="Password" required />
+                        <input className="user-c-cnf-pass" type="password" placeholder="Confirm Password" required />
+                        <input className="user-c-otp" type="number" placeholder="OTP" required />
+                        <input type="submit" style={{background : '#616bf1', border : 'none', color : '#fff', borderRadius : '5px', height : '40px',cursor : 'pointer'}}/>
+                    </form>
+                    <span className="create-user-x" onClick={closeUserCreateDiv}>&times;</span>
                 </div>
                 <div className="forgot-password-div">
                     <div className="forgot-pass-img-div">
