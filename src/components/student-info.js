@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './dashboard.css';
 import { Alert, closeAlert } from './dashboard';
 import axios from 'axios';
@@ -22,7 +22,6 @@ const StudentInfo = () => {
     };
 
     let score = 0;
-
     const setProgress = (percent) => {
         const progressBar = document.querySelector('.progress-bar');
         const progressText = document.querySelector('.progress-text');
@@ -246,7 +245,7 @@ const StudentInfo = () => {
         <center  className="Main-Page-Container">
         <div className="student-pop-up-details-container">
             <div className="student-details-left-div">
-            <span className="std-img-main-btn"><button className="std-img-btn1"></button><button className="std-img-btn2"></button></span>
+                <img className='std-profile-img' src={selectedStdData.Image && selectedStdData.Image.length > 0 ? selectedStdData.Image : 'images/Empty-Profile.png'}/>
                 <h2>{selectedStdData ? selectedStdData.Name : null}</h2>
                 <h3>{selectedStdData ? selectedStdData.Phone : null}</h3>
                 <h3>{selectedStdData ? selectedStdData.Email : null}</h3>
@@ -292,10 +291,11 @@ const StudentInfo = () => {
                 <p class="feedback-p feedback-p-1">Feedback &nbsp;:&nbsp; <span class="feedback-span feedback-span-1"> {selectedStdData.Feedback}</span> <button class="feedback-edit-btn" onClick={()=>feedBackInput('1')} style={{visibility : (loginned.includes('True')) ? 'visible' : 'hidden'}}>Edit</button></p>
                 <p class="feedback-p feedback-p-2">Student Feedback &nbsp;:&nbsp; <span class="feedback-span feedback-span-2"> {selectedStdData.StudentFeedback}</span> <button class="feedback-edit-btn" onClick={()=>feedBackInput('2')} style={{visibility : (loginned.includes('True')) ? 'hidden' : 'visible'}}>Edit</button></p>
                 <img class="std-details-logo" src="images/V-CUBE-Logo.png" alt="" />
-                <img class="close-std-details" src="images/x-icon.png" onClick={()=>{sessionStorage.setItem('StdLogin','False');history('/dashboard')}} alt="" />
-                <div class="update-std-details-div" style={{visibility : (loginned.includes('True')) ? 'visible' : 'hidden'}}>
-                    <button style={{fontSize : '18px', background : 'red', color : '#fff',border : 'solid 1px red', width : '170px'}} onClick={()=>confirmationDiv('open')}>Delete Student</button>
-                    <button class="std-details-discontinued-btn" onClick={()=>confirmationDiv('open','discontinued')} style={{background : selectedStdData.Status === 'Active' ? 'red' : 'lightgrey',border : selectedStdData.Status === 'Active' ? 'solid 1px red' : 'solid 1px lightgrey',pointerEvents : selectedStdData.Status === 'Active' ? 'auto' : 'none', width : '140px'}}>Discontinued</button>
+                <img class="close-std-details" src="images/x-icon.png" alt="" onClick={()=> stdLogin === 'True' ? (history('/login'),sessionStorage.setItem('StdLogin', 'False')) : history('/dashboard')}/>
+                <div class="update-std-details-div" >
+                    <button style={{fontSize : '18px', background : 'red', color : '#fff',border : 'solid 1px red', width : '170px',visibility : (loginned.includes('True')) ? 'visible' : 'hidden'}} onClick={()=>confirmationDiv('open')}>Delete Student</button>
+                    <button class="std-details-discontinued-btn" onClick={()=>confirmationDiv('open','discontinued')} style={{background : selectedStdData.Status === 'Active' ? 'red' : 'lightgrey',border : selectedStdData.Status === 'Active' ? 'solid 1px red' : 'solid 1px lightgrey',pointerEvents : selectedStdData.Status === 'Active' ? 'auto' : 'none', width : '140px',visibility : (loginned.includes('True')) ? 'visible' : 'hidden'}}>Discontinued</button>
+                    <a href={selectedStdData.Resume} target='main' disabled={selectedStdData.Resume && selectedStdData.Resume.length > 0 ? false : true} style={{fontSize : '20px', border : 'none', background : selectedStdData.Resume && selectedStdData.Resume.length > 0 ? '#616bf1' : 'grey', color : '#fff', textDecoration : 'none',width : '150px',height : '35px', borderRadius : '5px', cursor : selectedStdData.Resume && selectedStdData.Resume.length > 0 ? 'pointer' : 'auto', display : 'flex', alignItems : 'center', justifyContent : 'center'}}>View Resume</a>
                     <button class="std-details-update-btn" onClick={()=>{sessionStorage.setItem('updateStdForm','True');history('/studentform')}} style={{width : '140px'}}>Update</button>
                 </div>
             </div>
