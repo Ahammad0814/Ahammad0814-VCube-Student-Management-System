@@ -89,10 +89,9 @@ const AddStudent = () => {
             schoolCGPAElement.value = wantToUpdateData.SSC_CGPA
             schoolYearElement.value = wantToUpdateData.SSC_Year
             projectElement.value = wantToUpdateData.Project
-
-        }else{
-
-        }
+            resumeELement.value = wantToUpdateData.Resume
+            imageElement.value = wantToUpdateData.Image
+        };
     };
 
     const studentForm = async (event) => {
