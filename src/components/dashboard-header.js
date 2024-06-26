@@ -171,21 +171,45 @@ const DashboardHeader = ({selectBatch, studentData, todayDate, Alert}) => {
                             found = batchData.some(data=>(selectedBatch === 'All' || data.BatchName === selectedBatch) && data.Interviews.includes(todayDate));
                         }
                         if (!found){
-                            batchData.forEach((data,index)=>{
-                                if (selectedBatch === 'All' || selectedBatch === data.BatchName){
-                                    if (attName === 'Class'){
-                                        data.Classes = `${parseInt(data.Classes.split(' ')[0]) + 1} ${data.id} ${todayDate}`;
-                                    }else if (attName === 'MockTest'){
-                                        data.MockTests = `${parseInt(data.MockTests.split(' ')[0]) + 1} ${data.id} ${todayDate}`;
-                                    }else if (attName === 'CaseStudy'){
-                                        data.CaseStudies = `${parseInt(data.CaseStudies.split(' ')[0]) + 1} ${data.id} ${todayDate}`;
-                                    }else if (attName === 'Interview'){
-                                        data.Interviews = `${parseInt(data.Interviews.split(' ')[0]) + 1} ${data.id} ${todayDate}`;
-                                    }
-                                    updateBatchAtt(data,attName,selectedBatch);
+                            let isAllGood = false;
+                            if (selectedBatch !== 'All'){
+                                const stdFind = studentData.some(std=>std.BatchName === selectedBatch);
+                                if (stdFind){
+                                    isAllGood = true;
+                                }else{
+                                    Alert('error','Students not found in the selected batch !');
                                 };
-                            });
-                            stdAttPopUp(null,'close');
+                            }else if (selectedBatch === 'All'){
+                                let stdCnt = 0;
+                                batchData.forEach((data,index)=>{
+                                    const isFound = studentData.some(fdata=>fdata.BatchName === data.BatchName);
+                                    if (isFound){
+                                        stdCnt += 1;
+                                    };
+                                });
+                                if (stdCnt === batchData.length){
+                                    isAllGood = true;
+                                }else{
+                                    Alert('error','Some students from the selected batch were not found !');
+                                }
+                            };
+                            if (isAllGood){
+                                batchData.forEach((data,index)=>{
+                                    if (selectedBatch === 'All' || selectedBatch === data.BatchName){
+                                        if (attName === 'Class'){
+                                            data.Classes = `${parseInt(data.Classes.split(' ')[0]) + 1} ${data.id} ${todayDate}`;
+                                        }else if (attName === 'MockTest'){
+                                            data.MockTests = `${parseInt(data.MockTests.split(' ')[0]) + 1} ${data.id} ${todayDate}`;
+                                        }else if (attName === 'CaseStudy'){
+                                            data.CaseStudies = `${parseInt(data.CaseStudies.split(' ')[0]) + 1} ${data.id} ${todayDate}`;
+                                        }else if (attName === 'Interview'){
+                                            data.Interviews = `${parseInt(data.Interviews.split(' ')[0]) + 1} ${data.id} ${todayDate}`;
+                                        }
+                                        updateBatchAtt(data,attName,selectedBatch);
+                                    };
+                                });
+                                stdAttPopUp(null,'close');
+                            };
                         }else{
                             Alert('warning','Some of selected batches have already taken attendance.<br/>Check and try again !',4000);
                         };
