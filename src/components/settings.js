@@ -10,7 +10,7 @@ const Settings = () => {
     const [loginData, setLoginData] = useState([]);
     const [selectId, setSelectId] = useState([]);
     const loginned = localStorage.getItem('Login') || 'False';
-    const loginUserId = JSON.parse(sessionStorage.getItem('LoginUserId'));
+    const loginUserId = JSON.parse(localStorage.getItem('LoginUserId'));
     const getLoginData = async () => {
         const login_Data = await fetchLoginData();
         setLoginData(login_Data);
@@ -36,9 +36,11 @@ const Settings = () => {
     let loginnedUser = "";
     if (Array.isArray(loginData) && loginData.length > 0){
         loginnedUser = loginData && loginData.find(data=> data.id === loginUserId);
+        console.log('worked')
     };
 
     const grantPermission = () => {
+        let isDelete = false;
         const userDetail = sessionStorage.getItem('UserDetail');
         loginData.forEach((data)=>{
             if (data.id === selectId){
@@ -46,8 +48,13 @@ const Settings = () => {
                     data.Permission = (data.Permission === 'Granted') ? 'Denied' : 'Granted';
                 }else if (userDetail === 'User'){
                     data.User = (data.User === 'Admin') ? 'User' : 'Admin';
+                }else if (userDetail == 'Delete'){
+                    isDelete = true;
+                    updateLoginData(data,'Delete');
                 }
-                updateLoginData(data,'Put');
+                if (!isDelete){
+                    updateLoginData(data,'Put');   
+                }
                 confirmationDiv('close');
             };
         });
@@ -162,14 +169,26 @@ const Settings = () => {
         } else if (methodType === 'Put') {
             method = axios.put;
             newData = data;
+        }else if (methodType === 'Delete'){
+            method = axios.delete;
+            newData = data;
         }
+        let res;
         try {
-            let res = await method('http://127.0.0.1:8000/login/', JSON.stringify(newData), {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-    
+            if (methodType === 'Delete'){
+                res = await method('http://127.0.0.1:8000/login/', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    data : JSON.stringify(newData)
+                });
+            }else{
+                res = await method('http://127.0.0.1:8000/login/',JSON.stringify(newData),{
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+            }
             if (res.status === 200 || res.status === 201) {
                 if (methodType === 'Post'){
                     Alert('success', 'New user added successfully!');
@@ -177,18 +196,22 @@ const Settings = () => {
                     password.value = '';
                     email.value = '';
                     conPassword.value = '';
-                }else{
+                }else if (methodType === 'Put'){
                     Alert('success', 'Details Updated successfully!');
                     oldPassEle.value = '';
                     newPassEle.value = '';
                     conPassEle.value = '';
+                }else if (methodType === 'Delete'){
+                    Alert('success','User deleted successfully!');
                 }
             }
         } catch (error) {
             if (methodType === 'Post'){
                 Alert('error', 'Unfortunately, the new user addition was unsuccessful.<br/>Please check & try again!');
-            }else{
+            }else if (methodType === 'Put'){
                 Alert('error', 'Unfortunately, the details addition was unsuccessful.<br/>Please check & try again!');
+            }else if (methodType === 'Delete'){
+                Alert('error','Unfortunately, the user deletion was unsuccessful.<br/>Please check & try again!');
             }
         }
     };
@@ -217,7 +240,7 @@ const Settings = () => {
                 <button><img className="profile-header-img" src="images/V-CUBE-Logo.png" alt="" width="100%"/></button>
                 <span className="settings-x-icon" onClick={()=>history('/dashboard')}>&times;</span>
             </div>
-            <div className="add-users-container" style={{opacity : loginnedUser.User === 'Admin' ? '1' : '0',pointerEvents : loginnedUser.User === 'Admin' ? 'auto' : 'none'}}>
+            <div className="add-users-container" style={{opacity : loginnedUser && loginnedUser.User === 'Admin' ? '1' : '0',pointerEvents : loginnedUser && loginnedUser.User === 'Admin' ? 'auto' : 'none'}}>
                 <h1>Add User</h1>
                 <form action="" onSubmit={(event)=>addNewUser(event)}>
                 <input type="text" placeholder="Username" className="new-user-username" required/>
@@ -237,20 +260,21 @@ const Settings = () => {
                 </form>            
             </div>
             <div className="user-details-container">
-                <h1>{loginnedUser.Username} <button className="isAdmin" style={{background : loginnedUser.User === 'Admin' ? '#616bf1' : '#88a9f0'}}>{loginnedUser.User}</button></h1>
-                <h2>{loginnedUser.Email}</h2>
+                <h1>{loginnedUser && loginnedUser.Username} <button className="isAdmin" style={{background : loginnedUser &&  loginnedUser.User === 'Admin' ? '#616bf1' : '#88a9f0'}}>{loginnedUser && loginnedUser.User}</button></h1>
+                <h2>{loginnedUser && loginnedUser.Email}</h2>
             </div>
-            <div className="total-users-details-container" style={{opacity : loginnedUser.User === 'Admin' ? '1' : '0',pointerEvents : loginnedUser.User === 'Admin' ? 'auto' : 'none'}}>
+            <div className="total-users-details-container" style={{opacity : loginnedUser && loginnedUser.User === 'Admin' ? '1' : '0',pointerEvents : loginnedUser && loginnedUser.User === 'Admin' ? 'auto' : 'none'}}>
                 <h1>Total Users</h1>
                 <div className="total-users-inner-div">
-                    <h2>Name</h2><h2>Email</h2><h2>Permission</h2><h2>User</h2>
+                    <h2>User</h2><h2>Name</h2><h2>Email</h2><h2>Permission</h2><h2>Remove User</h2>
                     {loginData && loginData.map((data,index)=>{
                         if (data.id !== loginUserId){
                             return(
                                 <React.Fragment key={index}>
+                                <button onClick={()=>{confirmationDiv('open'); setSelectId(data.id);sessionStorage.setItem('UserDetail','User')}} style={{background : data.User === 'Admin' ? '#616bf1' : '#88a9f0'}}>{data.User}</button>
                                 <span>{data.Username}</span><span>{data.Email}</span>
                                 <button onClick={()=>{confirmationDiv('open'); setSelectId(data.id);sessionStorage.setItem('UserDetail','Permission')}} style={{background : data.Permission === 'Granted' ? 'green' : 'red'}}>{data.Permission}</button>
-                                <button onClick={()=>{confirmationDiv('open'); setSelectId(data.id);sessionStorage.setItem('UserDetail','User')}} style={{background : data.User === 'Admin' ? '#616bf1' : '#88a9f0'}}>{data.User}</button>
+                                <button style={{background : 'red', color : '#fff'}} onClick={()=>{confirmationDiv('open'); setSelectId(data.id);sessionStorage.setItem('UserDetail','Delete')}}>Delete</button>
                                 </React.Fragment>
                             ) 
                         };
