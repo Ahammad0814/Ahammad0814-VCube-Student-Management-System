@@ -323,7 +323,7 @@ const AddStudent = () => {
             document.querySelector('.std-Image').setAttribute('src',e.target.value);
         };
         if (e.target.value.length >= 255){
-            Alert('error','Maximum URL characters do not exceed more than 255 characters !');
+            Alert('error','URL length do not exceed more than 255 characters !');
             if (type === 'Image'){
                 document.querySelector('.std-Image').setAttribute('src','images/Empty-Profile.png');
             };
