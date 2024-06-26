@@ -417,11 +417,11 @@ body{
 
 
 .student-register-form-center{
-    margin-top: 3%;
+    margin-top: 2%;
 }
 .student-registration-form{
-    width: 90%;
-    height: 710px;
+    width: 93%;
+    height: 730px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -431,15 +431,43 @@ body{
     position: relative;
 }
 .student-registration-form h1{
-    margin: 4% 0 4% 0;
+    margin: 7% 0 2% 0;
 }
-.student-registration-form img{
+.student-registration-form .form-logo{
     position: absolute;
     width: 12%;
-    top: 0;
-    left: 10px;
+    top: -15px;
+    left: 44%;
     cursor: pointer;
 }
+.image-upload-div{
+    position: absolute;
+    min-width: 280px;
+    max-width: 330px;
+    height: 190px;
+    top: 10px;
+    left: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+}
+.image-upload-div img{
+    width: 150px;
+    height: 150px;
+    border: solid 1px grey;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.image-upload-div input{
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    bottom: 0;
+    font-size: 18px;
+    height: 25px;
+}
+
 .batch-label{
     width: 100%;
 }
@@ -523,11 +551,24 @@ body{
     margin-right: 30%;
     font-weight: lighter;
 }
-.project-label{
-    font-size: 25px;
-    font-weight: bold;
+.upload-div{
     width: 100%;
-    margin-top: 2%;
+    height: 40px;
+    margin: 30px 0 0 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.resume-label input{
+    font-size: 18px;
+    height: 25px;
+}
+.resume-label,
+.project-label{
+    font-size: 23px;
+    font-weight: bold;
+    margin: 0 20px 0 20px;
 }
 .project-label select{
     width: 100px;
@@ -553,7 +594,7 @@ body{
     color: #ffff;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 3%;
+    margin-top: 2%;
     width: 30%;
     font-size: 18px;
     height: 40px;
@@ -602,34 +643,11 @@ body{
 .student-details-left-div h3{
     font-weight: lighter;
 }
-.std-img-main-btn{
+
+.std-profile-img{
     width: 200px;
     height: 200px;
-    background: #616bf1;
     border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: solid 1px #616bf1;
-    position: relative;
-    margin-top: 15px;
-}
-.std-img-btn1{
-    height: 60px;
-    width: 60px;
-    border-radius: 50%;
-    border: none;
-    background: #ffff;
-    margin-bottom: 10px;
-}
-.std-img-btn2{
-    width: 120px;
-    height: 50px;
-    border-radius: 30px;
-    border: none;
-    background: #ffff;
-    margin-top: 10px;
 }
 
 .student-details-right-div{
@@ -704,7 +722,7 @@ body{
 }
 .feedback-p,
 #project-p{
-    margin-top: 2%;
+    margin-top: 1%;
     margin-left: 5%;
     font-size: 18px;
     width: auto;
@@ -817,20 +835,25 @@ body{
     position: absolute;
     bottom: 2%;
     right: 1%;
-    width: 500px;
+    width: 98%;
     height: 50px;
     cursor: pointer;
     border: none;
     background: transparent;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: start;
 }
 .update-std-details-div button{
     height: 35px;
     cursor: pointer;
     border-radius: 5px;
     transition: width 0.5s ease-in-out;
+    margin: 0 10px 0 10px;
+}
+.update-std-details-div a{
+    margin-left: 200px;
+    margin-right: 10px;
 }
 .std-details-discontinued-btn{
     background-color: red;
@@ -1487,7 +1510,7 @@ body{
 }
 .total-users-inner-div{
     display: grid;
-    grid-template-columns: repeat(4,1fr);
+    grid-template-columns: repeat(5,1fr);
     row-gap: 30px;
     width: 100%;
     height: auto;
@@ -1528,4 +1551,34 @@ body{
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+.excel-upload{
+    z-index: 100;
+    position: absolute;
+    top: 50px;
+    right: 100px;
+    font-size: 25px;
+    font-weight: bold;
+    width: 25%;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+.excel-upload button{
+    width: 200px;
+    height: 30px;
+    font-size: 18px;
+    color: #fff;
+    background: #1967d2;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.excel-upload input{
+    font-size: 16px;
+    border: solid 1.5px black;
+    border-radius: 5px;
 }
