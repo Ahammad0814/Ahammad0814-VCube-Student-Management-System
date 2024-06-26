@@ -256,7 +256,7 @@ const AddStudent = () => {
             formsubmitBtn.style.borderRight = 'solid 5px transparent';
         },500);
         setTimeout(()=>{
-            studentForm(event)
+            studentForm(event);
         },3000);
     };
 
