@@ -685,7 +685,7 @@ body{
 .std-education-details-div div p{
     text-align: start;
     margin-left: 4%;
-    font-size: 18px;
+    /* font-size: 18px; */
 }
 .std-education-details-div div p:nth-child(1){
     width: 20%;
@@ -768,7 +768,6 @@ body{
 }
 
 .std-joining-date{
-    font-size: 20px;
     line-height: 1;
 }
 .std-batch{
@@ -1581,4 +1580,65 @@ body{
     font-size: 16px;
     border: solid 1.5px black;
     border-radius: 5px;
+}
+
+
+@media (max-width : 1310px) {
+    .std-education-details-div span,
+    .std-education-details-div p{
+        font-size: 15px;
+        line-height: 1;
+    }
+    .std-inner-div span,
+    .std-inner-div p{
+        font-size: 15px;
+        line-height: 1;
+        margin-top: 0;
+    }
+    .student-details-right-div h1{
+        font-size: 22px;
+    }
+    .std-joining-date{
+        font-size: 20px;
+        margin: 5px;
+    }
+    .student-details-right-div h2{
+        font-size: 19px;
+    }
+    .project-p span,
+    .feedback-p,
+    .project-p{
+        font-size: 15px;
+        margin-top: 0;
+        margin-bottom: 5px;
+    }
+    .update-std-details-div a,
+    .update-std-details-div button{
+        font-size: 14px;
+        height: 30px;
+    }
+    .std-profile-img{
+        width: 150px;
+        height: 150px;
+    }
+    .std-info-progress-circle{
+        height: 150px;
+        width: 150px;
+    }
+}
+
+@media (min-width : 1311px) {
+    .std-education-details-div span,
+    .std-education-details-div p{
+        font-size: 18px;
+    }
+    .std-joining-date{
+        font-size: 23px;
+    }
+    .update-std-details-div a{
+        font-size: 20px;
+    }
+    .update-std-details-div button{
+        font-size: 18px;
+    }
 }
