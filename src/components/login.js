@@ -73,17 +73,19 @@ const Login = () => {
                                 sessionStorage.setItem('StdID',JSON.stringify(stdData.id));
                                 const selectedBatch = batchesData.find(data=>data.BatchName === stdData.BatchName);
                                 sessionStorage.setItem('SelectedBatchData',JSON.stringify(selectedBatch));
+                                sessionStorage.setItem('StdLogin','True');
                                 history('/studentinfo');
                             }else{
                                 Alert('error',"Sorry, we couldn't find the student. Check the information you entered and try again !")
-                                stdErrorMsg.innerHTML = 'Visit for <a href="+91%9100573972">Assistance</a>';
+                                stdErrorMsg.style.visibility = 'visible';
                             }
                         }else{
                             Alert('error', 'Error finding student. Please check your input and try again.');
+                            stdErrorMsg.style.visibility = 'visible';
                         }
                     } else if (ele === 'Admin') {
                         if (checkAdmin() === true) {
-                            const loginUserId = JSON.parse(sessionStorage.getItem('LoginUserId'));
+                            const loginUserId = JSON.parse(localStorage.getItem('LoginUserId'));
                             const activeUser = loginData && loginData.find(data => data.id === loginUserId);
                             if (activeUser){
                                 if (activeUser.Permission === 'Granted'){
@@ -157,7 +159,7 @@ const Login = () => {
         for (const data of loginData) {
             if (data.Email === email || data.Username === email) {
                 if (data.Password === password){
-                    sessionStorage.setItem('LoginUserId',JSON.stringify(data.id));
+                    localStorage.setItem('LoginUserId',JSON.stringify(data.id));
                     return true;
                 } else {
                     return false;
@@ -395,7 +397,7 @@ const Login = () => {
                                 </label>
                                 <span className="admin-login" onClick={() => changeLogin('student')}>Admin Login</span>
                                 <button className="std-login-btn" onClick={() => btnRotate('Student')}>Login</button>
-                                <span className="std-login-error-msg" style={{ color: 'red', marginTop: '15px' }}></span>
+                                <span className="std-login-error-msg" style={{ color: 'red', marginTop: '15px', visibility : 'hidden' }}>Visit for <a href="https://www.vcubesoftsolutions.com/" target="main">Assistance</a></span>
                             </div>
                         </div>
                     </div>
