@@ -318,6 +318,19 @@ const AddStudent = () => {
         };
     };
 
+    const checkURL = (e,type) => {
+        if (type === 'Image'){
+            document.querySelector('.std-Image').setAttribute('src',e.target.value);
+        };
+        if (e.target.value.length >= 255){
+            Alert('error','Maximum URL characters do not exceed more than 255 characters !');
+            if (type === 'Image'){
+                document.querySelector('.std-Image').setAttribute('src','images/Empty-Profile.png');
+            };
+            e.target.value = "";
+        };
+    };
+
   return (
     <div>
     <img className="screen-error-img" src="images/screen-size-error.png" width="100%" alt=""/>
@@ -339,7 +352,7 @@ const AddStudent = () => {
                 </label>
                 <div className='image-upload-div'>
                     <img className='std-Image' src="images/Empty-Profile.png" />
-                    <input type='text' className='std-image-input' placeholder='Profile Image URL' onChange={(e) =>document.querySelector('.std-Image').setAttribute('src',e.target.value)} />
+                    <input type='text' className='std-image-input' placeholder='Profile Image URL' onChange={(e) =>checkURL(e,'Image')} />
                 </div>
 
                 <div className="std-personal-details-div">
@@ -373,7 +386,7 @@ const AddStudent = () => {
                     <label>School Passed Year : <input type="number" className="std-school-year" required = {std_Login === 'True' ? true : false} /></label>
                 </div>
                 <div className='upload-div'>
-                    <label className="resume-label">Resume link : <input className='std-resume' type='text' placeholder='Resume URL'/></label>
+                    <label className="resume-label">Resume link : <input className='std-resume' onChange={(e)=>checkURL(e,'Resume')} type='text' placeholder='Resume URL'/></label>
                     <label for="project" className="project-label">Project : &nbsp;
                         <select className="std-project">
                             <option value="No">No</option>
