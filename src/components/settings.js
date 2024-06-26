@@ -263,9 +263,9 @@ const Settings = () => {
                 <h1>{loginnedUser && loginnedUser.Username} <button className="isAdmin" style={{background : loginnedUser &&  loginnedUser.User === 'Admin' ? '#616bf1' : '#88a9f0'}}>{loginnedUser && loginnedUser.User}</button></h1>
                 <h2>{loginnedUser && loginnedUser.Email}</h2>
             </div>
-            <div className="total-users-details-container" style={{opacity : loginnedUser && loginnedUser.User === 'Admin' ? '1' : '0',pointerEvents : loginnedUser && loginnedUser.User === 'Admin' ? 'auto' : 'none'}}>
-                <h1>Total Users</h1>
-                <div className="total-users-inner-div">
+            <div className="total-users-details-container">
+                <h1 style={{opacity : loginnedUser && loginnedUser.User === 'Admin' ? '1' : '0',pointerEvents : loginnedUser && loginnedUser.User === 'Admin' ? 'auto' : 'none'}}>Total Users</h1>
+                <div className="total-users-inner-div" style={{opacity : loginnedUser && loginnedUser.User === 'Admin' ? '1' : '0',pointerEvents : loginnedUser && loginnedUser.User === 'Admin' ? 'auto' : 'none'}}>
                     <h2>User</h2><h2>Name</h2><h2>Email</h2><h2>Permission</h2><h2>Remove User</h2>
                     {loginData && loginData.map((data,index)=>{
                         if (data.id !== loginUserId){
