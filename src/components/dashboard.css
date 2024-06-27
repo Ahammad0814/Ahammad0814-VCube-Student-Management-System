@@ -417,11 +417,11 @@ body{
 
 
 .student-register-form-center{
-    margin-top: 2%;
+    margin-top: 1.7%;
 }
 .student-registration-form{
     width: 93%;
-    height: 730px;
+    height: 740px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -500,6 +500,18 @@ body{
     font-size: 18px;
     height: 30px;
 }
+.pg-project-container{
+    width: 100%;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0 30px 0;
+}
+.pg-project-container label{
+    margin: 0 50px 0 50px;
+}
 .std-form-education-details-div{
     display: grid;
     grid-template-columns: repeat(4,1fr);
@@ -560,16 +572,21 @@ body{
     align-items: center;
     justify-content: center;
 }
+.linkedin-label input,
+.git-label input,
 .resume-label input{
     font-size: 18px;
     height: 25px;
 }
+.linkedin-label,
+.git-label,
 .resume-label,
 .project-label{
-    font-size: 23px;
+    font-size: 20px;
     font-weight: bold;
     margin: 0 20px 0 20px;
 }
+
 .project-label select{
     width: 100px;
     height: 30px;
@@ -577,7 +594,6 @@ body{
     cursor: pointer;
 }
 .completed-pg{
-    margin: 2% 0 3% 0;
     font-size: 20px;
     font-weight: bold;
 }
@@ -594,7 +610,7 @@ body{
     color: #ffff;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 2%;
+    margin: 2% 0 7px 0;
     width: 30%;
     font-size: 18px;
     height: 40px;
@@ -627,7 +643,7 @@ body{
 }
 .student-details-left-div h2{
     line-height: 1;
-    margin: 13% 0 10% 0;
+    margin: 10% 0 5% 0;
 }
 .student-details-left-div h2,
 .student-details-left-div h3{
@@ -635,19 +651,21 @@ body{
     width: 99%;
 }
 .student-details-left-div h1{
-    margin-top: 10%;
+    margin-top: 5%;
 }
 .student-details-left-div h1 span{
     font-size: 25px;
 }
 .student-details-left-div h3{
     font-weight: lighter;
+    margin: 4% 0 4% 0;
 }
 
 .std-profile-img{
     width: 200px;
     height: 200px;
     border-radius: 50%;
+    object-fit: cover;
 }
 
 .student-details-right-div{
@@ -665,6 +683,25 @@ body{
 .student-details-right-div span{
     font-weight: lighter;
 }
+.std-g-l-links{
+    width: 100%;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+.std-git-url,
+.std-linkedin-url{
+    margin: 0 15px 0 15px;
+}
+.std-git-url img,
+.std-linkedin-url img{
+    width: 30px;
+    cursor: pointer;
+}
+
 .std-inner-main-div{
     width: 100%;
     display: flex;
