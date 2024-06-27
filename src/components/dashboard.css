@@ -338,7 +338,7 @@ body{
     left: 0;
     backdrop-filter: blur(5px);
     z-index: 100;
-    visibility: hidden; 
+    visibility: hidden;
 }
 
 .profile-side-bar{
@@ -861,11 +861,21 @@ body{
 }
 
 .close-std-details{
-    width: 20px;
+    width: 50px;
+    height: 30px;
     position: absolute;
-    top: 3%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    top: 2%;
     right: 2.5%;
     cursor: pointer;
+    font-size: 20px;
+    color: #4953e6;
+    text-decoration: underline;
+}
+.close-std-details img{
+    width: 20px;
 }
 .update-std-details-div{
     position: absolute;
