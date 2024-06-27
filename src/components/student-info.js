@@ -252,7 +252,7 @@ const StudentInfo = () => {
 
                 <label className='std-g-l-links'>
                     <a className='std-git-url' href={selectedStdData.Github} style={{opacity : selectedStdData.Github ? '1' : '0.3', cursor : selectedStdData.Github ? 'pointer' : 'auto', pointerEvents : selectedStdData.Github ? 'auto' : 'none'}} target='main'><img src='images/git-logo.png' /></a>
-                    <a className='std-linkedin-url' href={selectedStdData.Linkedin} style={{opacity : selectedStdData.Linkedin ? '1' : '0.3', cursor : selectedStdData.Linkedin ? 'pointer' : 'auto', pointerEvents : selectedStdData.Linkedin ? 'auto' : 'none'}} target='main'><img src='images/linkedin_logo.png' /></a>
+                    <a className='std-linkedin-url' href={selectedStdData.Linkedin} style={{opacity : selectedStdData.Linkedin ? '1' : '0.3', cursor : selectedStdData.Linkedin ? 'pointer' : 'auto', pointerEvents : selectedStdData.Linkedin ? 'auto' : 'none'}} target='main'><img src='images/LinkedIn_logo.png' /></a>
                 </label>
 
                 <h1>Performance &nbsp;:&nbsp; <span className="performance-status"></span></h1>
