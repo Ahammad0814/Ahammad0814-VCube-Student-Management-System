@@ -1625,6 +1625,9 @@ body{
         height: 150px;
         width: 150px;
     }
+    .student-details-left-div h1{
+        font-size: 25px;
+    }
 }
 
 @media (min-width : 1311px) {
