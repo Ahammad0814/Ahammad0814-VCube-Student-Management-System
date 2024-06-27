@@ -60,6 +60,8 @@ const AddStudent = () => {
     const imageElement = document.querySelector('.std-image-input');
     const resumeELement = document.querySelector('.std-resume');
     const wantToUpdateData = JSON.parse(sessionStorage.getItem('SelectedStudent')) || "";
+    const gitEle = document.querySelector('.git-url');
+    const linkedinEle = document.querySelector('.linkedin-url');
     const iD = wantToUpdateData.id;
     const ModifyData = sessionStorage.getItem('updateStdForm');
 
@@ -91,6 +93,9 @@ const AddStudent = () => {
             projectElement.value = wantToUpdateData.Project
             resumeELement.value = wantToUpdateData.Resume
             imageElement.value = wantToUpdateData.Image
+            document.querySelector('.std-Image').setAttribute('src',wantToUpdateData.Image);
+            gitEle.value = wantToUpdateData.Github
+            linkedinEle.value = wantToUpdateData.Linkedin
         };
     };
 
@@ -137,8 +142,10 @@ const AddStudent = () => {
                 Feedback : wantToUpdateData.Feedback,
                 Status : wantToUpdateData.Status,
                 StudentFeedback : wantToUpdateData.StudentFeedback,
-                Resume : resumeELement.value,
-                Image : imageElement.value
+                Resume : resumeELement.value || null,
+                Image : imageElement.value || null,
+                Github : gitEle.value || null,
+                Linkedin : linkedinEle.value || null
             };
             try {
                 let res = await axios.put('http://127.0.0.1:8000/students/', JSON.stringify(stdFormData), {
@@ -195,8 +202,10 @@ const AddStudent = () => {
                     Feedback : 'N/A',
                     Status : 'Active',
                     StudentFeedback : 'N/A',
-                    Resume : resumeELement.value,
-                    Image : imageElement.value
+                    Resume : resumeELement.value || null,
+                    Image : imageElement.value || null,
+                    Github : gitEle.value || null,
+                    Linkedin : linkedinEle.value || null
                 };
                 try {
                     let res = await axios.post('http://127.0.0.1:8000/students/', JSON.stringify(stdFormData), {
@@ -330,13 +339,35 @@ const AddStudent = () => {
         };
     };
 
+    const isValidUrl = (e) => {
+        e.preventDefault();
+        const expression = /^(http|https):\/\/[^ "]+\.[^ "]+$/;
+        const newUrlEles = []
+        const urlEles = [imageElement.value, resumeELement.value, gitEle.value, linkedinEle.value]
+        console.log(urlEles[0].length);
+        urlEles.forEach(ele=>{
+            if (ele.length > 0){
+                newUrlEles.push(ele)
+            };
+        });
+        if (newUrlEles.length > 0){
+            const isUrlValid = newUrlEles.every(ele=>expression.test(ele));
+            if (!isUrlValid){
+                Alert('error','Enter a valid URL !');
+            };
+            return isUrlValid;
+        }else{
+            return true
+        };
+    };
+
   return (
     <div>
     <img className="screen-error-img" src="images/screen-size-error.png" width="100%" alt=""/>
         <div className="Main-Page-Container">
             <center className="student-register-form-center">
             <label style={{visibility : ModifyData === 'True' ? 'hidden' : 'visible'}} className='excel-upload'>Upload by Excel : <input type='file' className='excelfile'/><button className='excel-upload-btn' onClick={updateStudentFiles}>Upload</button></label>
-            <form onSubmit={(event)=>btnRotate(event)} action="" className="student-registration-form">
+            <form onSubmit={(event)=>{isValidUrl(event) && btnRotate(event)}} action="" className="student-registration-form">
                 <h1>Student Register Form</h1>
                 <img src="images/V-CUBE-Logo.png" className="form-logo" alt="" onClick={()=>std_Login === 'False' && history('/dashboard')}/>
                 <span className="student-form-X-icon" onClick={xIconlocate}>&times;</span>
@@ -360,12 +391,20 @@ const AddStudent = () => {
                     <label>Phone : <input type="number" className="std-phone" required disabled={std_Login === 'True' ? true : false} /></label>
                     <label>Email : <input type="email" className="std-mail" required disabled={std_Login === 'True' ? true : false} /></label>
                 </div>
-                <label className="completed-pg" >Completed PostGraduate : &nbsp; 
-                    <select className="pg-completion" onChange={pgCompleted}>
-                        <option value="No">No</option>
-                        <option value="Yes">Yes</option>
-                    </select>
-                </label>
+                <div className='pg-project-container'>
+                    <label className="completed-pg" >Completed PostGraduate : &nbsp; 
+                        <select className="pg-completion" onChange={pgCompleted}>
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </label>
+                    <label for="project" className="project-label">Project : &nbsp;
+                        <select className="std-project">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </label>
+                </div>
                 <div className="std-form-education-details-div">
                     <label>PG : <input type="text" className="std-pg" disabled /></label>
                     <label>PG Branch : <input type="text" className="std-pg-branch" disabled /></label>
@@ -385,16 +424,12 @@ const AddStudent = () => {
                     <label>School Passed Year : <input type="number" className="std-school-year" required = {std_Login === 'True' ? true : false} /></label>
                 </div>
                 <div className='upload-div'>
-                    <label className="resume-label">Resume link : <input className='std-resume' onChange={(e)=>checkURL(e,'Resume')} type='text' placeholder='Resume URL'/></label>
-                    <label for="project" className="project-label">Project : &nbsp;
-                        <select className="std-project">
-                            <option value="No">No</option>
-                            <option value="Yes">Yes</option>
-                        </select>
-                    </label>
-                    <a href='https://imgbb.com/' target='main' style={{fontSize : '18px', color : 'red', marginLeft : '20px'}}>Don't have resume or image link ?</a>
+                    <label className="resume-label">Resume link : <input className='std-resume' onChange={(e)=>checkURL(e,'Resume')} type='text' placeholder='Resume URL' /></label>
+                    <label className='git-label'>Github : <input type='text' placeholder='Github link' className='git-url' onChange={(e)=>checkURL(e,'Github')} /></label>
+                    <label className='linkedin-label'>Linkedin : <input type='text' placeholder='Linkedin link' className='linkedin-url' onChange={(e)=>checkURL(e,'Linkedin')} /></label>
                 </div>
                 <input className="form-submit-btn" type="submit" value="Submit" />
+                <a href='https://imgbb.com/' target='main' style={{fontSize : '18px', color : 'red', marginLeft : '20px'}}>Don't have resume or image link ?</a>
             </form>
             <div className="alert-div">
                 <img className="alert-div-img" src="" alt="" width="40px"/>
