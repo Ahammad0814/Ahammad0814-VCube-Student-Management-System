@@ -6,6 +6,26 @@ import { Alert, closeAlert } from './dashboard';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+const today = new Date();
+const day = today.getDate();
+const options = { month: 'long' };
+const month = today.toLocaleDateString('en-US', options);
+const year = today.getFullYear();
+
+export const sendStdAlert = async(mail,mailtype) => {
+    const mailData = {
+        Email : mail,
+        OTP : `${day}-${month}-${year} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}} ${mailtype}`,
+    };
+    try{
+        let res = await axios.post('http://127.0.0.1:8000/sendotp/', JSON.stringify(mailData), {
+            headers: {
+            'Content-Type': 'application/json',
+            },
+        });
+    }catch(error){
+    };
+};
 
 const StudentInfo = () => {
     const selectedStdData = JSON.parse(sessionStorage.getItem('SelectedStudent'));
@@ -13,11 +33,6 @@ const StudentInfo = () => {
     const stdID = JSON.parse(sessionStorage.getItem('StdID'));
     const [userOTP,setUserOTP] = useState([]);
     const history = useNavigate();
-    const today = new Date();
-    const day = today.getDate();
-    const options = { month: 'long' };
-    const month = today.toLocaleDateString('en-US', options);
-    const year = today.getFullYear();
 
     if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) {
 
@@ -37,6 +52,7 @@ const StudentInfo = () => {
         if (sessionStorage.getItem('isStudentdLoggined') === 'True'){
             setTimeout(()=>{
                 Alert('note',`Hello ${selectedStdData.Name}`);
+                sendStdAlert(selectedStdData.Email,'Std_Login_Alert');
                 sessionStorage.setItem('isStudentdLoggined','False');
             },50);
         };
@@ -245,12 +261,24 @@ const StudentInfo = () => {
             }else if (txt.innerHTML.includes('login authentication')){
                 const otp = Math.floor(100000 + Math.random() * 900000);
                 setUserOTP(otp);
-                sendOTP(selectedStdData.Email,otp,'User_Auth');
+                Alert('warning','Sending OTP. Please wait...',1000);
+                setTimeout(()=>{
+                    document.querySelector('.blur-div').style.visibility = 'visible';
+                    setTimeout(()=>{
+                        sendOTP(selectedStdData.Email,otp,'User_Auth');
+                    },2000);
+                },10);
 
             }else if (txt.innerHTML.includes('edit details')){
                 const otp = Math.floor(100000 + Math.random() * 900000);
                 setUserOTP(otp);
-                sendOTP(selectedStdData.Email,otp,'User_Details_Change');
+                Alert('warning','Sending OTP. Please wait...',1000);
+                setTimeout(()=>{
+                    document.querySelector('.blur-div').style.visibility = 'visible';
+                    setTimeout(()=>{
+                        sendOTP(selectedStdData.Email,otp,'User_Details_Change');
+                    },2000);
+                },10);
             }
             confirmationDiv('close');
         };
@@ -311,7 +339,8 @@ const StudentInfo = () => {
                     closeStdOTPDiv('open');
                 };
             }catch(error){
-                Alert('error','There was an error sending the OTP. Please try again later !'); 
+                Alert('error','There was an error sending the OTP. Please try again later !');
+                document.querySelector('.blur-div').style.visibility = 'hidden';
             };
         };
 
@@ -370,6 +399,7 @@ const StudentInfo = () => {
                     Alert('success','Your login authentication changed successfully !');
                     changeBtn();
                     getStudents();
+                    sendStdAlert(data.Email,'Auth_Alert');
                 };
             }catch(error){
                 Alert('error','There was an error changing login authentication. Please try again later !'); 
