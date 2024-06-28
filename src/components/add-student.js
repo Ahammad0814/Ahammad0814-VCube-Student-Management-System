@@ -4,6 +4,7 @@ import { Alert, closeAlert } from './dashboard';
 import axios from 'axios';
 import { isAdminAuth, isStudentAuth } from './dashboard';
 import { useNavigate } from 'react-router-dom';
+import { sendStdAlert } from './student-info';
 import * as XLSX from 'xlsx';
 
 const AddStudent = () => {
@@ -146,6 +147,9 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
                     if (res.status === 200 || res.status === 201){
                         Alert('success',`Student : ${nameElement.value} details updated successfully !`);
                         sessionStorage.setItem('SelectedStudent',JSON.stringify(stdFormData));
+                        if (!isAdminAuth() && isStudentAuth()){
+                            sendStdAlert(stdFormData.Email,'Std_Details_Update_Alert');
+                        }
                     }
                 } catch (error){
                     Alert('error', 'Unfortunately, the student details update was unsuccessful.<br/>Please check & try again !');
@@ -256,8 +260,7 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
             },3000);
         };
 
-        const isStdFoundExcel = () =>{
-            const stdF_Data = JSON.parse(sessionStorage.getItem('ExcelData'));
+        const isStdFoundExcel = (stdF_Data) =>{
             let isFound = false;
             stdF_Data.forEach(ex_data=>{
                 studentsData.forEach(data=>{
@@ -279,52 +282,20 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
         };
 
         const updateStudentFiles = async() => {
-            const submitBtn = document.querySelector('.excel-upload-btn');
             const file = document.querySelector('.excelfile').files[0];
             if (file){
                 if (file.name.includes('.xlxs') || file.name.includes('.xls')){
                     checkExcelStd();
-                    if (JSON.parse(sessionStorage.getItem('ExcelData')) && JSON.parse(sessionStorage.getItem('ExcelData').length > 0)){
-                        submitBtn.innerHTML = "";
-                        submitBtn.style.background = '#fff';
-                        submitBtn.style.borderRadius = '50%';
-                        submitBtn.style.width = '35px';
-                        submitBtn.style.height = '35px';
-                        submitBtn.style.border = 'solid 5px #1967d2';
-                        submitBtn.style.borderRight = 'solid 5px #fff';
-                        submitBtn.classList.add('btn-rotate');
-                        setTimeout(()=>{
-                            if (!isStdFoundExcel()){
-                                addStdDetilsByExcel();
-                            }else{
-                                Alert('error','Student with Mobile or Email exists !');
-                            };
-                            submitBtn.innerHTML = "Upload";
-                            submitBtn.style.background = '#1967d2';
-                            submitBtn.style.borderRadius = '5px';
-                            submitBtn.style.width = '200px';
-                            submitBtn.style.height = '30px';
-                            submitBtn.style.border = 'none';
-                            submitBtn.classList.remove('btn-rotate');
-                            setTimeout(()=>{
-                                sessionStorage.setItem('ExcelData',JSON.stringify([]));
-                                history('/dashboard');
-                            },2000);
-                        },3000);
-                    }else{
-                        Alert('error','No data found or error finding data !')
-                    };
                 }else{
                 Alert('error','Only excel files are allowed !');
                 };
-            }
-
-            if (file === undefined || file === null){
+            }else{
                 Alert('error','Insert Excel file to upload student details !');
             };
         };
 
         const checkExcelStd = () => {
+            const submitBtn = document.querySelector('.excel-upload-btn');
             const reader = new FileReader();
             const file = document.querySelector('.excelfile').files[0];
             reader.onload = (e) => {
@@ -333,7 +304,35 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
               const sheetName = workbook.SheetNames[0];
               const sheet = workbook.Sheets[sheetName];
               const jsonData = XLSX.utils.sheet_to_json(sheet);
-              sessionStorage.setItem('ExcelData',JSON.stringify(jsonData));
+              if (jsonData && jsonData.length > 0){
+                submitBtn.innerHTML = "";
+                submitBtn.style.background = '#fff';
+                submitBtn.style.borderRadius = '50%';
+                submitBtn.style.width = '35px';
+                submitBtn.style.height = '35px';
+                submitBtn.style.border = 'solid 5px #1967d2';
+                submitBtn.style.borderRight = 'solid 5px #fff';
+                submitBtn.classList.add('btn-rotate');
+                setTimeout(()=>{
+                    if (!isStdFoundExcel(jsonData)){
+                        addStdDetilsByExcel();
+                    }else{
+                        Alert('error','Student with Mobile or Email exists !');
+                    };
+                    submitBtn.innerHTML = "Upload";
+                    submitBtn.style.background = '#1967d2';
+                    submitBtn.style.borderRadius = '5px';
+                    submitBtn.style.width = '200px';
+                    submitBtn.style.height = '30px';
+                    submitBtn.style.border = 'none';
+                    submitBtn.classList.remove('btn-rotate');
+                    setTimeout(()=>{
+                        history('/dashboard');
+                    },2000);
+                },3000);
+            }else{
+                Alert('error','No data found or error finding data !')
+            };
             };
             reader.readAsBinaryString(file);
         };
@@ -430,9 +429,9 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
 
                     <div className="std-personal-details-div">
                         <h3>Student &nbsp; S.No : &nbsp;<span className="std-ID" style={{fontWeight : 'lighter'}}>1</span></h3>
-                        <label>Name : <input type="text" className="std-name" required disabled={(!isAdminAuth() && isStudentAuth()) === 'True' ? true : false} /></label>
-                        <label>Phone : <input type="number" className="std-phone" required disabled={(!isAdminAuth() && isStudentAuth()) === 'True' ? true : false} /></label>
-                        <label>Email : <input type="email" className="std-mail" required disabled={(!isAdminAuth() && isStudentAuth()) === 'True' ? true : false} /></label>
+                        <label>Name : <input type="text" className="std-name" required disabled={(!isAdminAuth() && isStudentAuth()) ? true : false} /></label>
+                        <label>Phone : <input type="number" className="std-phone" required disabled={(!isAdminAuth() && isStudentAuth()) ? true : false} /></label>
+                        <label>Email : <input type="email" className="std-mail" required disabled={(!isAdminAuth() && isStudentAuth()) ? true : false} /></label>
                     </div>
                     <div className='pg-project-container'>
                         <label className="completed-pg" >Completed PostGraduate : &nbsp; 
