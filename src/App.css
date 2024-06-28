@@ -185,7 +185,10 @@ button{
     outline: none;
     font-size: 20px;
 }
-
+.std-login-input::-webkit-inner-spin-button,
+.std-login-input::-webkit-outer-spin-button,
+.std-detail-auth-div input::-webkit-inner-spin-button,
+.std-detail-auth-div input::-webkit-outer-spin-button,
 .user-create-container form input::-webkit-inner-spin-button,
 .user-create-container form input::-webkit-outer-spin-button{
     -webkit-appearance: none;
@@ -196,5 +199,95 @@ button{
     font-size: 50px;
     top: 0;
     right: 15px;
+    cursor: pointer;
+}
+
+.stdAuth-container{
+    position: absolute;
+    bottom: 25px;
+    left: 40px;
+    font-size: 20px;
+    font-weight: bold;
+    width: 50%;
+}
+.stdAuth-container label{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+}
+.stdAuth-container div{
+    width: 70px;
+    height: 30px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: 30px;
+    position: relative;
+}
+.stdAuth-container div button{
+    position: absolute;
+    height: 100%;
+    width: 45%;
+    border-radius: 50%;
+    border: none;
+    background: #fff;
+    transition: 0.5s ease-in-out;
+    cursor: pointer;
+}
+
+.std-detail-auth-div{
+    position: absolute;
+    width: 500px;
+    height: 300px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    background: #fff;
+    border-radius: 10px;
+    top: 30%;
+    left: 35%;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    visibility: hidden;
+    opacity: 0;
+}
+.std-detail-auth-div p{
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+.std-detail-auth-div input{
+    width: 77%;
+    padding-left: 10px;
+    height: 40px;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+.std-detail-auth-div button{
+    width: 80%;
+    height: 40px;
+    font-size: 20px;
+    color: #fff;
+    background: #616bf1;
+    border: solid 1px #616bf1;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.stdBtn{
+    animation: rotateStdBtn 0.80s linear infinite;
+}
+@keyframes rotateStdBtn{
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+.std-detail-auth-div span{
+    font-size: 50px;
+    position: absolute;
+    top: 0;
+    right: 20px;
     cursor: pointer;
 }
