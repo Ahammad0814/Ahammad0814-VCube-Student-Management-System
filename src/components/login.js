@@ -138,7 +138,7 @@ const Login = () => {
                             if ((checkAdmin() !== true || checkAdmin() !== false) && checkAdmin() === email.value){
                                 const otp = Math.floor(100000 + Math.random() * 900000);
                                 setOTP(otp);
-                                sendMail(null,'amarapudinesh1234@gmail.com',otp,'User_OTP');
+                                sendMail(null,'ahammado828@gmail.com',otp,'User_OTP');
                             }else{
                                 if (checkAdmin() === true) {
                                     const loginUserId = JSON.parse(localStorage.getItem('LoginUserId'));
@@ -285,54 +285,64 @@ const Login = () => {
             }
         };
         const sendMail = async (data,mail,user,mailtype) => {
+            Alert('warning','Sending OTP. Please wait...',1000);
+            document.querySelector('.blurdiv').style.visibility = 'visible';
             const password = document.querySelector('.password-input');
             const email = document.querySelector('.email-input');
             const emailOptDiv = document.querySelector('.email-otp-div');
             const passwordDiv = document.querySelector('.reset-password-div');
             const mailData = {
-            Email : mail,
-            OTP : `${user} ${mailtype}`,
-            }
-        try {
-            let res = await axios.post('http://127.0.0.1:8000/sendotp/', JSON.stringify(mailData), {
-                headers: {
-                'Content-Type': 'application/json',
-                },
-            });
+                Email : mail,
+                OTP : `${user} ${mailtype}`,
+            };
+            try {
+                let res = await axios.post('http://127.0.0.1:8000/sendotp/', JSON.stringify(mailData), {
+                    headers: {
+                    'Content-Type': 'application/json',
+                    },
+                });
             if (res.status === 200 || res.status === 201){
-                if (mailtype === 'Username'){
-                    Alert('success','Your Username has been successfully sent to your email address !<br/>Also check spam folder if not found !');
-                    forgotDivClose('close');
-                }else if (mailtype === 'OTP'){
-                    Alert('success','OTP has been successfully sent to your email address !<br/>Also check spam folder if not found !');
-                    setUserForgotDetail(data);
-                    emailOptDiv.style.marginLeft = '-450px';
-                    passwordDiv.style.right = '0';
-                }else if (mailtype === 'User_OTP'){
-                    Alert('success','Enter OTP sent to the Admin email address to add user !<br/>Also check spam folder if not found !');
-                    const docEle = document.querySelector('.user-create-container')
-                    docEle.style.visibility = 'visible';
-                    docEle.style.opacity = '0';
-                    setTimeout(()=>{
-                        docEle.style.transition = '0.5s ease-in-out';
-                        docEle.style.opacity = '1';
-                    },500);
-                    document.querySelector('.user-c-username').value = email.value;
-                    password.value = "";
-                    email.value = "";
-                }else if (mailtype === 'Std_Login_OTP'){
-                    Alert('success','OTP has been successfully sent to your email address !<br/>Also check spam folder if not found !');
-                    stdChkOTP();
-                    setUserLO(true);
-                };
+                setTimeout(()=>{
+                    if (mailtype === 'Username'){
+                        Alert('success','Your Username has been successfully sent to your email address !<br/>Also check spam folder if not found !');
+                        forgotDivClose('close');
+                    }else if (mailtype === 'OTP'){
+                        Alert('success','OTP has been successfully sent to your email address !<br/>Also check spam folder if not found !');
+                        setUserForgotDetail(data);
+                        emailOptDiv.style.marginLeft = '-450px';
+                        passwordDiv.style.right = '0';
+                    }else if (mailtype === 'User_OTP'){
+                        Alert('success','Enter OTP sent to the Admin email address to add user !<br/>Also check spam folder if not found !');
+                        const docEle = document.querySelector('.user-create-container')
+                        docEle.style.visibility = 'visible';
+                        docEle.style.opacity = '0';
+                        setTimeout(()=>{
+                            docEle.style.transition = '0.5s ease-in-out';
+                            docEle.style.opacity = '1';
+                        },500);
+                        document.querySelector('.user-c-username').value = email.value;
+                        password.value = "";
+                        email.value = "";
+                    }else if (mailtype === 'Std_Login_OTP'){
+                        Alert('success','OTP has been successfully sent to your email address !<br/>Also check spam folder if not found !');
+                        stdChkOTP();
+                        setUserLO(true);
+                        document.querySelector('.blurdiv').style.visibility = 'hidden';
+                    };
+                },1100);
             };
             } catch (error){
-                if (mailtype === 'Username'){
-                    Alert('error','There was an error sending the email. Please try again later !');
-                }else{
-                    Alert('error','There was an error sending the OTP. Please try again later !');
-                }            
-            }      
+                setTimeout(()=>{
+                    if (mailtype === 'Std_Login_OTP' || mailtype == 'User_OTP'){
+                        document.querySelector('.blurdiv').style.visibility = 'hidden';
+                    };
+                    if (mailtype === 'Username'){
+                        Alert('error','There was an error sending the email. Please try again later !');
+                    }else{
+                        Alert('error','There was an error sending the OTP. Please try again later !');
+                    }   
+                },2100);         
+            }
         };
 
         const updatePassword = async (data,email,newPassword) => {
@@ -439,6 +449,7 @@ const Login = () => {
             docEle.style.opacity = '0';
             setTimeout(()=>{
                 docEle.style.visibility = 'hidden';
+                document.querySelector('.blurdiv').style.visibility = 'hidden';
             },500);
         };
 
@@ -498,7 +509,7 @@ const Login = () => {
                     <div className="main-login-container" data-login-type="">
                         <div className="inner-login-div">
                             <div className="login-form-left-div">
-                                <img src="images/V-CUBE-Logo-Blue.png" className="login-Favicon" />
+                                <img src="images/V-CUBE-Logo.png" className="login-Favicon" />
                                 <div>
                                     <img className="admin-login-icon" src="images/admin-login.gif" width="100px" />
                                     <img src="images/std-login-icon.png" className="std-login-icon"/>
