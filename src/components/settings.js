@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import './dashboard.css';
 import { fetchLoginData } from "./data";
 import { useNavigate } from "react-router-dom";
+import { isAdminAuth, isStudentAuth } from './dashboard';
 import axios from "axios";
 import { Alert, closeAlert } from "./dashboard.js";
 
@@ -23,20 +24,11 @@ const Settings = () => {
         getLoginData();
     },[loginData]);
 
-    const today = new Date();
-    const day = today.getDate();
-    const options = { month: 'long' };
-    const month = today.toLocaleDateString('en-US', options);
-    const year = today.getFullYear();
-
-    if (loginned === 'False' || !loginned.includes(`True ${day} ${month} ${year}`)){
-        history('/login');
-    };
+if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) {
 
     let loginnedUser = "";
     if (Array.isArray(loginData) && loginData.length > 0){
         loginnedUser = loginData && loginData.find(data=> data.id === loginUserId);
-        console.log('worked')
     };
 
     const grantPermission = () => {
@@ -218,6 +210,14 @@ const Settings = () => {
 
     const logout =()=>{
         localStorage.setItem('Login','False');
+        localStorage.setItem('isAuthenticated','False');
+        sessionStorage.setItem('SelectedStudent',JSON.stringify([]));
+        sessionStorage.setItem('StdID',JSON.stringify([]));
+        sessionStorage.setItem('SelectedBatchData',JSON.stringify([]));
+        sessionStorage.setItem('StdLogin','False');
+        sessionStorage.setItem('isStdAuthenticated','False');
+        sessionStorage.setItem('isAdminLoggined','False');
+        sessionStorage.setItem('isStudentdLoggined','False');
         Alert('success',"You've successfully logged out !");
         setTimeout(()=>{
             history('/login');
@@ -300,6 +300,10 @@ const Settings = () => {
         </div>
     </div>
   )
-}
+}else{
+    sessionStorage.setItem('Tried','True');
+    history('/login');
+};
+};
 
 export default Settings;
