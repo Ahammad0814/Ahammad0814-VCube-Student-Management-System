@@ -159,6 +159,14 @@ const Dashboard = () => {
             },50);
         };
 
+        sessionStorage.getItem('SelectedStudent',JSON.stringify([]));
+        if (sessionStorage.getItem('std_into_tried') === 'True'){
+            sessionStorage.setItem('std_into_tried','False');
+            setTimeout(()=>{
+                Alert('error','Student must be selected to show details !');
+            },100);
+        };
+
         const addBatch =  async (batchName) => {
             const data = {
                 BatchName : batchName,
