@@ -43,6 +43,26 @@ const StudentInfo = () => {
             },50);
         };
         sessionStorage.setItem('updateStdForm','False');
+
+        const chkStudents = async () => {
+            const student_Data = await fetchStudentsData();
+            if (student_Data && student_Data.length > 0){
+                return true;
+            }else{
+                return false;
+            }
+        };
+
+    if ((isAdminAuth() && !isStudentAuth()) && ((selectedStdData && selectedStdData.length < 1) || !chkStudents())){
+        setTimeout(()=>{
+            if (!chkStudents()){
+                sessionStorage.setItem('SomethingWrong','True');
+            };
+            sessionStorage.setItem('std_into_tried','True');
+            history('/dashboard');
+        },50);
+
+    }else{
         const getStudents = async () => {
             const student_Data = await fetchStudentsData();
             const selectedStd = student_Data.find(data=>data.id === stdID);
@@ -510,6 +530,7 @@ const StudentInfo = () => {
             </center>
         </div>
     );
+    };
     }else{
         setTimeout(()=>{
             sessionStorage.setItem('Tried','True');
