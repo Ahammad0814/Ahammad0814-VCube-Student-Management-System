@@ -144,6 +144,10 @@ const Dashboard = () => {
         getStudents();
     }, [studentsData]);
 
+    useEffect(()=>{
+        getBatchesData();
+    },[batchesData]);
+
     const today = new Date();
     const day = today.getDate();
     const options = { month: 'long' };
@@ -156,6 +160,13 @@ const Dashboard = () => {
             setTimeout(()=>{
                 Alert('note',`Welcome back <strong>${JSON.parse(sessionStorage.getItem('LogginedUser'))}</strong>.`);
                 sessionStorage.setItem('isAdminLoggined','False');
+            },50);
+        };
+
+        if (sessionStorage.getItem('SomethingWrong') === 'True'){
+            setTimeout(()=>{
+                Alert('error','Something went wrong !');
+                sessionStorage.setItem('SomethingWrong','False');
             },50);
         };
 
@@ -405,29 +416,33 @@ const Dashboard = () => {
                     attSubmitBtn.style.borderRight = 'solid 5px transparent';
                     attSubmitBtn.style.borderRadius = '50%';
                     setTimeout(()=>{
-                        studentsData.forEach((data,index)=>{
-                            if (selectedBatch === 'All' || data.BatchName === selectedBatch){
-                                if (document.querySelector(`.std-checkbox${index}`).checked === true){
-                                    if (classAtt){
-                                        const classCnt = data.Classes.split(' ')[0];
-                                        data.Classes = `${parseInt(classCnt) + 1} ${data.id} ${day} ${month} ${year}`; 
-                                    }
-                                    if (mockAtt){
-                                        const mockCnt = data.MockTests.split(' ')[0];
-                                        data.MockTests = `${parseInt(mockCnt) + 1} ${data.id} ${day} ${month} ${year}`; 
-                                    }
-                                    if (studyAtt){
-                                        const studyCnt = data.CaseStudies.split(' ')[0];
-                                        data.CaseStudies = `${parseInt(studyCnt) + 1} ${data.id} ${day} ${month} ${year}`; 
-                                    }
-                                    if (interviewAtt){
-                                        const interviewsCnt = data.Interviews.split(' ')[0];
-                                        data.Interviews = `${parseInt(interviewsCnt) + 1} ${data.id} ${day} ${month} ${year}`; 
-                                    }
-                                    updateStdAttendance(data);
-                                };
-                            }
-                        });
+                        // if (checkStdAttCnt(classAtt,mockAtt,studyAtt,interviewAtt)){
+                            studentsData.forEach((data,index)=>{
+                                if (selectedBatch === 'All' || data.BatchName === selectedBatch){
+                                    if (document.querySelector(`.std-checkbox${index}`).checked === true){
+                                        if (classAtt){
+                                            const classCnt = data.Classes.split(' ')[0];
+                                            data.Classes = `${parseInt(classCnt) + 1} ${data.id} ${day} ${month} ${year}`; 
+                                        }
+                                        if (mockAtt){
+                                            const mockCnt = data.MockTests.split(' ')[0];
+                                            data.MockTests = `${parseInt(mockCnt) + 1} ${data.id} ${day} ${month} ${year}`; 
+                                        }
+                                        if (studyAtt){
+                                            const studyCnt = data.CaseStudies.split(' ')[0];
+                                            data.CaseStudies = `${parseInt(studyCnt) + 1} ${data.id} ${day} ${month} ${year}`; 
+                                        }
+                                        if (interviewAtt){
+                                            const interviewsCnt = data.Interviews.split(' ')[0];
+                                            data.Interviews = `${parseInt(interviewsCnt) + 1} ${data.id} ${day} ${month} ${year}`; 
+                                        }
+                                        updateStdAttendance(data);
+                                    };
+                                }
+                            });
+                        // }else{
+                        //     Alert('error','Cannot take Student Attendance Count more than<br/>Batch Attendance Count !')
+                        // };
                         attSubmitBtn.classList.remove('btn-rotate');
                         attSubmitBtn.style.width = '50%';
                         attSubmitBtn.style.background = '#616bf1';
@@ -443,7 +458,8 @@ const Dashboard = () => {
                 Alert('warning', 'Select atleast one Attandence option !');
             };
         };
-        
+
+
         const updateStdAttendance = async (data) => {
             const stdInputEles = document.querySelectorAll('.std-checkbox');
             const inputEles = Array.from(stdInputEles);
@@ -528,8 +544,7 @@ const Dashboard = () => {
         const showStdInfo = (data,id,batch) => {
             sessionStorage.setItem('SelectedStudent',JSON.stringify(data));
             sessionStorage.setItem('StdID',JSON.stringify(id));
-            const selectedBatch = batchesData.find(data=>data.BatchName === batch);
-            sessionStorage.setItem('SelectedBatchData',JSON.stringify(selectedBatch));
+            sessionStorage.setItem('SelectedBatchData',JSON.stringify(batchesData.find(data=>data.BatchName === batch)));
             history('/studentinfo');
         };
 
