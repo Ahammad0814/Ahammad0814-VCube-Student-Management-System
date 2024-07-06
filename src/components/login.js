@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import './login.css';
 import { fetchBatchData,fetchLoginData,fetchStudentsData } from "./data";
-import { isAdminAuth, isStudentAuth } from "./dashboard.js";
+import { isStudentAuth, isAdminAuth } from "./dashboard.js";
 import { useNavigate } from "react-router-dom";
 import { Alert, closeAlert } from "./dashboard.js";
 import axios from "axios";
+import { date_time } from "./dashboard-header.js";
 
 const Login = () => {
     const history = useNavigate();
@@ -14,13 +15,10 @@ const Login = () => {
     const [userOTP,setOTP] = useState([]);
     const [userLO, setUserLO] = useState(false);
     const [userForgotDetail,setUserForgotDetail] = useState([]);
+    const [cls, setCls] = useState("");
     const action = sessionStorage.getItem('Tried');
 
-    const today = new Date();
-    const day = today.getDate();
-    const options = { month: 'long' };
-    const month = today.toLocaleDateString('en-US', options);
-    const year = today.getFullYear();
+    const date = date_time().split(' ');
 
     const getBatches = async () => {
         const batches_Data = await fetchBatchData();
@@ -41,21 +39,17 @@ const Login = () => {
         getBatches();
     }, []);
 
-    useEffect(() => {
-        getLoginData();
-    }, [loginData]);
 
     if (action === 'True'){
         setTimeout(()=>{
             Alert('error','Login required !');
             sessionStorage.setItem('Tried','False');
         },50);
-    }
+    };
 
-    if (isAdminAuth() && !isStudentAuth()) {
+    if (isAdminAuth() && !isStudentAuth()){
         history('/dashboard');
-
-    }else if (!isAdminAuth() && isStudentAuth()){
+    }else if(!isAdminAuth() && isStudentAuth()){
         localStorage.setItem('Login','False');
         localStorage.setItem('isAuthenticated','False');
         sessionStorage.setItem('SelectedStudent',JSON.stringify([]));
@@ -64,112 +58,124 @@ const Login = () => {
         sessionStorage.setItem('StdLogin','False');
         sessionStorage.setItem('Std_Authenticated','False');
         sessionStorage.setItem('isStdAuthenticated','False');
-
-    }else{
+    }else if(!isAdminAuth() && !isStudentAuth()){
         const btnRotate = (ele) => {
             if (!batchesData){
                 Alert('error','Something went wrong. Please try again later !')
             }else{
                 let btnElement = ""
-                const password = document.querySelector('.password-input');
-                const email = document.querySelector('.email-input');
-                const stdSelectOpt = document.querySelector('.std-batch-selection');
-                const stdUserInput = document.querySelector('.std-email-input');
-                const blurDiv = document.querySelector('.blurdiv');
-                const stdErrorMsg = document.querySelector('.std-login-error-msg');
                 if (ele === 'Admin'){
                     btnElement = document.querySelector('.admin-login-btn');
                 }else if (ele === 'Student'){
-                    btnElement = document.querySelector('.std-login-btn');   
+                    btnElement = document.querySelector('.std-login-btn');
                 };
                 btnElement.style.width = '40px';
-                btnElement.innerHTML = "";
+                btnElement.textContent = "";
                 setTimeout(()=>{
                     btnElement.classList.add('login-btn-rotate');
                     setTimeout(()=>{
                         btnElement.classList.remove('login-btn-rotate');
                         btnElement.style.width = '50%';
-                        btnElement.innerHTML = "Login";
+                        btnElement.textContent = "Login";
                         if (ele === 'Student'){
-                            if (userLO){
-                                const userOtp = document.querySelector('.std-login-input');
-                                if (userOTP === parseInt(userOtp.value)){
-                                    sessionStorage.setItem('StdLogin','True');
-                                    sessionStorage.setItem('isStdAuthenticated','True');
-                                    localStorage.setItem('Login','False');
-                                    localStorage.setItem('isAuthenticated','False');
-                                    sessionStorage.setItem('std_login-OTP','False');
-                                    sessionStorage.setItem('isStudentdLoggined','True');
-                                    sessionStorage.setItem('Std_Authenticated','True');
-                                    history('/studentinfo');
-                                }else{
-                                    Alert('error','OTP mismatch. Check and try again !');
-                                };
-                            }else{
-                                if (stdSelectOpt.value !== 'select' && stdUserInput.value.length > 0){
-                                    const stdData = studentsData && studentsData.find(data=>data.BatchName === stdSelectOpt.value && (data.Email === stdUserInput.value || data.Phone === stdUserInput.value));
-                                    if (stdData){
-                                        sessionStorage.setItem('SelectedStudent',JSON.stringify(stdData));
-                                        sessionStorage.setItem('StdID',JSON.stringify(stdData.id));
-                                        const selectedBatch = batchesData.find(data=>data.BatchName === stdData.BatchName);
-                                        sessionStorage.setItem('SelectedBatchData',JSON.stringify(selectedBatch));
-                                        if (stdData.Authentication === 'Active'){
-                                            const otp = Math.floor(100000 + Math.random() * 900000);
-                                            setOTP(otp);
-                                            sendMail(null,stdData.Email,otp,'Std_Login_OTP');
-                                        }else{
-                                            sessionStorage.setItem('StdLogin','True');
-                                            sessionStorage.setItem('isStdAuthenticated','True');
-                                            localStorage.setItem('Login','False');
-                                            localStorage.setItem('isAuthenticated','False');
-                                            sessionStorage.setItem('isStudentdLoggined','True');
-                                            history('/studentinfo');
-                                        };
-                                    }else{
-                                        Alert('error',"Sorry, we couldn't find the student. Check the information you entered and try again !")
-                                        stdErrorMsg.style.visibility = 'visible';
-                                    }
-                                }else{
-                                    Alert('error', 'Error finding student. Please check your input and try again.');
-                                    stdErrorMsg.style.visibility = 'visible';
-                                }
-                            };
+                            isUserStudent();
                         }else if (ele === 'Admin'){
-                            if ((checkAdmin() !== true || checkAdmin() !== false) && checkAdmin() === email.value){
-                                const otp = Math.floor(100000 + Math.random() * 900000);
-                                setOTP(otp);
-                                sendMail(null,'ahammado828@gmail.com',otp,'User_OTP');
-                            }else{
-                                if (checkAdmin() === true) {
-                                    const loginUserId = JSON.parse(localStorage.getItem('LoginUserId'));
-                                    const activeUser = loginData && loginData.find(data => data.id === loginUserId);
-                                    if (activeUser){
-                                        if (activeUser.Permission === 'Granted'){
-                                            blurDiv.style.visibility = 'visible';
-                                            sessionStorage.setItem('LogginedUser',JSON.stringify(activeUser.Username))
-                                            blurDiv.style.visibility = 'hidden';
-                                            localStorage.setItem('Login',`True ${day} ${month} ${year}`);
-                                            localStorage.setItem('isAuthenticated','True');
-                                            sessionStorage.setItem('SelectedStudent',JSON.stringify([]));
-                                            sessionStorage.setItem('StdID',JSON.stringify([]));
-                                            sessionStorage.setItem('SelectedBatchData',JSON.stringify([]));
-                                            sessionStorage.setItem('StdLogin','False');
-                                            sessionStorage.setItem('isStdAuthenticated','False');
-                                            sessionStorage.setItem('isAdminLoggined','True');
-                                            sessionStorage.setItem('isStudentdLoggined','False');
-                                            history('/dashboard');
-                                        }else{
-                                            Alert('error',`Dear ${activeUser.Username}, Your login access has been denied.<br/>Please contact Admin and try again !`)
-                                        };
-                                    };
-                                } else{
-                                    Alert('error','Invalid username or password !');
-                                }
-                            }
+                            isUserAdmin();
                         }
                     }, 3000);
                 }, 300);
             }
+        };
+
+        const isUserAdmin = () => {
+            const email = document.querySelector('.email-input');
+            const blurDiv = document.querySelector('.blurdiv');
+            if ((checkAdmin() !== true || checkAdmin() !== false) && checkAdmin() === email.value){
+                const otp = Math.floor(100000 + Math.random() * 900000);
+                setOTP(otp);
+                blurDiv.style.visibility = 'visible';
+                sendMail(null,'ahammado828@gmail.com',otp,'User_OTP');
+            }else{
+                if (checkAdmin() === true) {
+                    const loginUserId = JSON.parse(localStorage.getItem('LoginUserId'));
+                    const activeUser = loginData && loginData.find(data => data.id === loginUserId);
+                    if (activeUser){
+                        if (activeUser.Permission === 'Granted'){
+                            blurDiv.style.visibility = 'visible';
+                            sessionStorage.setItem('LogginedUser',JSON.stringify(activeUser.Username));
+                            blurDiv.style.visibility = 'hidden';
+                            localStorage.setItem('Login',`True ${date[0]} ${date[1]} ${date[2]}`);
+                            localStorage.setItem('isAuthenticated','True');
+                            localStorage.setItem('IsUser',JSON.stringify(activeUser.User));
+                            localStorage.setItem('UserClass',JSON.stringify(activeUser.Class));
+                            sessionStorage.setItem('SelectedStudent',JSON.stringify([]));
+                            sessionStorage.setItem('StdID',JSON.stringify([]));
+                            sessionStorage.setItem('SelectedBatchData',JSON.stringify([]));
+                            sessionStorage.setItem('StdLogin','False');
+                            sessionStorage.setItem('isStdAuthenticated','False');
+                            sessionStorage.setItem('isAdminLoggined','True');
+                            sessionStorage.setItem('isStudentdLoggined','False');
+                            history('/dashboard');
+                        }else{
+                            Alert('error',`Dear ${activeUser.Username}, Your login access has been denied.<br/>Please contact Admin and try again !`)
+                        };
+                    };
+                } else{
+                    Alert('error','Invalid username or password !');
+                }
+            };
+        };
+        const isUserStudent = () => {
+            const stdSelectOpt = document.querySelector('.std-batch-selection');
+            const stdUserInput = document.querySelector('.std-email-input');
+            const stdErrorMsg = document.querySelector('.std-login-error-msg');
+            if (userLO){
+                const user_Otp = document.querySelector('.std-login-input');
+                if (userOTP === parseInt(user_Otp.value)){
+                    sessionStorage.setItem('StdLogin','True');
+                    sessionStorage.setItem('isStdAuthenticated','True');
+                    localStorage.setItem('Login','False');
+                    localStorage.setItem('isAuthenticated','False');
+                    sessionStorage.setItem('std_login-OTP','False');
+                    sessionStorage.setItem('isStudentdLoggined','True');
+                    sessionStorage.setItem('Std_Authenticated','True');
+                    localStorage.setItem('IsUser',JSON.stringify([]));
+                    localStorage.setItem('UserClass',JSON.stringify([]));
+                    history('/studentinfo');
+                }else{
+                    Alert('error','OTP mismatch. Check and try again !');
+                };
+            }else{
+                if (stdSelectOpt.value !== 'select' && stdUserInput.value.length > 0){
+                    const stdData = studentsData && studentsData.find(data=>data.BatchName === stdSelectOpt.value && (data.Email === stdUserInput.value || data.Phone === stdUserInput.value));
+                    if (stdData){
+                        sessionStorage.setItem('Selected_Student',JSON.stringify(stdData));
+                        sessionStorage.setItem('StdID',JSON.stringify(stdData.id));
+                        const selectedBatch = batchesData.find(data=>data.BatchName === stdData.BatchName);
+                        sessionStorage.setItem('SelectedBatchData',JSON.stringify(selectedBatch));
+                        if (stdData.Authentication === 'Active'){
+                            const otp = Math.floor(100000 + Math.random() * 900000);
+                            setOTP(otp);
+                            sendMail(null,stdData.Email,otp,'Std_Login_OTP');
+                        }else if(stdData.Access === 'Denied'){
+                            Alert('error','Your login access denied. Contact Administration !');
+                        }else if(stdData.Access === 'Granted'){
+                            sessionStorage.setItem('StdLogin','True');
+                            sessionStorage.setItem('isStdAuthenticated','True');
+                            localStorage.setItem('Login','False');
+                            localStorage.setItem('isAuthenticated','False');
+                            sessionStorage.setItem('isStudentdLoggined','True');
+                            history('/studentinfo');
+                        };
+                    }else{
+                        Alert('error',"Sorry, we couldn't find the student.<br/>Check the information you entered and try again !")
+                        stdErrorMsg.style.visibility = 'visible';
+                    }
+                }else{
+                    Alert('error', 'Error finding student. Please check your input and try again.');
+                    stdErrorMsg.style.visibility = 'visible';
+                }
+            };
         };
 
         const showPassword = () => {
@@ -213,6 +219,10 @@ const Login = () => {
                     adminIcon.style.left = '0';
                     stdIcon.style.right = '-550px';
                 }
+                document.querySelector('.password-input').value = "";
+                document.querySelector('.email-input').value = "";
+                document.querySelector('.std-batch-selection').value = 'select';
+                document.querySelector('.std-email-input').value = "";
             };
         };
 
@@ -285,8 +295,7 @@ const Login = () => {
             }
         };
         const sendMail = async (data,mail,user,mailtype) => {
-            Alert('warning','Sending OTP. Please wait...',1000);
-            document.querySelector('.blurdiv').style.visibility = 'visible';
+            Alert('warning','Sending OTP. Please wait...');
             const password = document.querySelector('.password-input');
             const email = document.querySelector('.email-input');
             const emailOptDiv = document.querySelector('.email-otp-div');
@@ -302,40 +311,34 @@ const Login = () => {
                     },
                 });
             if (res.status === 200 || res.status === 201){
-                setTimeout(()=>{
-                    if (mailtype === 'Username'){
-                        Alert('success','Your Username has been successfully sent to your email address !<br/>Also check spam folder if not found !');
-                        forgotDivClose('close');
-                    }else if (mailtype === 'OTP'){
-                        Alert('success','OTP has been successfully sent to your email address !<br/>Also check spam folder if not found !');
-                        setUserForgotDetail(data);
-                        emailOptDiv.style.marginLeft = '-450px';
-                        passwordDiv.style.right = '0';
-                    }else if (mailtype === 'User_OTP'){
-                        Alert('success','Enter OTP sent to the Admin email address to add user !<br/>Also check spam folder if not found !');
-                        const docEle = document.querySelector('.user-create-container')
-                        docEle.style.visibility = 'visible';
-                        docEle.style.opacity = '0';
-                        setTimeout(()=>{
-                            docEle.style.transition = '0.5s ease-in-out';
-                            docEle.style.opacity = '1';
-                        },500);
-                        document.querySelector('.user-c-username').value = email.value;
-                        password.value = "";
-                        email.value = "";
-                    }else if (mailtype === 'Std_Login_OTP'){
-                        Alert('success','OTP has been successfully sent to your email address !<br/>Also check spam folder if not found !');
-                        stdChkOTP();
-                        setUserLO(true);
-                        document.querySelector('.blurdiv').style.visibility = 'hidden';
-                    };
-                },1100);
+                if (mailtype === 'Username'){
+                    Alert('success','Your Username has been successfully sent to your email address !<br/>Also check spam folder if not found !');
+                    forgotDivClose('close');
+                }else if (mailtype === 'OTP'){
+                    Alert('success','OTP has been successfully sent to your email address !<br/>Also check spam folder if not found !');
+                    setUserForgotDetail(data);
+                    emailOptDiv.style.marginLeft = '-450px';
+                    passwordDiv.style.right = '0';
+                }else if (mailtype === 'User_OTP'){
+                    Alert('success','Enter OTP sent to the Admin email address to add user !<br/>Also check spam folder if not found !');
+                    const docEle = document.querySelector('.user-create-container')
+                    docEle.style.visibility = 'visible';
+                    docEle.style.opacity = '0';
+                    setTimeout(()=>{
+                        docEle.style.transition = '0.5s ease-in-out';
+                        docEle.style.opacity = '1';
+                    },500);
+                    document.querySelector('.user-c-username').value = email.value;
+                    password.value = "";
+                    email.value = "";
+                }else if (mailtype === 'Std_Login_OTP'){
+                    Alert('success','OTP has been successfully sent to your email address !<br/>Also check spam folder if not found !');
+                    stdChkOTP();
+                    setUserLO(true);
+                };
             };
             } catch (error){
                 setTimeout(()=>{
-                    if (mailtype === 'Std_Login_OTP' || mailtype == 'User_OTP'){
-                        document.querySelector('.blurdiv').style.visibility = 'hidden';
-                    };
                     if (mailtype === 'Username'){
                         Alert('error','There was an error sending the email. Please try again later !');
                     }else{
@@ -352,7 +355,7 @@ const Login = () => {
                 Email : email,
                 Password : newPassword
             }
-            try {
+            try{
                 let res = await axios.put('http://127.0.0.1:8000/login/', JSON.stringify(loginData), {
                 headers: {
                     'Content-Type': 'application/json',
@@ -362,9 +365,9 @@ const Login = () => {
                     Alert('success','Your Password had been updated successfully !');
                     forgotDivClose('close');
                 }
-            } catch (error){
+            }catch (error){
                 Alert('error','There was an error in updating password. Please try again later !');
-            }      
+            };
         };
 
         const forgotDivClose =(status)=> {
@@ -502,11 +505,31 @@ const Login = () => {
         `;
         };
 
+        const chkStdBatch = (e) => {
+            if (cls === "" && document.querySelector('.std-email-input').value === ""){ 
+                e.stopPropagation();
+                Alert('error','Enter Phone or Email to show batches !')
+            };
+        };
+
+        const chckStdP_E = (e) => {
+            if(e.target.value === ""){
+                sessionStorage.setItem('std_cls',JSON.stringify(""));
+                setCls("");
+            };
+            studentsData.forEach(data=>{
+                if (data.Phone === e.target.value || data.Email === e.target.value){
+                    sessionStorage.setItem('std_cls',JSON.stringify(data.Class));
+                    setCls(data.Class);
+                };
+            });
+        };
+
         return (
             <div>
                 <img className="screen-size-error-img" src="images/screen-size-error.png" width="100%" alt=""/>
                 <div className="Login-Page-Container">
-                    <div className="main-login-container" data-login-type="">
+                    <div className="main-login-container" data-login-type="" >
                         <div className="inner-login-div">
                             <div className="login-form-left-div">
                                 <img src="images/V-CUBE-Logo.png" className="login-Favicon" />
@@ -541,16 +564,18 @@ const Login = () => {
                                     </span>
                                     <label>
                                         <img src="images/login-username-icon.png" width="20px" />
-                                        <input type="text" placeholder="Email or Phone" className="std-email-input"/>
+                                        <input type="text" placeholder="Email or Phone" className="std-email-input" onChange={(e)=>chckStdP_E(e)}/>
                                     </label>
                                     <label className="std-selection-batch-label">
                                         <img src="images/std-batch-icon.png" width="28px" />
-                                        <select className="std-batch-selection">
+                                        <select className="std-batch-selection" onClick={chkStdBatch}>
                                             <option value="select" style={{ visibility: 'hidden' }} >Select Batch</option>
                                             {batchesData && batchesData.map(data=>{
+                                                if(data.Class === JSON.parse(sessionStorage.getItem('std_cls'))){
                                                 return(
-                                                <option value={data.BatchName} style={{fontSize : '23px'}}>{data.BatchName}</option>
-                                                )
+                                                    <option value={data.BatchName} style={{fontSize : '23px'}}>{data.BatchName}</option>
+                                                    )
+                                                }
                                             })}
                                         </select>
                                     </label>
@@ -611,7 +636,7 @@ const Login = () => {
                 </div>
             </div>
         );
-    };
+    }
 };
 
 export default Login;
