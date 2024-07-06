@@ -1,11 +1,6 @@
 import React from "react";
 import axios from "axios";
 
-// let StudentsData = [];
-// let BatchesData = [];
-// let DatesData = [];
-// let LoginData = [];
-
 const fetchStudentsData = async () => {
     try {
         let api = await axios({
@@ -17,6 +12,18 @@ const fetchStudentsData = async () => {
     } catch (error) {
     }
 };
+
+const fetchClassData = async () => {
+    try {
+        let api = await axios({
+            url: "http://127.0.0.1:8000/classes/",
+            method: "GET",
+        });
+        let apiResponse = api;
+        return apiResponse.data.length > 0 ? apiResponse.data : [];
+    } catch (error) {
+    }
+}
 
 const fetchBatchData = async () => {
     try {
@@ -44,16 +51,16 @@ const fetchLoginData = async () => {
     }
 };
 
-const fetchDatesData = async () => {
+const fetchMessagesData = async () => {
     try {
         let api = await axios({
-            url: "http://127.0.0.1:8000/dates/",
+            url: "http://127.0.0.1:8000/messages/",
             method: "GET",
         });
         let apiResponse = api;
         return apiResponse.data.length > 0 ? apiResponse.data : [];
     } catch (error) {
-    }
+    };
 };
 
-export { fetchStudentsData, fetchBatchData, fetchLoginData, fetchDatesData }
+export { fetchStudentsData, fetchBatchData, fetchLoginData, fetchMessagesData, fetchClassData}
