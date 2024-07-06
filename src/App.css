@@ -1,5 +1,10 @@
 *{
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    user-select: none;
+}
+img{
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
 }
 .screen-error-img{
     position: absolute;
@@ -89,7 +94,7 @@ button{
     top: 20%;
     left: 40%;
     width: 30%;
-    height: 60%;
+    max-height: 60%;
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
@@ -99,7 +104,7 @@ button{
 }
 .delete-batch-div{
     width: 100%;
-    height: 70%;
+    max-height: 70%;
     display: flex;
     flex-direction: column;
     align-items: start;
@@ -201,21 +206,29 @@ button{
     right: 15px;
     cursor: pointer;
 }
-
+.Admin-std-Auth-container{
+    left: 3%;
+    bottom: 70px;
+}
+.Admin-std-Auth-container,
 .stdAuth-container{
     position: absolute;
-    bottom: 25px;
-    left: 40px;
     font-size: 20px;
     font-weight: bold;
     width: 50%;
 }
+.stdAuth-container{
+    bottom: 25px;
+    left: 40px;
+}
+.Admin-std-Auth-container label,
 .stdAuth-container label{
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: start;
 }
+.Admin-std-Auth-container div,
 .stdAuth-container div{
     width: 70px;
     height: 30px;
@@ -224,6 +237,7 @@ button{
     margin-left: 30px;
     position: relative;
 }
+.Admin-std-Auth-container div button,
 .stdAuth-container div button{
     position: absolute;
     height: 100%;
@@ -290,4 +304,372 @@ button{
     top: 0;
     right: 20px;
     cursor: pointer;
+}
+
+
+.all-class-performance-container{
+    position: absolute;
+    width: 95%;
+    height: 95%;
+    z-index: 110;
+    top: 2.5%;
+    left: 2.5%;
+    background: #fff;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    border-radius: 10px;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.5s ease-in-out;
+}
+.all-class-performance-container .main-logo{
+    position: absolute;
+    width: 12%;
+    height: 14.5%;
+    top: 0;
+    left: 44%;
+}
+.all-class-performance-container .close-container{
+    font-size: 60px;
+    position: absolute;
+    right: 20px;
+    top: 0;
+    cursor: pointer;
+}
+
+.all-class-performance-container .perfromance-circles-div{
+    position: absolute;
+    width: 100%;
+    height: 70%;
+    top: 25%;
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+}
+
+.header-span-circle-txt{
+    position : absolute;
+    top : 0;
+    width : 100%;
+    left : 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    height: 25%;
+    top: 37.5%;
+}
+
+.std-raise-rqt-div{
+    position: absolute;
+    background: #fff;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    border-radius: 10px;
+    width: 40%;
+    height: 40%;
+    left: 30%;
+    top: 30%;
+    opacity : 0;
+    visibility : hidden;
+    transition : 0.5s ease-in-out;
+    z-index: 100;
+}
+.std-raise-rqt-div h1{
+    color: #4953e6;
+}
+.std-raise-rqt-div form{
+    height: 70%;
+}
+.std-raise-rqt-div textarea{
+    width: 80%;
+    height: 65%;
+    font-size: 18px;
+    resize: none;
+    padding: 10px;
+}
+.std-raise-rqt-div input{
+    width: 83.5%;
+    height: 40px;
+    margin-top: 10px;
+    font-size: 20px;
+    background: #616bf1;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+}
+.std-raise-rqt-div span{
+    position: absolute;
+    font-size: 50px;
+    top: 0;
+    right: 15px;
+    cursor: pointer;
+}
+
+.Raise-rqt img{
+    width: 40px;
+    cursor: pointer;
+}
+
+.std-notification-div{
+    position: absolute;
+    top: 15px;
+    left: 10px;
+    width: 50px;
+}
+.std-notification-div img{
+    width: 45px;
+    cursor: pointer;
+}
+.std-notification-div span{
+    width: 17px;
+    height: 17px;
+    background: red;
+    color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    border: solid 2px #fff;
+    top: 5px;
+    right: 5px;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.std-notification-veiw-container{
+    position: absolute;
+    z-index: 100;
+    left: 20%;
+    top: 10%;
+    width: 60%;
+    height: 633px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.5s ease-in-out;
+}
+
+.std-notification-veiw-container .notif-X{
+    font-size: 50px;
+    position: absolute;
+    top: 0;
+    right: 15px;
+    cursor: pointer;
+}
+
+.std-notification-veiw-container img{
+    width: 130px;
+}
+.std-notification-veiw-container h1{
+    margin: 0 0 15px 0;
+}
+
+.std-notification-veiw-container .notification-lists{
+    position: relative;
+    width: 100%;
+    height: 85%;
+}
+
+.std-notif-opts-div{
+    width: 70%;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+.std-notif-opts-div p{
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 0 0px;
+}
+.std-notif-opts-div .p1{
+    color: #4953e6;
+}
+.std-notif-opts-div .notif-slider{
+    position: absolute;
+    width: 166px;
+    height: 5px;
+    background: #4953e6;
+    left: 0;
+    bottom: 5px;
+    border-radius: 10px;
+    transition: 0.7s ease-in-out;
+}
+
+
+.std-notification-data-div{
+    position: relative;
+    min-height: 85%;
+    max-height: 85%;
+    margin-top: 2%;
+}
+
+.std-notification-data-div img{
+    position: absolute;
+    width: 30%;
+    height: 62%;
+    left: 35%;
+    top: 20%;
+}
+
+.std-requests-data-div{
+    position: absolute;
+    top: 12.5%;
+    width: 100%;
+    height: 85%;
+    visibility: hidden;
+}
+
+.std-requests-data-div .rqt-img-div{
+    position: absolute;
+    width: 50%;
+    left: 25%;
+    top: 15%;
+}
+.std-requests-data-div .rqt-img-div img{
+    width: 100%;
+}
+.std-requests-data-div .rqt-img-div h1{
+    font-weight: 100;
+    color: grey;
+}
+
+.std-rqt-data{
+    position: relative;
+    border: solid 1px lightgrey;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    padding: 10px 20px 10px 10px;
+    height: auto;
+}
+
+.std-rqt-data h3{
+    margin: 0;
+    width: 100px;
+    height: 40px;
+    display: flex;
+    justify-content: start;
+    color: rgb(87, 87, 87);
+}
+.std-rqt-data p{
+    width: 720px;
+    text-align: start;
+    display: flex;
+    margin: 0;
+    color: rgb(31, 30, 30);
+    user-select: text;
+}
+
+.std-rqt-data span{
+    position: absolute;
+    /* font-size:; */
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+
+.dashboard-notification-div{
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    top: 10px;
+    left: 10px;
+    cursor: pointer;
+}
+.dashboard-notification-div img{
+    width: 45px;
+}
+.dashboard-notification-div span{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: red;
+    color: hwb(202 96% 0%);
+    font-weight: bold;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: solid 2px hwb(202 96% 0%);
+}
+
+.dashboard-notifications-container{
+    position: absolute;
+    top: 5%;
+    width: 80%;
+    left: 10%;
+    height: 712px;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    transition: 0.5s ease-in-out;
+    z-index: -10;
+    visibility: hidden;
+}
+.dashboard-notifications-container h1{
+    margin: 10px;
+}
+.dashboard-notifications-container .D_logo{
+    width: 12%;
+}
+.d_n_X{
+    position: absolute;
+    font-size: 60px;
+    top: 0;
+    right: 15px;
+    cursor: pointer;
+}
+
+.dashboard-notifications-lists-div{
+    margin-top: 1%;
+    width: 100%;
+    height: 75%;
+    position: relative;
+}
+.dashboard-notification-lists{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    height: auto;
+    border: solid 1px lightgrey;
+    padding: 5px 20px;
+}
+.dashboard-notification-lists h3{
+    margin: 5px 0;
+    width: 80px;
+    height: 30px;
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    color: rgba(0, 0, 0, 0.831);
+}
+.dashboard-notification-lists p{
+    width: 990px;
+    height: auto;
+    text-align: start;
+    margin: 5px 0;
+    font-size: 18px;
+    color: rgb(74, 74, 74);
+    user-select: text;
+}
+
+.D_notif-icon{
+    position: absolute;
+    top: 15%;
+    width: 33%;
+    height: 70%;
+    left: 33.5%;
 }
