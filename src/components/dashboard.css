@@ -121,7 +121,7 @@ body{
 }
 
 .search-div{
-    width: 90%;
+    width: 91%;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -129,7 +129,7 @@ body{
     margin: 30px;
 }
 .search-input-div{
-    width: 50%;
+    width: 23%;
     display: flex;
     align-items: center;
     justify-content: start;
@@ -137,16 +137,16 @@ body{
 }
 
 .search-input-div input{
-    width: 40%;
+    width: 100%;
     height: 35px;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
     border: none;
-    padding-left: 3%;
+    padding-left: 15px;
     border: solid 1px grey;
     border-right: none;
     outline: none;
-    font-size: 20px;
+    font-size: 22px;
 }
 .search-input-div button{
     background-color: #ffff;
@@ -155,11 +155,27 @@ body{
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
     padding-right: 10px;
-    height: 38px;
+    height: 39px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.admin-classes-show-div{
+    width: 23%;
+}
+.admin-classes-show-div select{
+    width: 90%;
+    height: 35px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 20px;
+    padding-left: 10px;
+    outline: none;
+}
+.admin-classes-show-div option{
+    font-size: 25px;
 }
 
 .batches option{
@@ -169,7 +185,7 @@ body{
 }
 
 .make-operation-btn{
-    width: 80%;
+    width: 100%;
     height: 100%;
     border: solid 1px #616bf1;
     color: #ffff;
@@ -177,14 +193,18 @@ body{
     cursor: pointer;
     transition: 0.5s;
     border-radius: 5px;
-    margin-left: 5px;
     font-size: 17px;
     transition: width 0.5s ease-in-out;
+}
+.make-operation-div{
+    width: 22%;
+}
+.search-select-option{
+    width: 30%;
 }
 .make-operation-div,
 .search-select-option{
     height: 35px;
-    width: 30%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -199,6 +219,7 @@ body{
     font-size: 20px;
     padding: 0 10px 0 10px;
 }
+.add-class-option,
 .add-batch-option{
     width: 60%;
     height: 30px;
@@ -210,6 +231,7 @@ body{
     left: 0;
     visibility: hidden;
 }
+.add-class-option-btn,
 .add-batch-option-btn{
     width: 35%;
     height: 34px;
@@ -566,7 +588,7 @@ body{
 .upload-div{
     width: 100%;
     height: 40px;
-    margin: 30px 0 0 0;
+    margin: 23px 0 0 0;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -624,7 +646,7 @@ body{
     border-radius: 20px;
     background-color: #ffff;
     width: 90%;
-    height: 92%;
+    height: 728px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -643,7 +665,7 @@ body{
 }
 .student-details-left-div h2{
     line-height: 1;
-    margin: 10% 0 5% 0;
+    margin: 8% 0 5% 0;
 }
 .student-details-left-div h2,
 .student-details-left-div h3{
@@ -658,7 +680,15 @@ body{
 }
 .student-details-left-div h3{
     font-weight: lighter;
-    margin: 4% 0 4% 0;
+    margin: 2% 0 2% 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.student-details-left-div h3 img{
+    width: 25px;
+    margin-left: 10px;
+    cursor: pointer;
 }
 
 .std-profile-img{
@@ -708,7 +738,7 @@ body{
     flex-direction: column;
 }
 .std-education-details-div{
-    margin: 1% 0 3% 0;
+    margin: 1% 0 0 0;
     display: flex;
     flex-direction: column;
 }
@@ -722,7 +752,6 @@ body{
 .std-education-details-div div p{
     text-align: start;
     margin-left: 4%;
-    /* font-size: 18px; */
 }
 .std-education-details-div div p:nth-child(1){
     width: 20%;
@@ -740,12 +769,13 @@ body{
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
     width: 100%;
     font-size: 18px;
 }
 .std-inner-div p{
     width: 25%;
+    text-align: center;
 }
 .std-attendence1{
     font-weight: bold;
@@ -759,8 +789,7 @@ body{
 }
 .feedback-p,
 #project-p{
-    margin-top: 1%;
-    margin-left: 5%;
+    margin: 1% 0 1% 4%;
     font-size: 18px;
     width: auto;
 }
@@ -836,6 +865,7 @@ body{
 }
 .progress-bg{
     stroke: #f3f3f3;
+    /* color: linear-gradient(); */
     z-index: 3;
 }
 .std-info-progress-circle,
@@ -874,8 +904,15 @@ body{
     color: #4953e6;
     text-decoration: underline;
 }
-.close-std-details img{
-    width: 20px;
+
+.Raise-rqt{
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    color: #4953e6;
+    font-size: 20px;
+    text-decoration: underline;
+    cursor: pointer;
 }
 .update-std-details-div{
     position: absolute;
@@ -1189,7 +1226,7 @@ body{
     background: #616bf1;
     font-size: 20px;
     color: #ffff;
-    margin-top: 5%;
+    margin-top: 15%;
     cursor: pointer;
     transition: width 0.5s ease-in-out;
 }
@@ -1222,6 +1259,27 @@ body{
 .empty-search-label span{
     color: grey;
 }
+.empty-class-icon{
+    position: absolute;
+    top: 0;
+    width: 26%;
+    height: 70%;
+    top: 15%;
+    left: 37%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+.empty-class-icon img{
+    width: 80%;
+}
+.empty-class-icon span{
+    font-size: 35px;
+    font-weight: bold;
+    color: #949bf3;
+}
+
 .empty-error-icon,
 .empty-std-icon{
     position: absolute;
@@ -1290,12 +1348,21 @@ body{
     border: solid 1px grey;
 }
 
-
+.dashboard-att-opts-container,
 .att-opts-container{
     position: relative;
-    width: 250px;
+    width: 330px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.dashboard-att-opts-container{
+    border-radius: 5px;
+    height: 40px;
+    margin: 0 10px 0 10px;
 }
 .main-opt-div{
+    margin-top: 50px;
     border: solid 1px grey;
     width: 250px;
     height: 50px;
@@ -1303,13 +1370,14 @@ body{
     display: flex;
     align-items: center;
     justify-content: start;
-    border-radius: 10px;
-    position: relative;
+    border-radius: 5px;
+    position: absolute;
     cursor: pointer;
 }
 .main-opt-div p{
     margin-left: 10px;
 }
+.down-arrow,
 #down-arrow{
     position: absolute;
     right: 7px;
@@ -1317,11 +1385,19 @@ body{
     transition: 0.5s ease-in-out;
     cursor: pointer;
 }
+
+.dashboard-opts-div{
+    z-index: 1;
+    top: 38px;
+}
+.opts-div{
+    max-height: 300px;
+}
+.dashboard-opts-div,
 .opts-div{
     position: absolute;
     background: #ffff;
     width: 250px;
-    max-height: 300px;
     overflow-y: scroll;
     margin: 0;
     scrollbar-width: thin;
@@ -1331,11 +1407,16 @@ body{
     height: 0;
     transition: height 0.5s ease-in-out, visibility 0.5s ease-in-out;
 }
+
 .opts{
-    height: 300px;
+    height: 500px;
     transition: height 0.5s ease-in-out;
     visibility: visible;
 }
+.dashboard-opts-div li{
+    height: 50px;
+}
+
 .batch-opt span{
     margin-top: 8px;
     font-size: 23px;
@@ -1359,6 +1440,7 @@ body{
     justify-content: space-between;
     margin: 0;
 }
+.dashboard-downArrow-rotate,
 .downArrow-rotate{
     transform: rotate(180deg);
 }
@@ -1461,7 +1543,6 @@ body{
 .change-password-container{
     position: absolute;
     width: 30%;
-    height: 50%;
     top: 25%;
     right: 0;
     border: none;
@@ -1512,7 +1593,7 @@ body{
     font-size: 50px;
 }
 .isAdmin{
-    width: 60px;
+    width: auto;
     height: 30px;
     display: flex;
     align-items: center;
@@ -1545,13 +1626,13 @@ body{
     position: absolute;
     width: 100%;
     height: auto;
-    top: 75%;
+    top: 85%;
     left: 0;
 }
 .total-users-details-container h1{
     width: 100%;
     height: 50px;
-    margin-top: 5%;
+    margin-top: 3%;
     border-bottom: solid 1px grey;
 }
 .total-users-inner-div{
@@ -1590,7 +1671,7 @@ body{
     top: 25%;
     left: 40%;
     width: 30%;
-    height: 45%;
+    height: 50%;
 }
 .add-users-container form{
     display: flex;
