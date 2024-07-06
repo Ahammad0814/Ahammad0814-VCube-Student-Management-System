@@ -1516,7 +1516,7 @@ body{
 .settings-main-container{
     position: absolute;
     width: 100%;
-    height: 100%;
+    height: 800px;
 }
 .profile-header-div{
     position: absolute;
