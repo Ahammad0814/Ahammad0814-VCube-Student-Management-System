@@ -121,10 +121,14 @@ if ((isAdminAuth() && !isStudentAuth())) {
                 const isUserFound = loginData && loginData.some(data=>data.Username === username.value);
                 const foundUser = loginData && loginData.find(data=>data.id === loginUserId);
                 let isFound = false;
+                let isAdminFound = true;
                 if (login_User === 'Super Admin' && user.value === 'Admin'){
                     isFound = loginData.some(data=>data.Class === clss.value && data.User === 'Admin');
                 }
-                console.log(isMailFound,isUserFound);
+                if(login_User === 'Super Admin' && user.value === 'User'){
+                    isAdminFound = loginData.some(data=>data.Class === clss.value && data.User === 'Admin');
+                }
+            if(isAdminFound){
                 if(!isFound){
                     if (!isUserFound){
                         if (!isMailFound){
@@ -147,7 +151,7 @@ if ((isAdminAuth() && !isStudentAuth())) {
                                         Class : foundUser.Class,
                                     }
                                 }
-                                updateLoginData(data,'Post');
+                                // updateLoginData(data,'Post');
                             }else{
                                 Alert('error',"The new password and the confirm password do not match !");
                             }
@@ -160,6 +164,9 @@ if ((isAdminAuth() && !isStudentAuth())) {
                 }else{
                     Alert('error','Admin already assigned to the selected class !');
                 }
+            }else{
+                Alert('error','Admin not found to the selected class.<br/>Add admin before adding user to the selected class !');
+            };
             },3000)
         },500);
     };
@@ -325,7 +332,6 @@ if ((isAdminAuth() && !isStudentAuth())) {
             data.Permission = (data.Permission === 'Granted' || data.Permission === 'Granted~') ? 'Granted~' : 'Denied~';
             Alert('note','Submitting Review. Please wait...');
             sendStdAlert('ahammada587@gmail.com','User_Review',`${data.Username}~${data.Email}~${cnt}~${names[no]}~${txt}~`,data);
-            setReview(false);
             closeRatingDiv('close',true);
         }else{
             Alert('error','Please select a rating from 1 to 10 to provide your review !');
@@ -342,6 +348,9 @@ if ((isAdminAuth() && !isStudentAuth())) {
         if (!nope){
             Alert('error','Ratings provide valuable feedback that motivates us to deliver an even better experience.<br/>So we kindly request that you take a moment to share your rating.',10000);
         };
+        setReview(false);
+        setClickedNo(0);
+        setClicked(false);
     }
 
     const logout =()=>{
