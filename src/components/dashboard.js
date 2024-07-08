@@ -1,8 +1,9 @@
 import React from "react";
 import './dashboard.css';
 import DashboardHeader from "./dashboard-header";
-import { fetchStudentsData,fetchBatchData,fetchLoginData,fetchClassData,fetchMessagesData } from "./data";
+import { fetchStudentsData, fetchBatchData, fetchLoginData, fetchClassData, fetchMessagesData, fetchFeedbackData } from "./data";
 import { useState, useEffect } from "react";
+import { sendStdAlert } from "./student-info";
 import { date_time } from "./dashboard-header";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -116,6 +117,74 @@ export const closeAlert = () => {
     },1000);
 };
 
+export const delete_User = async(data,mail,A_mail) => {
+    try {
+        let res = await axios.delete('http://127.0.0.1:8000/login/', {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: JSON.stringify(data)
+        });
+    } catch (error){
+    };
+    sendStdAlert(A_mail,'Unexpected',`${data.Username}-${data.Email}`);
+    sendStdAlert(mail,'Unexpected',`Username : ${data.Username}_Email : ${data.Email}_`);
+};
+
+export const isUserFound = async() => {
+    const class_Data = await fetchClassData();
+    const login_Data = await fetchLoginData();
+    const userId = JSON.parse(localStorage.getItem('LoginUserId')) || "";
+    let s_U_Mail = "";
+
+    const filteredData = login_Data && login_Data.filter(data=>data.User === 'Super Admin');
+    if (filteredData && filteredData.length > 1){
+        const smallest_Id = Math.min(...filteredData.map(obj => obj.id));
+        const R_User = filteredData.find(data=>data.id === smallest_Id);
+        s_U_Mail = R_User.Email;
+        filteredData.forEach(data=>{
+            if(data.id !== smallest_Id){
+                delete_User(data,R_User.Email,s_U_Mail);
+                if (userId === data.id){
+                    sessionStorage.setItem('UserLogout',`True&${data.Username}&${data.Email}&${data.Permission}`);
+                    for (let i = 0; i < localStorage.length; i++){
+                        const key = localStorage.key(i);
+                        localStorage.setItem(key, JSON.stringify([]));
+                    }
+                    for (let i = 0; i < sessionStorage.length; i++) {
+                        const key = sessionStorage.key(i);
+                        sessionStorage.setItem(key, JSON.stringify([]));
+                    }
+                }
+            }
+        })
+    };
+
+    class_Data && class_Data.forEach((cls)=>{
+        const foundLen = login_Data && login_Data.filter(data=>data.Class === cls.Class && data.User === 'Admin');
+        if(foundLen.length > 1){
+            const smallestId = Math.min(...foundLen.map(obj => obj.id));
+            const R_user = foundLen.find(obj=>obj.id === smallestId);
+            foundLen.forEach(fdata=>{
+                if (fdata.id !== smallestId){
+                    delete_User(fdata,R_user.Email,s_U_Mail);
+                    if (userId === fdata.id){
+                        sessionStorage.setItem('UserLogout',`True&${fdata.Username}&${fdata.Email}&${fdata.Permission}`);
+                        for (let i = 0; i < localStorage.length; i++){
+                            const key = localStorage.key(i);
+                            localStorage.setItem(key, JSON.stringify([]));
+                        }
+                        for (let i = 0; i < sessionStorage.length; i++) {
+                            const key = sessionStorage.key(i);
+                            sessionStorage.setItem(key, JSON.stringify([]));
+                        }
+                    }
+                }
+            })
+        }
+    });
+};
+
 const Dashboard = () => {
     const [studentsData, setStudentsData] = useState([]);
     const [batchesData, setbatchesData] = useState([]);
@@ -125,6 +194,7 @@ const Dashboard = () => {
     const batchEle = document.querySelector('.batch-selected-opt');
     const [isDeleteBatch, setIsDeleteBatch] = useState(false);
     const [notifications,setNotifications] = useState([]);
+    const [stdFeedback,setStdFeedback] = useState([]);
     const isUser = JSON.parse(localStorage.getItem('IsUser'));
     const userClass = JSON.parse(localStorage.getItem('UserClass'));
     const isAdminAction = sessionStorage.getItem('isAdminLoggined');
@@ -132,7 +202,14 @@ const Dashboard = () => {
     const sBatch = (isUser === "Super Admin") ? (JSON.parse(sessionStorage.getItem('Selected_Batch')) || "") : 'All';
     const [selectedBatch,setSelectedBatch] = useState(sBatch);
     const [selectedClass,setSelectedClass] = useState(sClass);
+    const [reveiwCnt,setReveiwCnt] = useState(0);
+    const lg_User = sessionStorage.getItem('UserLogout') || 'False';
     const isSearched = sessionStorage.getItem('isSearched') || 'False';
+    const date = date_time().split(' ');
+    const day = date[0];
+    const month = date[1];
+    const year = date[2];
+
     if (classELe){
         if (isUser === "Super Admin")classELe.textContent = (sClass.length === 0) ? "Select Class" : (sClass === 'All') ? 'All Classes' : sClass;
     };
@@ -162,6 +239,26 @@ const Dashboard = () => {
         setClassData(class_Data);
     };
 
+    const getFeedbackData = async () => { 
+        const feedback_Data = await fetchFeedbackData();
+        let cnt = 0;
+        const today = new Date();
+        const week = today.getUTCDay();
+        const currentDate = new Date();
+        const yesterdayDate = new Date(currentDate.getTime() - (24 * 60 * 60 * 1000));
+        const dayAfterYesterdayDate = new Date(currentDate.getTime() - (48 * 60 * 60 * 1000));
+        const y_Date = yesterdayDate.toLocaleString('default', { month: 'short', day: 'numeric' });
+        const d_A_Y_Date = dayAfterYesterdayDate.toLocaleString('default', { month: 'short', day: 'numeric' });
+        feedback_Data && feedback_Data.forEach((data=>{
+            const date_ = data.BatchName.split('~')[1]
+            if((data.BatchName.split('~')[0].split(' ')[0] === selectedClass || selectedClass === 'All') && (date_ === `${day}-${month}-${year}` || (week === 1 && (date_ === `${day-1}-${y_Date.split(' ')[0]}-${year}` || date_ === `${day-2}-${d_A_Y_Date.split(' ')[0]}-${year}`)))){
+                cnt++
+            };
+        }))
+        setReveiwCnt(cnt);
+        setStdFeedback(feedback_Data);
+    };
+
     const getNotifications = async() => {
         const msgData = await fetchMessagesData();
         setNotifications([]);
@@ -172,24 +269,29 @@ const Dashboard = () => {
             }
         });
     };
-    
+
+
     useEffect(() => {
-      getBatchesData();
-      getStudents();
-      getLoginData();
-      getClassData();
+        getBatchesData();
+        getStudents();
+        getLoginData();
+        getClassData();
+        isUserFound();
+        getFeedbackData();
     }, []);
 
     useEffect(()=>{
         getNotifications();
-    },[selectedBatch,selectedClass])
+    },[selectedBatch,selectedClass]);
 
-    const date = date_time().split(' ');
-    const day = date[0];
-    const month = date[1];
-    const year = date[2];
+    useEffect(()=>{
+        isUserFound();
+    },[loginData])
 
     if (isAdminAuth() && !isStudentAuth() && localStorage.getItem('isAuthenticated') === 'True'){
+        if (lg_User.split('&')[0] === 'True'){
+            history('/login');
+        }
         
         if (isAdminAction === 'True'){
             setTimeout(()=>{
@@ -252,10 +354,11 @@ const Dashboard = () => {
             }
         };
 
-        const addClass = async (name_) => {
+        const addClass = async (name_,tutors) => {
             const name = name_.charAt(0).toUpperCase() + name_.slice(1).toLowerCase();
             const data = {
-                Class : name
+                Class : name,
+                Tutors : tutors
             }
             try {
                 let res = await axios.post('http://127.0.0.1:8000/classes/', JSON.stringify(data), {
@@ -277,28 +380,29 @@ const Dashboard = () => {
 
         const dashboardBatchChange = (type) => {
             const selectElement = (type === 'Batch') ? document.querySelector('.batch-main-opt') : document.querySelector('.class-main-opt');
+            const timer = (type === 'Batch') ? 3000 : 0;
             if((!batchesData) && (!studentsData)){
                 Alert('error','Something went wrong. Please try again later !');
                 selectElement.value = 'All';
             }else{
                 const addBatchInput = document.querySelector('.add-batch-option');
-                const addClassInput = document.querySelector('.add-class-option');
-                const addBatchBtn = (type === 'Batch') ? document.querySelector('.add-batch-option-btn') : document.querySelector('.add-class-option-btn');
-                const inputLen = (type === 'Batch') ? addBatchInput.value.length > 5 : addClassInput.value.length > 3;
+                const addClassInput = document.querySelector('.add-class-name-input');
+                const addClassTurors = document.querySelector('.tutors-names-input');
+                const addBatchBtn = (type === 'Batch') ? document.querySelector('.add-batch-option-btn') : document.querySelector('.class-add-btn');
+                const inputLen = (type === 'Batch') ? addBatchInput.value.length > 5 : (addClassInput.value.length > 3 && addClassTurors.value.length > 5);
                 if (inputLen){
-                    addBatchBtn.style.transition = 'right 0.5s ease-in-out, width 0.5s ease-in-out';
-                    addBatchBtn.style.width = '40px';
-                    addBatchBtn.style.right = '5%';
+                    if(type === 'Batch')addBatchBtn.style.transition = 'right 0.5s ease-in-out, width 0.5s ease-in-out';
+                    if(type === 'Batch')addBatchBtn.style.width = '40px';
+                    if(type === 'Batch')addBatchBtn.style.right = '5%';
                     setTimeout(()=>{
-                        addBatchBtn.classList.add('btn-rotate');
+                        if(type === 'Batch')addBatchBtn.classList.add('btn-rotate');
                         setTimeout(()=>{
-                            addBatchBtn.classList.remove('btn-rotate')
-                            addBatchBtn.style.width = '35%';
+                            if(type === 'Batch')addBatchBtn.classList.remove('btn-rotate')
+                            if(type === 'Batch')addBatchBtn.style.width = '35%';
                             const newBatch = addBatchInput.value.toUpperCase();
                             const newClass = addClassInput.value.charAt(0).toUpperCase() + addClassInput.value.slice(1).toLowerCase();
                             const searchBatchData = batchesData.some(batch=>batch.BatchName.toLowerCase() === newBatch.toLowerCase());
                             const searchClassData = classData && classData.some(cls=>cls.Class.toLowerCase() === newClass.toLowerCase());
-                            console.log(classData,searchClassData);
                             if (type === 'Batch'){
                                 if (searchBatchData){
                                     setSelectedBatch(newBatch);
@@ -311,21 +415,23 @@ const Dashboard = () => {
                                     setSelectedClass(newClass);
                                     Alert('warning',`Class : ${newClass} already exists !`);
                                 }else{
-                                    addClass(newClass);
+                                    addClass(newClass,addClassTurors.value);
                                 };
-                            }
+                            };
                             selectElement.style.visibility = 'visible';
-                            (type === 'Batch') ? addBatchInput.style.visibility = 'hidden' : addClassInput.style.visibility = 'hidden';
-                            addBatchBtn.style.visibility = 'hidden';
+                            if(type === 'Batch')addBatchInput.style.visibility = 'hidden';
                             (type === 'Batch') ? addBatchInput.value = "" : addClassInput.value = "";
-                            addBatchBtn.style.right = '0';
-                        },3000)
+                            addClassTurors.value = "";
+                            if(type === 'Batch')addBatchBtn.style.right = '0';
+                            closeAddClassDiv('close');
+                        },timer)
                     },500)
                 }else{
                     selectElement.style.visibility = 'visible';
-                    (type === 'Batch') ? addBatchInput.style.visibility = 'hidden' : addClassInput.style.visibility = 'hidden';
-                    addBatchBtn.style.visibility = 'hidden';
+                    if(type === 'Batch')addBatchInput.style.visibility = 'hidden';
+                    if(type === 'Batch')addBatchBtn.style.visibility = 'hidden';
                     (type === 'Batch') ? addBatchInput.value = "" : addClassInput.value = "";
+                    addClassTurors.value = "";
                     if (Array.isArray(batchesData) && batchesData.length > 0) {
                         setSelectedBatch(batchesData[0].BatchName);
                     };
@@ -670,18 +776,18 @@ const Dashboard = () => {
         const logout =()=>{
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
-                localStorage.setItem(key, JSON.stringify([]));
-            }
+                if (key !== 'LoginUserId'){
+                    localStorage.setItem(key, JSON.stringify([]));
+                };
+            };
             for (let i = 0; i < sessionStorage.length; i++) {
                 const key = sessionStorage.key(i);
                 sessionStorage.setItem(key, JSON.stringify([]));
-            }
-            Alert('success',"You've successfully logged out. Redirecting...");
-            confirmationDiv('close','logout');
-            sideBar();
-            setTimeout(()=>{
-                history('/login');
-            },5000);
+            };
+            const user = loginData && loginData.find(data=>data.id === JSON.parse(localStorage.getItem('LoginUserId')));
+            sessionStorage.setItem('UserLogout',`True&${user.Username}&${user.Email}&${user.Permission}`);
+            localStorage.setItem('LoginUserId',JSON.stringify([]));
+            history('/login');
         };
 
         const showStdInfo = (data,id,batch) => {
@@ -693,16 +799,20 @@ const Dashboard = () => {
 
         const navigateAddStd = () => {
             if (studentsData && batchesData){
-                if (batchesDataLength > 0){
-                    if (isUser === 'Super Admin' && (selectedClass === 'All' || selectedClass.length <= 1)){
-                        Alert('error','Select the desired class when adding a student,<br/>rather than selecting all classes or not selecting any class !',7000)
+                if (classData && classData.length > 0){
+                    if (batchesDataLength > 0){
+                        if (isUser === 'Super Admin' && (selectedClass === 'All' || selectedClass.length <= 1)){
+                            Alert('error','Select the desired class when adding a student,<br/>rather than selecting all classes or not selecting any class !',7000)
+                        }else{
+                            sessionStorage.setItem('AddStd_Class',JSON.stringify(selectedClass))
+                            sessionStorage.setItem('updateStdForm', 'False');
+                            history('/studentform');
+                        }
                     }else{
-                        sessionStorage.setItem('AddStd_Class',JSON.stringify(selectedClass))
-                        sessionStorage.setItem('updateStdForm', 'False');
-                        history('/studentform');
+                        Alert('error','Add atleast one batch to add a student !');
                     }
-                }else{
-                    Alert('error','Add atleast one batch to add a student !');
+                }else if(!classData || classData.length === 0){
+                    Alert('error','Add atleast one class !');
                 }
             }else{
                 Alert('error','Something went wrong. Please try again later !');
@@ -712,11 +822,11 @@ const Dashboard = () => {
 
         const navigateSettings = () => {
             if (studentsData && batchesData){
-                history('/settings')
+                history('/settings');
             }else{
                 Alert('error','Something went wrong. Please try again later !');
-                sideBar();
             }
+            sideBar();
         };
 
         const deleteBatch = (type) => {
@@ -838,10 +948,10 @@ const Dashboard = () => {
                 Alert('error','Select atleast one batch !');
             }
         };
-        
-        console.log(selectedClass);
+
 
         const attBatchDivVisibility = (type) =>{
+            getFeedbackData();
             if (type === 'Batch' && isUser === "Super Admin"){
                 if (selectedClass === "Select Class" || selectedClass.length === 0){
                     Alert('error','Select class to show batch details !')
@@ -862,6 +972,7 @@ const Dashboard = () => {
         };
 
         const attBatchOptSelect = (type,batchName) => {
+            getFeedbackData();
             if (!batchesData && !studentsData){
                 Alert('error','No data found or something went wrong !');
             }else{
@@ -870,10 +981,8 @@ const Dashboard = () => {
                 const deleteBatchCon = document.querySelector('.delete-batch-container');
                 const deleteBlurDiv = document.querySelector('.blur-div');
                 const addBatchInput = document.querySelector('.add-batch-option');
-                const addClassInput = document.querySelector('.add-class-option');
                 const addBatchBtn = document.querySelector('.add-batch-option-btn');
-                const addClassBtn = document.querySelector('.add-class-option-btn');
-                const classSelectElement = document.querySelector('.class-main-opt');
+                const classSelectElement = document.querySelector('.add-class-container');
                 const batchSelectElement = document.querySelector('.batch-main-opt');
                 if (batchName === 'All Batches' || batchName === 'All Classes'){
                     (type === 'Batch') ? batchSelectedOpt.textContent = batchName : classSelectedopt.textContent = batchName;
@@ -883,9 +992,16 @@ const Dashboard = () => {
                     if (type === 'Batch' && selectedClass === 'All'){
                         Alert('error','Select the desired class when creating a batch,<br/>rather than selecting all classes !',7000)
                     }else{
-                        (type === 'Batch') ? batchSelectElement.style.visibility = 'hidden' : classSelectElement.style.visibility = 'hidden';
-                        (type === 'Batch') ? addBatchInput.style.visibility = 'visible' : addClassInput.style.visibility = 'visible';
-                        (type === 'Batch') ? addBatchBtn.style.visibility = 'visible' : addClassBtn.style.visibility = 'visible';
+                        if(type === 'Batch'){
+                            batchSelectElement.style.visibility = 'hidden'
+                            addBatchInput.style.visibility = 'visible'
+                            addBatchBtn.style.visibility = 'visible'
+                        }else if (type === 'Class'){
+                            document.querySelector('.blur-div').style.visibility = 'visible';
+                            classSelectElement.style.visibility = 'visible';
+                            classSelectElement.style.opacity = '1';
+                            classSelectElement.style.zIndex = '110';
+                        };
                     }
                 }else if (batchName === 'Delete'){
                     deleteBatchCon.style.opacity = '1';
@@ -908,9 +1024,56 @@ const Dashboard = () => {
             divEle.style.zIndex = (type === 'open') ? '110' : '-10';
             document.querySelector('.blur-div').style.visibility = (type === 'open') ? 'visible' : 'hidden';
             getNotifications();
+            getFeedbackData();
         };
 
+        const closeAddClassDiv = (type) => {
+            const divEle = document.querySelector('.add-class-container');
+            document.querySelector('.blur-div').style.visibility = (type === 'open') ? 'visible' : 'hidden';
+            divEle.style.visibility = (type === 'open') ? 'visible' : 'hidden';
+            divEle.style.opacity = (type === 'open') ? '1' : '0';
+            divEle.style.zIndex = (type === 'open') ? '110' : '-10';
+        };
+
+        const move_Slider = (move) => {
+            const p1Ele = document.querySelector('.notif-reqts-title');
+            const p2Ele = document.querySelector('.notif-review-title');
+            const slideEle = document.querySelector('.dashboard-notif-slider');
+            const notifDiv = document.querySelector('.dashboard-notifications-lists-div');
+            const rqtDiv = document.querySelector('.std-feedback-list-div');
+            const r_cnt = document.querySelector('.rev-cnt');
+            const n_cnt = document.querySelector('.notif-cnt');
+             if (move === 'right'){
+                 slideEle.style.left = '58.5%';
+                 setTimeout(()=>{
+                     p2Ele.style.color = '#4953e6';
+                     p1Ele.style.color = 'black';
+                     rqtDiv.style.visibility = 'visible';
+                     notifDiv.style.visibility = 'hidden';
+                     rqtDiv.style.opacity = '1';
+                     notifDiv.style.opacity = '0';
+                     r_cnt.style.color = '#4953e6';
+                     n_cnt.style.color = 'black';
+                 },300);
+             }else if (move === 'left'){
+                 slideEle.style.left = '8.4%';
+                 setTimeout(()=>{
+                     p1Ele.style.color = '#4953e6';
+                     p2Ele.style.color = 'black';
+                     rqtDiv.style.visibility = 'hidden';
+                     notifDiv.style.visibility = 'visible';
+                     rqtDiv.style.opacity = '0';
+                     r_cnt.style.color = 'black';
+                     n_cnt.style.color = '#4953e6';
+                     setTimeout(()=>{
+                        notifDiv.style.opacity = '1';
+                     },300);
+                 },300);
+             };
+         };
+
         let dataCnt = 0;
+        let stdFedbckCnt = 0;
         return (
             <center>
             <img className="screen-error-img" src="images/screen-size-error.png" width="100%" alt=""/>
@@ -937,7 +1100,6 @@ const Dashboard = () => {
                             <li className="batch-opt-last batch-opt" onClick={()=>attBatchOptSelect('Class','Add')}><span>Add Class++</span><img src="images/add-student-icon.png" width='30px' style={{mixBlendMode : 'difference'}} /></li>
                             <li className="batch-opt-last batch-opt delete-batch-opt" onClick={()=>attBatchOptSelect('Class','Delete')}><span>Delete Class</span><img src="images/batch-delete-icon.png" width='30px' style={{mixBlendMode : 'multiply'}} /></li>
                         </div>
-                        <input type="text" placeholder="Add Class" className="add-class-option" /> <button className="add-class-option-btn" onClick={()=>dashboardBatchChange('Class')}>Add</button>
                     </div>
                     <div className="dashboard-att-opts-container">
                         <div className="main-opt-div dashboard-main-opt batch-main-opt" style={{height : '35px',background : '#fff',margin : '0'}} onClick={()=>attBatchDivVisibility('Batch')}>
@@ -998,25 +1160,59 @@ const Dashboard = () => {
                 </div>
                 <div className="dashboard-notification-div" onClick={()=>notificationDiv('open')} >
                     <img src='images/notification-bell.gif' />
-                    <span>{notifications ? notifications.length : 0}</span>
+                    <span>{notifications ? notifications.length + reveiwCnt : 0 + reveiwCnt}</span>
                 </div>
                 <div className="dashboard-notifications-container">
                     <img className="D_logo" src="images/V-Cube-Logo.png" />
-                    <h1>Notifications of Students' Requests</h1>
-                    <div className="dashboard-notifications-lists-div" style={{overflowY : (notifications && notifications.length >= 2) ? 'scroll' : ''}}>
-                    {notifications && notifications.map((data)=>(
-                        <div className="dashboard-notification-lists">
-                            <h3>Name : </h3><p>{data.StudentMessage.split('~')[2]}</p>
-                            <h3>Batch : </h3><p>{data.StudentMessage.split('~')[0]}</p>
-                            <h3>Phone : </h3><p>{data.StudentMessage.split('~')[3]}</p>
-                            <h3>Date : </h3><p>{data.StudentMessage.split('~')[5]}</p>
-                            <h3>Request : </h3><p>{data.StudentMessage.split('~')[4]}</p>
-                        </div>
-                    ))}
-                    <img src="images/no-notifi-icon.png" className="D_notif-icon" style={{display : (notifications && notifications.length > 0) ? 'none' : '' }} />
+                    <div className="dashboard-notifcation-title-div">
+                        <span className="notif-cnt">({notifications ? notifications.length : 0})</span><span className="rev-cnt">({reveiwCnt})</span>
+                        <h2 className="notif-reqts-title" onClick={()=>move_Slider('left')}>Notifications of Students' Requests</h2>
+                        <h2 className="notif-review-title" onClick={()=>move_Slider('right')}>Notifications of Students' Reviews</h2>
+                        <div className="dashboard-notif-slider"></div>
                     </div>
-                    <span className="d_n_X" onClick={()=>notificationDiv('close')} >&times;</span>
+                    <div className="dashboard-notifications-lists-div" style={{overflowY : (notifications && notifications.length >= 2) ? 'scroll' : ''}}>
+                        {notifications && notifications.map((data)=>(
+                            <div className="dashboard-notification-lists">
+                                <h3>Name : </h3><p>{data.StudentMessage.split('~')[2]}</p>
+                                <h3>Batch : </h3><p>{data.StudentMessage.split('~')[0]}</p>
+                                <h3>Phone : </h3><p>{data.StudentMessage.split('~')[3]}</p>
+                                <h3>Date : </h3><p>{data.StudentMessage.split('~')[5]}</p>
+                                <h3>Request : </h3><p>{data.StudentMessage.split('~')[4]}</p>
+                            </div>
+                        ))}
+                        <img src="images/no-notifi-icon.png" className="D_notif-icon" style={{display : (notifications && notifications.length > 0) ? 'none' : '' }} />
+                    </div>
+                    <div className="std-feedback-list-div" style={{overflowY : (stdFeedback && stdFeedback.length >= 2) ? 'scroll' : ''}}>
+                        {stdFeedback && stdFeedback.map((data=>{
+                            if(data.BatchName.split('~')[0].split(' ')[0] === selectedClass || selectedClass === 'All'){
+                            stdFedbckCnt++
+                            return(
+                            <div className="std-fedbck-lists">
+                                <h3>Batch : </h3><p>{data.BatchName.split('~')[0]}</p>
+                                <h3 style={{marginBottom : '30px'}}>Date : </h3><p>{data.BatchName.split('~')[1]}</p>
+                                {data.TurorsReview.split('~').map(review=>{
+                                    if(review && review.length > 5){ return (
+                                        <><h3>Tutor Review : </h3><p>{review}</p></>
+                                    )}
+                                })}
+                                <h3 >Tutor Feedback : </h3><p style={{textAlign : 'start'}}>{data.TutorsFeedback}</p>
+                                <h3 style={{marginTop : '30px'}}>Class Review : </h3><p style={{marginTop : '30px'}}>{data.ClassReview}</p>
+                                <h3>Class Feedback : </h3><p style={{textAlign : 'start'}}>{data.ClassFeedback}</p>
+                            </div>
+                            )}}))}
+                        <img style={{display : (stdFedbckCnt > 0) ? 'none' : ''}} src="images/no-feedback.png" />
+                    </div>
+                    <span className="d_n_X" onClick={()=>{notificationDiv('close');move_Slider('left')}} >&times;</span>
                 </div>
+            </div>
+            <div className="add-class-container">
+                <h1>Add Class</h1>
+                <form onSubmit={(e)=>{e.preventDefault();dashboardBatchChange('Class')}}>
+                    <input className="add-class-name-input" type="text" placeholder="Enter Class Name" required />
+                    <input className="tutors-names-input" type="text" placeholder="Enter Class Tutors Names  (Ex.Name1,Name2...)" required />
+                    <input className="class-add-btn" type="submit" value='Add Batch'/>
+                </form>
+                <span className="add-class-X" onClick={()=>closeAddClassDiv('close')}>&times;</span>
             </div>
             <div className="alert-div">
                 <img className="alert-div-img" src="" alt="" width="40px"/>
@@ -1024,7 +1220,6 @@ const Dashboard = () => {
                 <span className="X" onClick={closeAlert}>&times;</span>
                 <div className="alert-timer-line"></div>
             </div>
-
             <div className="attendance-pop-up-container">
                 <div className="attendance-pop-up-div">
                     <span className="selected-std-note" style={{color:'red',width:'100%',visibility:'hidden',height:'0'}}>Selected students has already been taken attendance.<br/>Check and try again.</span>
