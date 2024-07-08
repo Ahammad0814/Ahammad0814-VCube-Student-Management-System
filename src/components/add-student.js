@@ -1,8 +1,8 @@
 import { React, useState, useEffect } from 'react'
 import { fetchBatchData,fetchStudentsData } from './data';
-import { Alert, closeAlert } from './dashboard';
 import axios from 'axios';
-import { isAdminAuth, isStudentAuth } from './dashboard';
+import { isAdminAuth, isStudentAuth,Alert,closeAlert,isUserFound } from './dashboard';
+import { date_time } from './dashboard-header';
 import { useNavigate } from 'react-router-dom';
 import { sendStdAlert } from './student-info';
 import * as XLSX from 'xlsx';
@@ -11,6 +11,9 @@ const AddStudent = () => {
     const history = useNavigate();
     const [studentsData, setStudentsData] = useState([]);
     const [batchesData, setbatchesData] = useState([]);
+    const [isExcel, setIsExcel] = useState(false);
+    const lg_User = sessionStorage.getItem('UserLogout') || 'False';
+    const stdClass = JSON.parse(sessionStorage.getItem('AddStd_Class'));
 
     const getStudents = async () => {
         const student_Data = await fetchStudentsData();
@@ -24,9 +27,19 @@ const AddStudent = () => {
     useEffect(() => {
         getStudents();
         getBatches();
+        isUserFound();
       }, []);
 
+
+    useEffect(()=>{
+        isUserFound();
+    },[])
+
 if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) {
+
+    if (lg_User.split('&')[0] === 'True'){
+        history('/login');
+    }
 
     if ((isAdminAuth() && !isStudentAuth()) && ((!studentsData) || (!batchesData))){
         sessionStorage.setItem('SomethingWrong','True');
@@ -34,6 +47,9 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
     }else if((!isAdminAuth() && isStudentAuth()) && ((!studentsData) || (!batchesData))){
         sessionStorage.setItem('SomethingWrong','True');
         history('/studentinfo');
+    }else if(isAdminAuth() && !isStudentAuth() && stdClass.length === 0){
+        sessionStorage.setItem('Tried_Form','True')
+        history('/dashboard');
     }else{
     if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth() && sessionStorage.getItem('Std_Authenticated') === 'True')){
 
@@ -59,7 +75,7 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
         const idElement = document.querySelector('.std-ID');
         const imageElement = document.querySelector('.std-image-input');
         const resumeELement = document.querySelector('.std-resume');
-        const wantToUpdateData = JSON.parse(sessionStorage.getItem('SelectedStudent')) || "";
+        const wantToUpdateData = JSON.parse(sessionStorage.getItem('Selected_Student')) || "";
         const gitEle = document.querySelector('.git-url');
         const linkedinEle = document.querySelector('.linkedin-url');
         const iD = wantToUpdateData.id;
@@ -93,7 +109,7 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
                 projectElement.value = wantToUpdateData.Project
                 resumeELement.value = wantToUpdateData.Resume
                 imageElement.value = wantToUpdateData.Image
-                document.querySelector('.std-Image').setAttribute('src',wantToUpdateData.Image);
+                document.querySelector('.std-Image').setAttribute('src', (wantToUpdateData.Image !== null) ? wantToUpdateData.Image : 'images/Empty-Profile.png');
                 gitEle.value = wantToUpdateData.Github
                 linkedinEle.value = wantToUpdateData.Linkedin
             };
@@ -104,11 +120,10 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
             const pgBranchElement = pg_BranchElement.value || 'N/A';
             const pgCGPAElement = pg_CGPAElement.value || 'N/A';
             const pgYearElement = pg_YearElement.value || 'N/A';
-            const today = new Date();
-            const day = today.getDate();
-            const options = { month: 'long' };
-            const month = today.toLocaleDateString('en-US', options);
-            const year = today.getFullYear();
+            const date = date_time().split(' ');
+            const day = date[0];
+            const month = date[1];
+            const year = date[2];
             event.preventDefault();
             if (ModifyData === 'True'){
                 const stdFormData = {
@@ -136,13 +151,13 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
                     MockTests : wantToUpdateData.MockTests,
                     Interviews : wantToUpdateData.Interviews,
                     Project : projectElement.value,
-                    Feedback : wantToUpdateData.Feedback,
                     Status : wantToUpdateData.Status,
-                    StudentFeedback : wantToUpdateData.StudentFeedback,
                     Resume : resumeELement.value || null,
                     Image : imageElement.value || null,
                     Github : gitEle.value || null,
-                    Linkedin : linkedinEle.value || null
+                    Linkedin : linkedinEle.value || null,
+                    Class : wantToUpdateData.Class,
+                    Access : wantToUpdateData.Access
                 };
                 try {
                     let res = await axios.put('http://127.0.0.1:8000/students/', JSON.stringify(stdFormData), {
@@ -192,7 +207,9 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
                         Resume : resumeELement.value || null,
                         Image : imageElement.value || null,
                         Github : gitEle.value || null,
-                        Linkedin : linkedinEle.value || null
+                        Linkedin : linkedinEle.value || null,
+                        Class : stdClass,
+                        Access : 'Granted'
                     };
                     try {
                         let res = await axios.post('http://127.0.0.1:8000/students/', JSON.stringify(stdFormData), {
@@ -267,13 +284,22 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
             },3000);
         };
 
+        const isBatchFoundExcel = (stdF_Data) => {
+            const foundArr = [];
+            batchesData.forEach((bData,index)=>{
+                stdF_Data.forEach(data=>{
+                    if (data.BatchName === bData.BatchName)foundArr.push(data.BatchName === bData.BatchName);
+                });
+            });
+            return (foundArr.length === stdF_Data.length);
+        };
+
         const isStdFoundExcel = (stdF_Data) =>{
             let isFound = false;
             stdF_Data.forEach(ex_data=>{
                 studentsData.forEach(data=>{
                     if (parseInt(data.Phone) === ex_data.Phone || data.Email === ex_data.Email){
                         isFound = true;
-                        console.log(`${data.Phone} ${data.Email} ${ex_data.Phone} ${ex_data.Email}`)
                         return
                     };
                 });
@@ -321,10 +347,17 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
                 submitBtn.style.borderRight = 'solid 5px #fff';
                 submitBtn.classList.add('btn-rotate');
                 setTimeout(()=>{
-                    if (!isStdFoundExcel(jsonData)){
-                        addStdDetilsByExcel();
+                    if(isBatchFoundExcel(jsonData)){
+                        if (!isStdFoundExcel(jsonData)){
+                            jsonData.forEach((data,index)=>{
+                                data['Class'] = stdClass;
+                                (index === jsonData.length - 1) ? addStdDetilsByExcel(data) : addStdDetilsByExcel(data,true);
+                            });
+                        }else{
+                            Alert('error','Student with Mobile or Email exists !');
+                        };
                     }else{
-                        Alert('error','Student with Mobile or Email exists !');
+                        Alert('error',"New student's batch not found !");
                     };
                     submitBtn.innerHTML = "Upload";
                     submitBtn.style.background = '#1967d2';
@@ -334,8 +367,8 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
                     submitBtn.style.border = 'none';
                     submitBtn.classList.remove('btn-rotate');
                     setTimeout(()=>{
-                        history('/dashboard');
-                    },2000);
+                        if(isExcel)history('/dashboard');
+                    },3000);
                 },3000);
             }else{
                 Alert('error','No data found or error finding data !')
@@ -346,32 +379,38 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
         
 
 
-        const addStdDetilsByExcel = async() => {
-            const file = document.querySelector('.excelfile').files[0];
-            const stdFilesData = new FormData();
-            stdFilesData.append('excel_file', file);
+        const addStdDetilsByExcel = async(data,end=false) => {
             try {
-                let res = await axios.post('http://127.0.0.1:8000/studentsfiles/', stdFilesData, {
+                let res = await axios.post('http://127.0.0.1:8000/students/', JSON.stringify(data), {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
+                    'Content-Type': 'application/json',
                     },
                 });
-                if (res.status === 200 || res.status === 201){
-                    Alert('success','Student details Uploaded successfully !');
-                    setTimeout(()=>{
-                        history('/dashboard');
-                    },3000);
-                }else if (res.status === 302){
-                    Alert('error','Students with Mobile or Email exists !');
+                if (end){
+                    if (res.status === 200 || res.status === 201){
+                        setIsExcel(true);
+                        Alert('success','Student details Uploaded successfully !');
+                        setTimeout(()=>{
+                            history('/dashboard');
+                        },3000);
+                    }else if (res.status === 302){
+                        Alert('error','Students with Mobile or Email exists !');
+                    };    
                 };
             } catch (error){
-                Alert('error', 'Unfortunately, the student addition was unsuccessful.<br/>Please check & try again !');
+                if (end){
+                    setIsExcel(false);
+                    Alert('error', 'Unfortunately, the student addition was unsuccessful.<br/>Please check & try again !');
+                };
             };
         };
 
         const checkURL = (e,type) => {
             if (type === 'Image'){
                 document.querySelector('.std-Image').setAttribute('src',e.target.value);
+                if (e.target.value <= 1){
+                    document.querySelector('.std-Image').setAttribute('src','images/Empty-Profile.png');
+                }
             };
             if (e.target.value.length >= 255){
                 Alert('error','URL length do not exceed more than 255 characters !');
@@ -384,10 +423,9 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
 
         const isValidUrl = (e) => {
             e.preventDefault();
-            const expression = /^(http|https):\/\/[^ "]+\.[^ "]+$/;
+            const expression = /^(https):\/\/[^ "]+(\.[^ "]+)+$/;
             const newUrlEles = []
             const urlEles = [imageElement.value, resumeELement.value, gitEle.value, linkedinEle.value]
-            console.log(urlEles[0].length);
             urlEles.forEach(ele=>{
                 if (ele.length > 0){
                     newUrlEles.push(ele)
@@ -421,11 +459,12 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
                     <img src="images/V-CUBE-Logo.png" className="form-logo" alt="" onClick={backToDashboard} />
                     <span className="student-form-X-icon" onClick={xIconlocate}>&times;</span>
                     <label for="batch" className="batch-label"><h2>Select Batch : </h2>
-                    <select name="batch" className="batch-select">
+                    <select name="batch" className="batch-select" style={{height : '35px', fontSize : '20px'}} disabled={(!isAdminAuth() && isStudentAuth()) ? true : false}>
                         {batchesData.map(data=>{
+                            if((ModifyData === 'True' && wantToUpdateData.Class === data.Class) || (ModifyData !== 'True' && stdClass === data.Class)){
                             return(
-                            <option value={data.BatchName}>{data.BatchName}</option>
-                            )
+                            <option value={data.BatchName} style={{fontSize : '25px'}}>{data.BatchName}</option>
+                            )}
                         })};
                     </select>
                     </label>
@@ -478,7 +517,7 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
                         <label className='linkedin-label'>Linkedin : <input type='text' placeholder='Linkedin link' className='linkedin-url' onChange={(e)=>checkURL(e,'Linkedin')} /></label>
                     </div>
                     <input className="form-submit-btn" type="submit" value="Submit" />
-                    <a href='https://imgbb.com/' target='main' style={{fontSize : '18px', color : 'red', marginLeft : '20px'}}>Don't have resume or image link ?</a>
+                    <a href='https://imgbb.com/' target='main' style={{fontSize : '18px', color : 'red', margin : '8px 20px 0 0'}}>Don't have resume or image link ?</a>
                 </form>
                 <div className="alert-div">
                     <img className="alert-div-img" src="" alt="" width="40px"/>
