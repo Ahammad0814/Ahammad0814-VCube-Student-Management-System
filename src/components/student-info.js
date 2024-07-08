@@ -882,7 +882,7 @@ const StudentInfo = () => {
                 <span className='notif-X' onClick={()=>openNotifications('close')}>&times;</span>
             </div>
             <div className='student-feedback-conatiner'>
-                <img className='s-f-f-logo' src='images/V-Cube-Logo.png' />
+                <img className='s-f-f-logo' src='images/V-CUBE-Logo.png' />
                 <h1 className='title'>Student Feedback Form</h1>
                 <form onSubmit={(e)=>submitFeedback(e)}>
                     <div className='tariner-lists-div'>
