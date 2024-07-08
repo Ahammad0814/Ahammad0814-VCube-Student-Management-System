@@ -695,14 +695,6 @@ const StudentInfo = () => {
             }catch(error){
                 Alert('error','Unfortunately your review submmition was unsuccessful.<br/>Please try again later !')
             };
-            classTutors && classTutors.forEach((data,index)=>{
-                sessionStorage.setItem(`click-tutor-${index}`,'False');
-                sessionStorage.setItem(`No-tutor-${index}`,JSON.stringify(0));
-            });
-            sessionStorage.setItem('click-cls-0','False');
-            sessionStorage.setItem('No-cls-0',JSON.stringify(0));
-            document.querySelector('.std-cls-fedbck').value = "";
-            document.querySelector('.std-tutor-fedbck').value= "";
             stdFedbckForm('close',true);
         };
 
@@ -718,6 +710,14 @@ const StudentInfo = () => {
             }else if(!close){
                 Alert('error','Ratings provide valuable feedback that motivates us to deliver an even better experience. We would appreciate<br/>if you could spare a few minutes to complete this student feedback form about your experience',15000)
             }
+            classTutors && classTutors.forEach((data,index)=>{
+                sessionStorage.setItem(`click-tutor-${index}`,'False');
+                sessionStorage.setItem(`No-tutor-${index}`,JSON.stringify(0));
+            });
+            sessionStorage.setItem('click-cls-0','False');
+            sessionStorage.setItem('No-cls-0',JSON.stringify(0));
+            document.querySelector('.std-cls-fedbck').value = "";
+            document.querySelector('.std-tutor-fedbck').value= "";
         };
 
     return (
@@ -882,7 +882,7 @@ const StudentInfo = () => {
                 <span className='notif-X' onClick={()=>openNotifications('close')}>&times;</span>
             </div>
             <div className='student-feedback-conatiner'>
-                <img className='s-f-f-logo' src='images/V-CUBE-Logo.png'/>
+                <img className='s-f-f-logo' src='images/V-Cube-Logo.png' />
                 <h1 className='title'>Student Feedback Form</h1>
                 <form onSubmit={(e)=>submitFeedback(e)}>
                     <div className='tariner-lists-div'>
