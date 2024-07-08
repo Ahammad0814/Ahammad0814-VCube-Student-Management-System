@@ -833,7 +833,7 @@ const StudentInfo = () => {
                 <span onClick={()=>raiseRqtDiv('close')}>&times;</span>
             </div>
             <div className='std-notification-veiw-container'>
-                <img src='images/V-Cube-Logo.png'/>
+                <img src='images/V-CUBE-Logo.png'/>
                 <div className='notification-lists'>
                     <div className='std-notif-opts-div'><p className='p1' onClick={()=>moveSlider('left')}>Your Notifications</p><p className='p2' onClick={()=>moveSlider('right')}>{(!isAdminAuth() && isStudentAuth()) ? 'Your Requests' : 'Your Messages'}</p><div className='notif-slider'></div></div>
                     <div className='std-notification-data-div' style={{overflowY : (myMessages && myMessages.length >= 3) ? 'scroll' : 'auto'}}>
