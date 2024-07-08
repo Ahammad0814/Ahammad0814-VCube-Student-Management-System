@@ -599,6 +599,7 @@ const Login = () => {
                 sendStdAlert('ahammada587@gmail.com','User_Review',`${lg_User.split('&')[1]}~${lg_User.split('&')[2]}~${cnt}~${names[no]}~${txt}~`,data);
                 setReview(false);
                 closeRatingDiv(true);
+                setClickedNo(0);
             }else{
                 Alert('error','Please select a rating from 1 to 10 to provide your review !');
             };
@@ -614,7 +615,7 @@ const Login = () => {
                 Alert('error','Ratings provide valuable feedback that motivates us to deliver an even better experience.<br/>So we kindly request that you take a moment to share your rating.',10000);
             };
             sessionStorage.setItem('UserLogout','False');
-        }
+        };
 
         const chckStdP_E = (e) => {
             if(e.target.value === ""){
