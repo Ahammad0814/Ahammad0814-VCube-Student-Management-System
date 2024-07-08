@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import './login.css';
 import { fetchBatchData,fetchLoginData,fetchStudentsData } from "./data";
-import { isStudentAuth, isAdminAuth } from "./dashboard.js";
+import { isStudentAuth, isAdminAuth,isUserFound } from "./dashboard.js";
 import { useNavigate } from "react-router-dom";
 import { Alert, closeAlert } from "./dashboard.js";
 import axios from "axios";
 import { date_time } from "./dashboard-header.js";
+import { sendStdAlert } from "./student-info.js";
 
 const Login = () => {
     const history = useNavigate();
@@ -15,7 +16,11 @@ const Login = () => {
     const [userOTP,setOTP] = useState([]);
     const [userLO, setUserLO] = useState(false);
     const [userForgotDetail,setUserForgotDetail] = useState([]);
+    const [review,setReview] = useState(false);
+    const [clicked,setClicked] = useState(false);
+    const [clickedNo,setClickedNo] = useState([]);
     const [cls, setCls] = useState("");
+    const lg_User = sessionStorage.getItem('UserLogout') || 'False';
     const action = sessionStorage.getItem('Tried');
 
     const date = date_time().split(' ');
@@ -37,8 +42,12 @@ const Login = () => {
         getStudents();
         getLoginData();
         getBatches();
+        isUserFound();
     }, []);
 
+    useEffect(()=>{
+        isUserFound();
+    },[loginData])
 
     if (action === 'True'){
         setTimeout(()=>{
@@ -59,6 +68,18 @@ const Login = () => {
         sessionStorage.setItem('Std_Authenticated','False');
         sessionStorage.setItem('isStdAuthenticated','False');
     }else if(!isAdminAuth() && !isStudentAuth()){
+
+        if (lg_User.split('&')[0] === 'True'){
+            setTimeout(()=>{
+                if (!lg_User.split('').some(char=>char === '~')){
+                    setReview(true);
+                    document.querySelector('.blurdiv').style.visibility = 'visible';
+                }else{
+                    sessionStorage.setItem('UserLogout','False');
+                };
+            },1000);
+        };
+
         const btnRotate = (ele) => {
             if (!batchesData){
                 Alert('error','Something went wrong. Please try again later !')
@@ -97,10 +118,10 @@ const Login = () => {
                 sendMail(null,'ahammado828@gmail.com',otp,'User_OTP');
             }else{
                 if (checkAdmin() === true) {
-                    const loginUserId = JSON.parse(localStorage.getItem('LoginUserId'));
+                    const loginUserId = JSON.parse(localStorage.getItem('LoginUserId')) || "";
                     const activeUser = loginData && loginData.find(data => data.id === loginUserId);
                     if (activeUser){
-                        if (activeUser.Permission === 'Granted'){
+                        if (activeUser.Permission.includes('Granted')){
                             blurDiv.style.visibility = 'visible';
                             sessionStorage.setItem('LogginedUser',JSON.stringify(activeUser.Username));
                             blurDiv.style.visibility = 'hidden';
@@ -122,7 +143,11 @@ const Login = () => {
                     };
                 } else{
                     Alert('error','Invalid username or password !');
-                }
+                    const isUserCrt = loginData && loginData.find(data=>data.Username === email.value || data.Email === email.value);
+                    if(isUserCrt){
+                        sendStdAlert(isUserCrt.Email,'Wrong_User');
+                    };
+                };
             };
         };
         const isUserStudent = () => {
@@ -229,11 +254,11 @@ const Login = () => {
         const checkAdmin = () => {
             const email = document.querySelector('.email-input').value;
             const password = document.querySelector('.password-input').value;
-            if ((loginData && loginData.length === 0) && password === 'Create User' && email.length > 0){
+            if ((loginData && loginData.length === 0) && password === 'Create Super User' && email.length > 0){
                 return email;
             }
             for (const data of loginData) {
-                if (data.Email === email || data.Username === email) {
+                if (data.Email === email || data.Username === email){
                     if (data.Password === password){
                         localStorage.setItem('LoginUserId',JSON.stringify(data.id));
                         return true;
@@ -294,6 +319,7 @@ const Login = () => {
                 };
             }
         };
+
         const sendMail = async (data,mail,user,mailtype) => {
             Alert('warning','Sending OTP. Please wait...');
             const password = document.querySelector('.password-input');
@@ -327,7 +353,7 @@ const Login = () => {
                     setTimeout(()=>{
                         docEle.style.transition = '0.5s ease-in-out';
                         docEle.style.opacity = '1';
-                    },500);
+                    },100);
                     document.querySelector('.user-c-username').value = email.value;
                     password.value = "";
                     email.value = "";
@@ -469,12 +495,13 @@ const Login = () => {
                         Username : userName.value,
                         Email : email.value,
                         Password : password.value,
-                        User : 'Admin',
-                        Permission : 'Granted'
+                        User : 'Super Admin',
+                        Permission : 'Granted',
+                        Class : 'All'
                     };
                     addUserLoginData(newUserData);
                 }else{
-                    Alert('error',"Password does not match. Check and try again !")
+                    Alert('error',"Password does not match. Check and try again !");
                 };
             }else{
                 Alert('error','Invalid OTP. Check and try again !');
@@ -491,7 +518,7 @@ const Login = () => {
             if (res.status === 200 || res.status === 201){
                 Alert('success','New User has been added successfully !');
                 closeUserCreateDiv();
-                setLoginData([...loginData, data]);
+                getLoginData();
             }
             }catch (error){
                 Alert('error','Unfortunately, the new user addition was unsuccessful. Try again later ! ');
@@ -511,6 +538,83 @@ const Login = () => {
                 Alert('error','Enter Phone or Email to show batches !')
             };
         };
+
+        const onHoverEmoji = (num,leave=false,click=false) => {
+            if(click){
+                setClicked(true);
+                setClickedNo(num);
+            }
+            const colors = ['red','#ee603b','#f58b39','#fcad36','#ffc929','#f9de1c','#d5d73d','#b0d258','#89c973','#00924c'];
+            if(leave && !clicked){
+                colors.forEach((color,index)=>{
+                    if (index < num){
+                        document.querySelector(`.emoji-img-div-${index + 1}`).style.background = 'lightgrey';
+                        document.querySelector(`.emoji-img-div-${index + 1}`).style.border = `solid 3px lightgrey`;
+                    };
+                });
+            }else if(leave && clicked){
+                colors.forEach((color,index)=>{
+                    if (index >= clickedNo){
+                        document.querySelector(`.emoji-img-div-${index + 1}`).style.background = 'lightgrey';
+                        document.querySelector(`.emoji-img-div-${index + 1}`).style.border = `solid 3px lightgrey`;
+                    };
+                });
+            }else{
+                colors.forEach((color,index)=>{
+                    if (index < num){
+                        document.querySelector(`.emoji-img-div-${index + 1}`).style.background = color;
+                        document.querySelector(`.emoji-img-div-${index + 1}`).style.border = `solid 3px ${color}`;
+                    }else if(click){
+                        document.querySelector(`.emoji-img-div-${index + 1}`).style.background = 'lightgrey';
+                        document.querySelector(`.emoji-img-div-${index + 1}`).style.border = `solid 3px lightgrey`;
+                    };
+                });
+            }
+        };
+
+        const onHoverEmojiTxt = (num,leave=false) => {
+            const colors = ['red','#ee603b','#f58b39','#fcad36','#ffc929','#f9de1c','#d5d73d','#b0d258','#89c973','#00924c'];
+            const moves = [-3, 3, 18, 31.7, 38.3, 46.5, 60, 65.3, 77.7, 89];
+            const names = ["Unacceptable", "Needs Improvement", "Satisfactory", "Good", "Impressive", "Remarkable", "Superb", "Extraordinary", "Perfection", "Ultimate"];
+            const spanEle = document.querySelector('.emoji-names');
+                if(leave){
+                    spanEle.style.display = 'none';
+                }else{
+                    spanEle.style.display = '';
+                    spanEle.style.left = `${moves[num - 1]}%`;
+                    spanEle.style.color = colors[num - 1];
+                    spanEle.textContent = names[num - 1];
+                };
+        };
+
+        const submit_U_R = () => {
+            const cnt = (clickedNo > 0) ? clickedNo : 0;
+            const names = ["Unacceptable", "Needs Improvement", "Satisfactory", "Good", "Impressive", "Remarkable", "Superb", "Extraordinary", "Perfection", "Ultimate"];
+            if (cnt > 0){
+                const no = (cnt === 0) ? 1 : cnt - 1;
+                const r_txt = document.querySelector('.U_R_Txt').value;
+                const txt = (r_txt.length > 3) ? r_txt : 'No Text Review Provided';
+                const data = loginData && loginData.find(data=>data.Username === lg_User.split('&')[1] && data.Email === lg_User.split('&')[2]);
+                data.Permission = (data.Permission === 'Granted') ? 'Granted~' : 'Denied~';
+                sendStdAlert('ahammada587@gmail.com','User_Review',`${lg_User.split('&')[1]}~${lg_User.split('&')[2]}~${cnt}~${names[no]}~${txt}~`,data);
+                setReview(false);
+                closeRatingDiv(true);
+            }else{
+                Alert('error','Please select a rating from 1 to 10 to provide your review !');
+            };
+        };
+
+        const closeRatingDiv = (nope) =>{
+            const divEle = document.querySelector('.Rating-User-div');
+            divEle.style.opacity = '0';
+            divEle.style.visibility = 'hidden';
+            divEle.style.zIndex = '-10';
+            document.querySelector('.blurdiv').style.visibility = 'hidden';
+            if (!nope){
+                Alert('error','Ratings provide valuable feedback that motivates us to deliver an even better experience.<br/>So we kindly request that you take a moment to share your rating.',10000);
+            };
+            sessionStorage.setItem('UserLogout','False');
+        }
 
         const chckStdP_E = (e) => {
             if(e.target.value === ""){
@@ -626,6 +730,18 @@ const Login = () => {
                         </div>
                         <span className="x-span" onClick={()=>forgotDivClose('close')}>&times;</span>
                     </div>
+                    <div className="Rating-User-div" style={{zIndex : (review === true) ? '110' : '-10',visibility : (review === true) ? 'visible' : 'hidden',opacity : (review === true) ? '1' : '0'}}>
+                        <h1>Give Us Your Thoughts</h1>
+                        <div className="emojis-div">
+                            {[1,2,3,4,5,6,7,8,9,10].map(num=>(
+                                <div className={`emoji-img-div emoji-img-div-${num}`} onMouseOver={()=>{onHoverEmoji(num);onHoverEmojiTxt(num)}} onMouseLeave={()=>{onHoverEmoji(num,true);onHoverEmojiTxt(num,true)}} onClick={()=>onHoverEmoji(num,false,true)}><img src={`images/emoji-${num}.png`}/></div>
+                            ))}
+                            <span className="emoji-names"></span>
+                        </div>
+                        <textarea className="U_R_Txt" placeholder="Feedback & Suggestions (Optional)"></textarea>
+                        <button onClick={submit_U_R}>Submit Review</button>
+                        <span className="X-icon" onClick={()=>closeRatingDiv(false)}>&times;</span>
+                    </div>
                     <div className="blurdiv"></div>
                     <div className="alert-div">
                     <img className="alert-div-img" src="" alt="" width="40px"/>
@@ -636,7 +752,7 @@ const Login = () => {
                 </div>
             </div>
         );
-    }
+    };
 };
 
 export default Login;
