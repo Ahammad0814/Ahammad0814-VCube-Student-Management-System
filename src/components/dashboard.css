@@ -747,11 +747,15 @@ body{
     flex-direction: row;
     align-items: center;
     width: 100%;
-    height: 50px;
+    height: 55px;
+    border-bottom: solid 1px lightgrey;
 }
 .std-education-details-div div p{
     text-align: start;
     margin-left: 4%;
+}
+.std-education-details-div div:nth-child(1){
+    border-top: solid 1px lightgrey;
 }
 .std-education-details-div div p:nth-child(1){
     width: 20%;
@@ -769,13 +773,15 @@ body{
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
-    width: 100%;
+    justify-content: space-between;
+    width: 93%;
+    height: 70px;
+    margin-left: 4%;
     font-size: 18px;
 }
 .std-inner-div p{
-    width: 25%;
-    text-align: center;
+    width: auto;
+    text-align: start;
 }
 .std-attendence1{
     font-weight: bold;
@@ -787,45 +793,11 @@ body{
     color: darkred;
     font-size: 20px;
 }
-.feedback-p,
+
 #project-p{
     margin: 1% 0 1% 4%;
     font-size: 18px;
     width: auto;
-}
-.feedback-p{
-    width: 90%;
-    text-align: start;
-    display: flex;
-    align-items: center;
-    height: 30px;
-}
-.feedback-p button{
-    margin-left: 3%;
-    border: solid 1px #616bf1;
-    background: #616bf1;
-    color: #ffff;
-    height: 30px;
-    width: 50px;
-    font-size: 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: width 0.2s ease-in-out;
-}
-
-.feedback-span input{
-    height: 25px;
-    font-size: 18px;
-}
-
-.std-feedback-p{
-    width: 90%;
-    text-align: start;
-    display: flex;
-    align-items: center;
-    height: 30px;
-    font-size: 18px;
-    margin: 0 0 0 5%;
 }
 
 .std-joining-date,
@@ -900,20 +872,8 @@ body{
     top: 2%;
     right: 2.5%;
     cursor: pointer;
-    font-size: 20px;
-    color: #4953e6;
-    text-decoration: underline;
 }
 
-.Raise-rqt{
-    position: absolute;
-    top: 70px;
-    right: 20px;
-    color: #4953e6;
-    font-size: 20px;
-    text-decoration: underline;
-    cursor: pointer;
-}
 .update-std-details-div{
     position: absolute;
     bottom: 2%;
@@ -1298,12 +1258,12 @@ body{
 }
 
 .alert-div{
-    width: 50%;
+    width: 75%;
     height: 60px;
     border: solid 1px red;
     position: fixed;
     top: 0;
-    left: 25%;
+    left: 12.5%;
     border-radius: 5px;
     border: none;
     display: flex;
@@ -1637,7 +1597,7 @@ body{
 }
 .total-users-inner-div{
     display: grid;
-    grid-template-columns: repeat(5,1fr);
+    grid-template-columns: repeat(6,1fr);
     row-gap: 30px;
     width: 100%;
     height: auto;
@@ -1733,8 +1693,6 @@ body{
     .student-details-right-div h2{
         font-size: 19px;
     }
-    .project-p span,
-    .feedback-p,
     .project-p{
         font-size: 15px;
         margin-top: 0;
