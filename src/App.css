@@ -92,7 +92,7 @@ button{
     z-index: 900;
     position: absolute;
     top: 20%;
-    left: 40%;
+    left: 35%;
     width: 30%;
     max-height: 60%;
     background: #fff;
@@ -358,6 +358,94 @@ button{
     top: 37.5%;
 }
 
+.Rating-User-div{
+    z-index: 100;
+    background: #fff;
+    width: 40%;
+    height: 50%;
+    position: absolute;
+    top: 25%;
+    left: 30%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    z-index: -10;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.5s ease-in-out;
+}
+.Rating-User-div h1{
+    margin: 0;
+}
+.Rating-User-div textarea{
+    width: 85%;
+    resize: none;
+    height: 25%;
+    font-size: 20px;
+    padding: 2%;
+}
+.Rating-User-div button{
+    width: 90%;
+    height: 40px;
+    font-size: 20px;
+    border: none;
+    background: #4953e6;
+    color: #fff;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.emojis-div{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-around;
+    width: 90%;
+    position: relative;
+}
+.tutor-emoji-div,
+.cls-emoji-div,
+.emoji-img-div{
+    width: 30px;
+    height: 30px;
+    border: solid 3px lightgrey;
+    background: lightgrey;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+.tutor-emoji-div:hover,
+.cls-emoji-div:hover,
+.emoji-img-div:hover{
+    transform: scale(1.3);
+}
+.tutor-emoji-div img,
+.cls-emoji-div img,
+.emoji-img-div img{
+    width: 100%;
+}
+.Rating-User-div .X-icon{
+    position: absolute;
+    font-size: 50px;
+    top: 0;
+    right: 15px;
+    cursor: pointer;
+}
+.tutor-emoji-txt,
+.cls-emoji-txt{
+    position: absolute;
+    top: -25px;
+    font-weight: bold;
+}
+.emojis-div span{
+    position: absolute;
+    top: -30px;
+    font-weight: bold;
+}
+
 .std-raise-rqt-div{
     position: absolute;
     background: #fff;
@@ -401,6 +489,13 @@ button{
     font-size: 50px;
     top: 0;
     right: 15px;
+    cursor: pointer;
+}
+
+.Raise-rqt{
+    position: absolute;
+    top: 70px;
+    right: 20px;
     cursor: pointer;
 }
 
@@ -672,4 +767,303 @@ button{
     width: 33%;
     height: 70%;
     left: 33.5%;
+}
+
+.student-feedback-form{
+    position: absolute;
+    top: 17%;
+    right: 3%;
+    cursor: pointer;
+}
+.student-feedback-form img{
+    width: 30px;
+}
+.std-close-dtls-txt,
+.raise-rqt-txt,
+.fedbk-form-txt{
+    position: absolute;
+    border: none;
+    width: 110px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: -115px;
+    border-radius: 5px;
+    background: #616bf1;
+    color: #fff;
+    opacity: 0;
+    transition: 0.5s ease-in-out;
+    visibility: hidden;
+}
+
+.fedbk-form-txt{
+    top: 20%;
+}
+.std-close-dtls-txt{
+    left: -105px;
+}
+.close-std-details:hover .std-close-dtls-txt,
+.Raise-rqt:hover .raise-rqt-txt,
+.student-feedback-form:hover .fedbk-form-txt{
+    visibility: visible;
+    opacity: 1;
+}
+
+.student-feedback-conatiner{
+    position: absolute;
+    width: 80%;
+    height: 751.5px;
+    background: #fff;
+    z-index: -10;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    top: 2.5%;
+    left: 10%;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.5s ease-in-out;
+}
+.student-feedback-conatiner .s-f-f-logo{
+    position: absolute;
+    top: 0;
+    left: 50px;
+    width: 150px;
+}
+.student-feedback-conatiner .title{
+    margin: 40px 0 40px 0;
+}
+.student-feedback-conatiner form{
+    height: 78%;
+    margin-top: 1%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+.student-feedback-conatiner textarea{
+    width: 89%;
+    height: 19%;
+    resize: none;
+    font-size: 18px;
+    padding: 1%;
+}
+.student-feedback-conatiner input{
+    width: 50%;
+    height: 40px;
+    font-size: 20px;
+    color: #fff;
+    background: #4953e6;
+    border: solid 1px #4953e6;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.tariner-lists-div{
+    height: auto;
+    min-height: 18%;
+    width: 91%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.tariner-lists-div h2{
+    margin: 10px;
+}
+.trainer-lists-inner-div{
+    height: 45px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    margin: 3px 0 15px 0;
+}
+.trainer-lists-inner-div h2 p{
+    display: inline;
+    font-weight: 100;
+}
+.class-fedbck-div{
+    width: 91%;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.class-fedbck-div h2{
+    margin: 5px;
+    width: 48%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+.class-fedbck-div h2 p{
+    font-weight: normal;
+}
+.s-f-f-X{
+    position: absolute;
+    font-size: 60px;
+    top: 0;
+    right: 20px;
+    cursor: pointer;
+}
+
+.std-feedback-list-div{
+    height: 77%;
+    width: 100%;
+    position: absolute;
+    bottom: 0.7px;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.5s ease-in-out;
+}
+.std-feedback-list-div img{
+    position: absolute;
+    width: 30%;
+    top: 20%;
+    left: 35%;
+}
+
+.std-fedbck-lists{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    border: solid 1px lightgrey;
+    height: auto;
+    padding: 2%;
+}
+.std-fedbck-lists h3{
+    width: 150px;
+    height: 30px;
+}
+.std-fedbck-lists p{
+    width: 920px;
+    height: auto;
+    user-select: text;
+}
+.std-fedbck-lists p,
+.std-fedbck-lists h3{
+    margin: 5px;
+    display: flex;
+    align-items: start;
+    justify-content: start;
+}
+
+.std-fedbck-X-icon{
+    position: absolute;
+    font-size: 60px;
+    top: 0;
+    right: 20px;
+    cursor: pointer;
+}
+
+.dashboard-std-feedback-div{
+    position: absolute;
+    top: 70px;
+    left: 0px;
+    cursor: pointer;
+}
+.dashboard-std-feedback-div img{
+    width: 60px;
+    height: 55px;
+}
+.dashboard-std-feedback-div span{
+    position: absolute;
+    color: #fff;
+    left: 58%;
+    top: 13.5%;
+    font-size: 12px;
+    width: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard-notifcation-title-div{
+    width: 100%;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    position: relative;
+}
+.dashboard-notifcation-title-div h2{
+    cursor: pointer;
+}
+.dashboard-notifcation-title-div span{
+    position: absolute;
+    top: -30px;
+    font-size: 30px;
+    font-weight: normal;
+}
+.rev-cnt{
+    right: 23%;
+}
+.notif-cnt{
+    left: 23%;
+    color: #4953e6;
+}
+.notif-reqts-title{
+    color: #4953e6;
+}
+.dashboard-notif-slider{
+    position: absolute;
+    bottom: 5px;
+    left: 8.4%;
+    border: solid 2px #4953e6;
+    width: 378px;
+    border-radius: 5px;
+    transition: 0.5s ease-in-out;
+}
+
+.add-class-container{
+    position: absolute;
+    width: 40%;
+    height: 40%;
+    top: 30%;
+    left: 30%;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    opacity: 0;
+    visibility: hidden;
+    z-index: -10;
+    transition: 0.5s ease-in-out;
+}
+.add-class-container form{
+    width: 90%;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.add-class-X{
+    position: absolute;
+    top: 0;
+    right: 15px;
+    font-size: 50px;
+    cursor: pointer;
+}
+.add-class-container form input{
+    height: 40px;
+    font-size: 20px;
+    margin: 10px 0;
+}
+.add-class-container form input:nth-child(1),
+.add-class-container form input:nth-child(2){
+    border: none;
+    border-bottom: solid 1px grey;
+    width: 90%;
+    outline: none;
+}
+.add-class-container form input:nth-child(3){
+    border: solid 1px #4953e6;
+    background: #4953e6;
+    width: 91%;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
 }
