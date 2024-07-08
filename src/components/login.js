@@ -115,7 +115,7 @@ const Login = () => {
                 const otp = Math.floor(100000 + Math.random() * 900000);
                 setOTP(otp);
                 blurDiv.style.visibility = 'visible';
-                sendMail(null,'ahammado828@gmail.com',otp,'User_OTP');
+                sendMail(null,'amarapudinesh1234@gmail.com',otp,'User_OTP');
             }else{
                 if (checkAdmin() === true) {
                     const loginUserId = JSON.parse(localStorage.getItem('LoginUserId')) || "";
