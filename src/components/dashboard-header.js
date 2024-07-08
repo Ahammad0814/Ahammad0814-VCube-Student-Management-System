@@ -129,15 +129,6 @@ const DashboardHeader = ({selectBatch, studentData, todayDate, Alert, selected_C
                 const offset = circumference - (percentage / 100) * circumference;
                 progressBar.style.strokeDashoffset = offset;
                 progressText.textContent = percent < 10 ? `0${percent}%` : `${percent}%`;
-                // if (percent <= 35){
-                //     progressBar.style.stroke = 'red';
-                // }else if (percent > 35 && percent <= 50){
-                //     progressBar.style.stroke = 'gold';
-                // }else if (percent > 50 && percent <= 75){
-                //     progressBar.style.stroke = 'orange';
-                // }else if (percent > 75){
-                //     progressBar.style.stroke = 'green';
-                // }
             };
     };
 
