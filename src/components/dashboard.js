@@ -804,7 +804,6 @@ const Dashboard = () => {
                         if (isUser === 'Super Admin' && (selectedClass === 'All' || selectedClass.length <= 1)){
                             Alert('error','Select the desired class when adding a student,<br/>rather than selecting all classes or not selecting any class !',7000)
                         }else{
-                            sessionStorage.setItem('AddStd_Class',JSON.stringify(selectedClass))
                             sessionStorage.setItem('updateStdForm', 'False');
                             history('/studentform');
                         }
@@ -1163,7 +1162,7 @@ const Dashboard = () => {
                     <span>{notifications ? notifications.length + reveiwCnt : 0 + reveiwCnt}</span>
                 </div>
                 <div className="dashboard-notifications-container">
-                    <img className="D_logo" src="images/V-CUBE-Logo.png" />
+                    <img className="D_logo" src="images/V-Cube-Logo.png" />
                     <div className="dashboard-notifcation-title-div">
                         <span className="notif-cnt">({notifications ? notifications.length : 0})</span><span className="rev-cnt">({reveiwCnt})</span>
                         <h2 className="notif-reqts-title" onClick={()=>move_Slider('left')}>Notifications of Students' Requests</h2>
@@ -1291,4 +1290,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-  
