@@ -13,7 +13,8 @@ const AddStudent = () => {
     const [batchesData, setbatchesData] = useState([]);
     const [isExcel, setIsExcel] = useState(false);
     const lg_User = sessionStorage.getItem('UserLogout') || 'False';
-    const stdClass = JSON.parse(sessionStorage.getItem('AddStd_Class'));
+    const ModifyData = sessionStorage.getItem('updateStdForm');
+    const stdClass = JSON.parse(sessionStorage.getItem('Selected_Class'));
 
     const getStudents = async () => {
         const student_Data = await fetchStudentsData();
@@ -47,7 +48,7 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
     }else if((!isAdminAuth() && isStudentAuth()) && ((!studentsData) || (!batchesData))){
         sessionStorage.setItem('SomethingWrong','True');
         history('/studentinfo');
-    }else if(isAdminAuth() && !isStudentAuth() && stdClass.length === 0){
+    }else if(isAdminAuth() && !isStudentAuth() && ModifyData === 'False' && (stdClass.length === 0 || stdClass === 'All')){
         sessionStorage.setItem('Tried_Form','True')
         history('/dashboard');
     }else{
@@ -79,7 +80,6 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
         const gitEle = document.querySelector('.git-url');
         const linkedinEle = document.querySelector('.linkedin-url');
         const iD = wantToUpdateData.id;
-        const ModifyData = sessionStorage.getItem('updateStdForm');
 
         if (ModifyData === 'True'){
             if (projectElement){
@@ -444,6 +444,7 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
 
         const backToDashboard = () =>{
             if (isAdminAuth() && !isStudentAuth()){
+                sessionStorage.setItem('updateStdForm','False');
                 history('/dashboard');
             };
         };
