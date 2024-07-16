@@ -151,7 +151,7 @@ if ((isAdminAuth() && !isStudentAuth())) {
                                         Class : foundUser.Class,
                                     }
                                 }
-                                // updateLoginData(data,'Post');
+                                updateLoginData(data,'Post');
                             }else{
                                 Alert('error',"The new password and the confirm password do not match !");
                             }
