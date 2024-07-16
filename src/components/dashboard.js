@@ -1162,7 +1162,7 @@ const Dashboard = () => {
                     <span>{notifications ? notifications.length + reveiwCnt : 0 + reveiwCnt}</span>
                 </div>
                 <div className="dashboard-notifications-container">
-                    <img className="D_logo" src="images/V-Cube-Logo.png" />
+                    <img className="D_logo" src="images/V-CUBE-Logo.png" />
                     <div className="dashboard-notifcation-title-div">
                         <span className="notif-cnt">({notifications ? notifications.length : 0})</span><span className="rev-cnt">({reveiwCnt})</span>
                         <h2 className="notif-reqts-title" onClick={()=>move_Slider('left')}>Notifications of Students' Requests</h2>
