@@ -818,7 +818,7 @@ const StudentInfo = () => {
             </div>
             <div className="blur-div"></div>
             <div className='std-detail-auth-div'>
-                <img src='images/V-CUBE-logo.png' width='150px'/>
+                <img src='images/V-CUBE-Logo.png' width='150px'/>
                 <p>Enter <strong>OTP</strong> that has been sent to your Email address.</p>
                 <input className='user-otp-input' type='number' placeholder='Enter OTP'/>
                 <button onClick={()=>stdOTPSubmit()}>Submit</button>
