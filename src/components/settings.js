@@ -388,13 +388,13 @@ if ((isAdminAuth() && !isStudentAuth())) {
                 <input type="text" placeholder="Password" className="new-user-pass" required/>
                 <input type="password" placeholder="Confirm Password" className="new-user-con-pass" required/>
                 <div className="user-select-class-div" style={{display : 'flex', flexDirection : 'row', width : '60%', height : (login_User === 'Super Admin') ? '35px' : '0px',visibility : (login_User === 'Super Admin') ? 'visible' : 'hidden'}}>
-                    <select className="user-select-class" required={(login_User === 'Super Admin') ? true : false} style={{marginRight : '3px',width : '50%',  height : (login_User === 'Super Admin') ? '40px' : '0px', fontSize : '20px',cursor : 'pointer'}} onClick={()=>(classData && classData.length === 0) ? Alert('error','Add atleast one class and try again !') : null }>
+                    <select className="user-select-class" required={(login_User === 'Super Admin') ? true : false} style={{background : 'transparent',marginRight : '3px',width : '50%',  height : (login_User === 'Super Admin') ? '40px' : '0px', fontSize : '20px',cursor : 'pointer',borderRadius : '3px'}} onClick={()=>(classData && classData.length === 0) ? Alert('error','Add atleast one class and try again !') : null }>
                         <option style={{fontSize : '20px'}} value="">Select Class</option>
                         {classData && classData.map(data=>(
                             <option style={{fontSize : '25px'}} value={data.Class}>{data.Class}</option>
                         ))}
                     </select>
-                    <select className="user-select-User" required={(login_User === 'Super Admin') ? true : false} style={{marginLeft : '3px',width : '50%',height : (login_User === 'Super Admin') ? '40px' : '0px',fontSize : '20px',cursor : 'pointer'}} >
+                    <select className="user-select-User" required={(login_User === 'Super Admin') ? true : false} style={{background : 'transparent',marginLeft : '3px',width : '50%',height : (login_User === 'Super Admin') ? '40px' : '0px',fontSize : '20px',cursor : 'pointer',borderRadius : '3px'}} >
                         <option style={{fontSize : '20px'}} value="" >Select User</option>
                         <option value='Admin' style={{fontSize : '25px'}}>Admin</option>
                         <option value='User' style={{fontSize : '25px'}}>User</option>
@@ -460,7 +460,7 @@ if ((isAdminAuth() && !isStudentAuth())) {
             <h2 style={{color : '#4953e6',textDecoration : 'underline',cursor : 'pointer'}} onClick={()=>closeRatingDiv('open',true)}>Tell Us Your Thoughts.</h2>
             <h2 onClick={logout} style={{color : '#616bf1',cursor : 'pointer',textDecoration : 'underline',width : '80px'}}>Logout</h2>
             </div>
-            <div className="blur-div"></div>
+            <div className="blur-div" style={{height : 'auto'}}></div>
             <div className="confirm-operation-div">
                 <p>Are you sure ? <br/>you want to make change to the selected user details.</p>
                 <div className="outer-confirm-div" onClick={grantPermission}><button className="inner-confirm-button">Confirm</button></div>
