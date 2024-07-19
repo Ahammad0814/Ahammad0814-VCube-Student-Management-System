@@ -1136,7 +1136,7 @@ const Dashboard = () => {
                         <span>Branch</span>
                         <span>Passed Year</span>
                     </div>
-                    <div style={{height : '90.5%',overflowY : 'scroll',scrollbarWidth : 'thin'}}>
+                    <div style={{height : '90.9%',overflowY : 'scroll',scrollbarWidth : 'thin'}}>
                     {Array.isArray(studentsData) && studentsDataLength > 0 && studentsData.map((data,index)=>{
                         if (isSearched === 'True' || ((selectedClass === 'All' || data.Class === selectedClass) && (selectedBatch === 'All' || data.BatchName === selectedBatch))){
                                 dataCnt ++
