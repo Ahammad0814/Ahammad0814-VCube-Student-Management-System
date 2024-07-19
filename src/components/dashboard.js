@@ -1136,22 +1136,24 @@ const Dashboard = () => {
                         <span>Branch</span>
                         <span>Passed Year</span>
                     </div>
-                {Array.isArray(studentsData) && studentsDataLength > 0 && studentsData.map((data,index)=>{
-                    if (isSearched === 'True' || ((selectedClass === 'All' || data.Class === selectedClass) && (selectedBatch === 'All' || data.BatchName === selectedBatch))){
-                            dataCnt ++
-                            return(
-                            <div className={`student-details-container student-details-container${index}`} style={{background : (data.Status === 'Active') ? '#ffff' : '#ff6033',color : (data.Status === 'Active') ? '#000' : '#ffff'}} onClick={()=>selectStd(index,data.id)} onDoubleClick={()=>showStdInfo(data,data.id,data.BatchName)}>
-                                <input type="checkbox" value={`${data.id}`} className={`std-checkbox std-checkbox${index}`} disabled={data.Status === 'Active' ? false : true} onClick={()=>selectStd(index)} style={{backgroundColor: 'green'}} />
-                                <img src={data.Classes.includes(`${day} ${month} ${year}`) ? 'images/std-P.png' : 'images/std-A.png'} alt="" className={`student-details-profile student-details-profile${index}`} />
-                                <span>{data.BatchName}-<span className="std-batch-no">{dataCnt < 10 ? `0${dataCnt}` : dataCnt}</span></span>
-                                <span>{data.Name}</span>
-                                <span>{data.Phone}</span>
-                                <span>{data.Email}</span>
-                                <span>{data.PG !== 'N/A' ? data.PG : data.Degree}</span>
-                                <span>{data.PG_Branch !== 'N/A' ? data.PG_Branch : data.Degree_Branch}</span>
-                                <span>{data.PG_Year !== 'N/A' ? data.PG_Year : data.Degree_Year}</span>
-                            </div>
-                )}})}
+                    <div style={{height : '90.5%',overflowY : 'scroll',scrollbarWidth : 'thin'}}>
+                    {Array.isArray(studentsData) && studentsDataLength > 0 && studentsData.map((data,index)=>{
+                        if (isSearched === 'True' || ((selectedClass === 'All' || data.Class === selectedClass) && (selectedBatch === 'All' || data.BatchName === selectedBatch))){
+                                dataCnt ++
+                                return(
+                                <div className={`student-details-container student-details-container${index}`} style={{background : (data.Status === 'Active') ? '#ffff' : '#ff6033',color : (data.Status === 'Active') ? '#000' : '#ffff'}} onClick={()=>selectStd(index,data.id)} onDoubleClick={()=>showStdInfo(data,data.id,data.BatchName)}>
+                                    <input type="checkbox" value={`${data.id}`} className={`std-checkbox std-checkbox${index}`} disabled={data.Status === 'Active' ? false : true} onClick={()=>selectStd(index)} style={{backgroundColor: 'green'}} />
+                                    <img src={data.Classes.includes(`${day} ${month} ${year}`) ? 'images/std-P.png' : 'images/std-A.png'} alt="" className={`student-details-profile student-details-profile${index}`} />
+                                    <span>{data.BatchName}-<span className="std-batch-no">{dataCnt < 10 ? `0${dataCnt}` : dataCnt}</span></span>
+                                    <span>{data.Name}</span>
+                                    <span>{data.Phone}</span>
+                                    <span>{data.Email}</span>
+                                    <span>{data.PG !== 'N/A' ? data.PG : data.Degree}</span>
+                                    <span>{data.PG_Branch !== 'N/A' ? data.PG_Branch : data.Degree_Branch}</span>
+                                    <span>{data.PG_Year !== 'N/A' ? data.PG_Year : data.Degree_Year}</span>
+                                </div>
+                    )}})}
+                    </div>
                     <label className="empty-search-label" style={{visibility : (isSearched === 'True' && studentsData.length === 0) ? 'visible' : 'hidden'}}><img src="images/empty-search-icon.gif" alt="" className="empty-search-icon" /><h1>No Search Found!</h1><span>Try again with different keyword.</span></label>
                     <img style={{visibility : (selectedClass.length > 0 && isSearched === 'False' && Array.isArray(studentsData) && Array.isArray(batchesData) && dataCnt < 1) ? 'visible' : 'hidden'}} src="images/empty-std-list.png" alt="" className="empty-std-icon" />
                     <img style={{visibility : (!Array.isArray(studentsData) && !Array.isArray(batchesData)) ? 'visible' : 'hidden'}} src="images/something-went-wrong.png" alt="" className="empty-error-icon" />
