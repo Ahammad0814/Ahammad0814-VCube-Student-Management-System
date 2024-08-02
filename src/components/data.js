@@ -4,7 +4,7 @@ import axios from "axios";
 const fetchStudentsData = async () => {
     try {
         let api = await axios({
-            url: "http://127.0.0.1:8000/students/",
+            url: "https://vcubeapi.pythonanywhere.com/api/student/",
             method: "GET",
         });
         let apiResponse = api;
@@ -16,7 +16,7 @@ const fetchStudentsData = async () => {
 const fetchClassData = async () => {
     try {
         let api = await axios({
-            url: "http://127.0.0.1:8000/classes/",
+            url: "https://vcubeapi.pythonanywhere.com/api/class/",
             method: "GET",
         });
         let apiResponse = api;
@@ -28,7 +28,7 @@ const fetchClassData = async () => {
 const fetchBatchData = async () => {
     try {
         let api = await axios({
-            url: "http://127.0.0.1:8000/batches/",
+            url: "https://vcubeapi.pythonanywhere.com/api/batch/",
             method: "GET",
         });
         let apiResponse = api;
@@ -42,7 +42,7 @@ const fetchBatchData = async () => {
 const fetchLoginData = async () => {
     try {
         let api = await axios({
-            url: "http://127.0.0.1:8000/login/",
+            url: "https://vcubeapi.pythonanywhere.com/api/login/",
             method: "GET",
         });
         let apiResponse = api;
@@ -54,7 +54,7 @@ const fetchLoginData = async () => {
 const fetchMessagesData = async () => {
     try {
         let api = await axios({
-            url: "http://127.0.0.1:8000/messages/",
+            url: "https://vcubeapi.pythonanywhere.com/api/messages/",
             method: "GET",
         });
         let apiResponse = api;
@@ -66,7 +66,7 @@ const fetchMessagesData = async () => {
 const fetchFeedbackData = async () => {
     try {
         let api = await axios({
-            url: "http://127.0.0.1:8000/feedback/",
+            url: "https://vcubeapi.pythonanywhere.com/api/feedback/",
             method: "GET",
         });
         let apiResponse = api;
