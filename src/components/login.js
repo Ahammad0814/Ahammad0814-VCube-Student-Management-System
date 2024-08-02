@@ -121,7 +121,7 @@ const Login = () => {
                     const loginUserId = JSON.parse(localStorage.getItem('LoginUserId')) || "";
                     const activeUser = loginData && loginData.find(data => data.id === loginUserId);
                     if (activeUser){
-                        if (activeUser.Permission.includes('Granted')){
+                        if (activeUser.Permission.includes('Granted') || activeUser.Permission.includes('Access')){
                             blurDiv.style.visibility = 'visible';
                             sessionStorage.setItem('LogginedUser',JSON.stringify(activeUser.Username));
                             blurDiv.style.visibility = 'hidden';
