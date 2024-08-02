@@ -25,7 +25,7 @@ export const sendStdAlert = async(mail,mailtype,otp=null,data=null) => {
         };
     }
     try{
-        let res = await axios.post('http://127.0.0.1:8000/sendotp/', JSON.stringify(mailData), {
+        let res = await axios.post('https://vcubeapi.pythonanywhere.com/api/sendotp/', JSON.stringify(mailData), {
             headers: {
             'Content-Type': 'application/json',
             },
@@ -34,7 +34,7 @@ export const sendStdAlert = async(mail,mailtype,otp=null,data=null) => {
             if (res.status === 201 || res.status === 200){
                 Alert('success','Thank you for you review !');
                 try{
-                    let res = await axios.put('http://127.0.0.1:8000/login/', JSON.stringify(data), {
+                    let res = await axios.put('https://vcubeapi.pythonanywhere.com/api/login/', JSON.stringify(data), {
                         headers: {
                         'Content-Type': 'application/json',
                         },
@@ -229,7 +229,7 @@ const StudentInfo = () => {
             const disconBtn = document.querySelector('.std-details-discontinued-btn');
             const stdData = data;
             try {
-                let res = await axios.put('http://127.0.0.1:8000/students/', JSON.stringify(stdData), {
+                let res = await axios.put('https://vcubeapi.pythonanywhere.com/api/student/', JSON.stringify(stdData), {
                 headers: {
                     'Content-Type': 'application/json',
                     },
@@ -326,7 +326,7 @@ const StudentInfo = () => {
 
         const deleteStudent = async (data) => {
             try {
-                let res = await axios.delete('http://127.0.0.1:8000/students/', {
+                let res = await axios.delete('https://vcubeapi.pythonanywhere.com/api/student/', {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -372,7 +372,7 @@ const StudentInfo = () => {
                 OTP : `${user} ${mailtype}`,
             };
             try{
-                let res = await axios.post('http://127.0.0.1:8000/sendotp/', JSON.stringify(mailData), {
+                let res = await axios.post('https://vcubeapi.pythonanywhere.com/api/sendotp/', JSON.stringify(mailData), {
                     headers: {
                     'Content-Type': 'application/json',
                     },
@@ -432,7 +432,7 @@ const StudentInfo = () => {
 
         const updateStudentAuth = async(data,isAdmin_Chd=false) => {
             try{
-                let res = await axios.put('http://127.0.0.1:8000/students/', JSON.stringify(data), {
+                let res = await axios.put('https://vcubeapi.pythonanywhere.com/api/student/', JSON.stringify(data), {
                     headers: {
                     'Content-Type': 'application/json',
                     },
@@ -524,7 +524,7 @@ const StudentInfo = () => {
         const send_Message = async(data,methd="",type) => {
             if (methd === 'post'){
                 try {
-                    let res = await axios.post('http://127.0.0.1:8000/messages/', JSON.stringify(data), {
+                    let res = await axios.post('https://vcubeapi.pythonanywhere.com/api/messages/', JSON.stringify(data), {
                     headers: {
                         'Content-Type': 'application/json',
                         },
@@ -547,7 +547,7 @@ const StudentInfo = () => {
                 }
             }else if (methd === 'delete'){
                 try {
-                    let res = await axios.delete('http://127.0.0.1:8000/messages/', {
+                    let res = await axios.delete('https://vcubeapi.pythonanywhere.com/api/messages/', {
                         headers: {
                             'Content-Type': 'application/json',
                         },
@@ -684,7 +684,7 @@ const StudentInfo = () => {
 
         const submitReview = async(data)=>{
             try{
-                let res = await axios.post('http://127.0.0.1:8000/feedback/', JSON.stringify(data), {
+                let res = await axios.post('https://vcubeapi.pythonanywhere.com/api/feedback/', JSON.stringify(data), {
                     headers: {
                     'Content-Type': 'application/json',
                     },
