@@ -160,7 +160,7 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
                     Access : wantToUpdateData.Access
                 };
                 try {
-                    let res = await axios.put('http://127.0.0.1:8000/students/', JSON.stringify(stdFormData), {
+                    let res = await axios.put('https://vcubeapi.pythonanywhere.com/api/student/', JSON.stringify(stdFormData), {
                     headers: {
                         'Content-Type': 'application/json',
                         },
@@ -212,7 +212,7 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
                         Access : 'Granted'
                     };
                     try {
-                        let res = await axios.post('http://127.0.0.1:8000/students/', JSON.stringify(stdFormData), {
+                        let res = await axios.post('https://vcubeapi.pythonanywhere.com/api/student/', JSON.stringify(stdFormData), {
                         headers: {
                             'Content-Type': 'application/json',
                             },
@@ -381,7 +381,7 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
 
         const addStdDetilsByExcel = async(data,end=false) => {
             try {
-                let res = await axios.post('http://127.0.0.1:8000/students/', JSON.stringify(data), {
+                let res = await axios.post('https://vcubeapi.pythonanywhere.com/api/student/', JSON.stringify(data), {
                 headers: {
                     'Content-Type': 'application/json',
                     },
