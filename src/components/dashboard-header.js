@@ -323,7 +323,7 @@ const DashboardHeader = ({selectBatch, studentData, todayDate, Alert, selected_C
 
     const updateBatchAtt = async (data,name,batch) => {
         try {
-            let res = await axios.put('http://127.0.0.1:8000/batches/', JSON.stringify(data), {
+            let res = await axios.put('https://vcubeapi.pythonanywhere.com/api/batch/', JSON.stringify(data), {
                 headers: {
                     'Content-Type': 'application/json',
                 },
