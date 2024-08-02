@@ -229,14 +229,14 @@ if ((isAdminAuth() && !isStudentAuth())) {
         let res;
         try {
             if (methodType === 'Delete'){
-                res = await method('http://127.0.0.1:8000/login/', {
+                res = await method('https://vcubeapi.pythonanywhere.com/api/login/', {
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     data : JSON.stringify(newData)
                 });
             }else{
-                res = await method('http://127.0.0.1:8000/login/',JSON.stringify(newData),{
+                res = await method('https://vcubeapi.pythonanywhere.com/api/login/',JSON.stringify(newData),{
                     headers: {
                         'Content-Type': 'application/json',
                     },
