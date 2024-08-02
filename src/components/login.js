@@ -331,7 +331,7 @@ const Login = () => {
                 OTP : `${user} ${mailtype}`,
             };
             try {
-                let res = await axios.post('http://127.0.0.1:8000/sendotp/', JSON.stringify(mailData), {
+                let res = await axios.post('https://vcubeapi.pythonanywhere.com/api/sendotp/', JSON.stringify(mailData), {
                     headers: {
                     'Content-Type': 'application/json',
                     },
@@ -382,7 +382,7 @@ const Login = () => {
                 Password : newPassword
             }
             try{
-                let res = await axios.put('http://127.0.0.1:8000/login/', JSON.stringify(loginData), {
+                let res = await axios.put('https://vcubeapi.pythonanywhere.com/api/login/', JSON.stringify(loginData), {
                 headers: {
                     'Content-Type': 'application/json',
                     },
@@ -510,7 +510,7 @@ const Login = () => {
 
         const addUserLoginData = async (data) => {
             try{
-                let res = await axios.post('http://127.0.0.1:8000/login/', JSON.stringify(data), {
+                let res = await axios.post('https://vcubeapi.pythonanywhere.com/api/login/', JSON.stringify(data), {
                 headers: {
                 'Content-Type': 'application/json',
                 },
