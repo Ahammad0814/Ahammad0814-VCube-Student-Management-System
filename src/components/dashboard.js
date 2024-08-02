@@ -119,7 +119,7 @@ export const closeAlert = () => {
 
 export const delete_User = async(data,mail,A_mail) => {
     try {
-        let res = await axios.delete('http://127.0.0.1:8000/login/', {
+        let res = await axios.delete('https://vcubeapi.pythonanywhere.com/api/login/', {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -337,7 +337,7 @@ const Dashboard = () => {
                 Interviews : 0,
             };
             try {
-                let res = await axios.post('http://127.0.0.1:8000/batches/', JSON.stringify(data), {
+                let res = await axios.post('https://vcubeapi.pythonanywhere.com/api/batch/', JSON.stringify(data), {
                 headers: {
                     'Content-Type': 'application/json',
                     },
@@ -361,7 +361,7 @@ const Dashboard = () => {
                 Tutors : tutors
             }
             try {
-                let res = await axios.post('http://127.0.0.1:8000/classes/', JSON.stringify(data), {
+                let res = await axios.post('https://vcubeapi.pythonanywhere.com/api/class/', JSON.stringify(data), {
                 headers: {
                     'Content-Type': 'application/json',
                     },
@@ -713,7 +713,7 @@ const Dashboard = () => {
             const stdInputEles = document.querySelectorAll('.std-checkbox');
             const inputEles = Array.from(stdInputEles);
             try {
-                let res = await axios.put('http://127.0.0.1:8000/students/', JSON.stringify(data), {
+                let res = await axios.put('https://vcubeapi.pythonanywhere.com/api/student/', JSON.stringify(data), {
                 headers: {
                     'Content-Type': 'application/json',
                     },
@@ -877,7 +877,7 @@ const Dashboard = () => {
 
         const deleteSelectedBatch = async (batchData,end=false) => {
             try {
-                let res = await axios.delete('http://127.0.0.1:8000/batches/', {
+                let res = await axios.delete('https://vcubeapi.pythonanywhere.com/api/batch/', {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -899,7 +899,7 @@ const Dashboard = () => {
 
         const deleteSelectedClass = async (class_Data,end=false) => {
             try {
-                let res = await axios.delete('http://127.0.0.1:8000/classes/', {
+                let res = await axios.delete('https://vcubeapi.pythonanywhere.com/api/class/', {
                     headers: {
                         'Content-Type': 'application/json',
                     },
