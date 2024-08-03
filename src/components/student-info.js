@@ -25,7 +25,7 @@ export const sendStdAlert = async(mail,mailtype,otp=null,data=null) => {
         };
     }
     try{
-        let res = await axios.post('https://vcubeapi.pythonanywhere.com/api/sendotp/', JSON.stringify(mailData), {
+        let res = await axios.post('https://vcubeapi.pythonanywhere.com/api/send-otp/', JSON.stringify(mailData), {
             headers: {
             'Content-Type': 'application/json',
             },
@@ -372,7 +372,7 @@ const StudentInfo = () => {
                 OTP : `${user} ${mailtype}`,
             };
             try{
-                let res = await axios.post('https://vcubeapi.pythonanywhere.com/api/sendotp/', JSON.stringify(mailData), {
+                let res = await axios.post('https://vcubeapi.pythonanywhere.com/api/send-otp/', JSON.stringify(mailData), {
                     headers: {
                     'Content-Type': 'application/json',
                     },
