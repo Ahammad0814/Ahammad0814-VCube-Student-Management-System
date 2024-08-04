@@ -48,7 +48,7 @@ if ((isAdminAuth() && !isStudentAuth()) || (!isAdminAuth() && isStudentAuth())) 
     }else if((!isAdminAuth() && isStudentAuth()) && ((!studentsData) || (!batchesData))){
         sessionStorage.setItem('SomethingWrong','True');
         history('/studentinfo');
-    }else if(isAdminAuth() && !isStudentAuth() && ModifyData === 'False' && (stdClass.length === 0 || stdClass === 'All')){
+    }else if(isAdminAuth() && !isStudentAuth() && ModifyData === 'False' && (JSON.parse(localStorage.getItem('IsUser')) === 'Super Admin' && (stdClass.length === 0 || stdClass === 'All'))){
         sessionStorage.setItem('Tried_Form','True')
         history('/dashboard');
     }else{
