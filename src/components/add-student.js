@@ -14,7 +14,9 @@ const AddStudent = () => {
     const [isExcel, setIsExcel] = useState(false);
     const lg_User = sessionStorage.getItem('UserLogout') || 'False';
     const ModifyData = sessionStorage.getItem('updateStdForm');
-    const stdClass = JSON.parse(sessionStorage.getItem('Selected_Class'));
+    const userClass = JSON.parse(localStorage.getItem('UserClass'));
+    const isUser = JSON.parse(localStorage.getItem('IsUser'));
+    const stdClass = isUser === 'Super Admin' ? JSON.parse(sessionStorage.getItem('Selected_Class')) : userClass;
 
     const getStudents = async () => {
         const student_Data = await fetchStudentsData();
