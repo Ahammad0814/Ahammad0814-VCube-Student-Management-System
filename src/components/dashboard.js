@@ -214,7 +214,7 @@ const Dashboard = () => {
         if (isUser === "Super Admin")classELe.textContent = (sClass.length === 0) ? "Select Class" : (sClass === 'All') ? 'All Classes' : sClass;
     };
     if (batchEle){
-        batchEle.textContent = (sBatch.length === 0) ? "Select Batch" : (sBatch === 'All') ? "All Batches" : sBatch;
+        if (isUser === "Super Admin")batchEle.textContent = (sBatch.length === 0) ? "Select Batch" : (sBatch === 'All') ? "All Batches" : sBatch;
     }
     const studentsDataLength = (Array.isArray(studentsData)) ? studentsData.length : 0;
     const batchesDataLength = (Array.isArray(batchesData)) ? batchesData.length : 0;
